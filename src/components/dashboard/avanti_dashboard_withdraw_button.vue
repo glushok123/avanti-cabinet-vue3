@@ -105,7 +105,7 @@ const stateClass = computed(() => `avanti-dashboard-withdraw-button--${props.sta
     /* Значение из Figma, отдельного токена нет. */
     border-radius: 9px;
 
-    @include inner-border(var(--avanti-color-primary), 1px, 0 0 11px var(--avanti-color-surface));
+    @include inner-border(var(--avanti-color-primary), 1px, var(--avanti-shadow-withdraw-glow));
 
     .avanti-dashboard-withdraw-button__icon {
       width: 20px;

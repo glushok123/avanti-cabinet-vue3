@@ -31,7 +31,7 @@ defineProps<{
 <style lang="scss" scoped>
 .avanti-onboarding-approval-card {
   /* Обводка рисуется внутрь: габариты совпадают с кадром Figma. */
-  @include inner-border(var(--avanti-color-primary), 1px, var(--avanti-shadow-balance));
+  @include inner-border(var(--avanti-color-primary), 1px, var(--avanti-shadow-amount-card));
 
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@ defineProps<{
   width: 100%;
   padding: 24px;
   text-transform: uppercase;
-  background-color: var(--avanti-color-primary-soft);
+  background-color: var(--avanti-color-primary-surface);
   border-radius: var(--avanti-radius-3xl);
 
   &__label {
@@ -61,9 +61,7 @@ defineProps<{
     flex-direction: column;
     font-size: 16px;
     line-height: 1.4;
-
-    /* Точный цвет макета #4b5563; ближайший токен — text-secondary. */
-    color: var(--avanti-color-text-secondary);
+    color: var(--avanti-color-text-terms);
   }
 
   /*

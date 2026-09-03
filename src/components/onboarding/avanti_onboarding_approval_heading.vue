@@ -31,9 +31,7 @@ defineProps<{
     font-size: 28px;
     font-weight: var(--avanti-font-weight-bold);
     line-height: normal;
-
-    /* Точный цвет макета #09090b; ближайший токен — text-black. */
-    color: var(--avanti-color-text-black);
+    color: var(--avanti-color-text-heading-strong);
   }
 
   &__subtitle {

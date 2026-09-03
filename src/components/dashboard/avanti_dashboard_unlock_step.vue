@@ -81,7 +81,7 @@ const highlightClass = computed(() =>
 
     /* Акцент на последнем шаге: фирменное свечение вокруг круга. */
     &--highlighted {
-      @include inner-border(var(--avanti-color-primary), 2px, 0 0 7.695px var(--avanti-color-primary));
+      @include inner-border(var(--avanti-color-primary), 2px, var(--avanti-shadow-unlock-glow));
     }
   }
 
@@ -119,7 +119,7 @@ const highlightClass = computed(() =>
       }
 
       &--highlighted {
-        @include inner-border(var(--avanti-color-primary), 1.5px, 0 0 5.7px var(--avanti-color-primary));
+        @include inner-border(var(--avanti-color-primary), 1.5px, var(--avanti-shadow-unlock-glow-mobile));
       }
     }
 

@@ -45,7 +45,7 @@ const authorClass = computed(() => `avanti-chat-message--${props.message.author}
 
   &__bubble {
     /* Обводка рисуется внутрь: ширина пузыря по макету ровно 270px. */
-    @include inner-border(var(--avanti-color-border-soft), 1px, var(--avanti-shadow-card-soft));
+    @include inner-border(var(--avanti-color-border-soft), 1px, var(--avanti-shadow-chat-bubble));
 
     display: flex;
     flex-direction: column;

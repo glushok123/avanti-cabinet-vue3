@@ -38,7 +38,7 @@ defineProps<{
     font-weight: var(--avanti-font-weight-bold);
     line-height: normal;
     color: var(--avanti-color-primary);
-    background-color: var(--avanti-color-primary-soft);
+    background-color: var(--avanti-color-primary-surface-soft);
     border-radius: var(--avanti-radius-lg);
   }
 
@@ -46,7 +46,7 @@ defineProps<{
     font-size: 14px;
     font-weight: var(--avanti-font-weight-regular);
     line-height: 1.3;
-    color: var(--avanti-color-text-muted);
+    color: var(--avanti-color-text-note);
   }
 
   @include desktop-up {

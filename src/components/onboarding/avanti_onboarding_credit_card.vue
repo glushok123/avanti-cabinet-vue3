@@ -158,8 +158,7 @@ $frame-height: 258.196px;
     .avanti-onboarding-credit-card__number-label,
     .avanti-onboarding-credit-card__holder-label,
     .avanti-onboarding-credit-card__expiry-label {
-      /* Точный цвет макета #adadad; ближайший токен — text-tertiary. */
-      color: var(--avanti-color-text-tertiary);
+      color: var(--avanti-color-text-card-caption);
     }
   }
 
@@ -173,8 +172,7 @@ $frame-height: 258.196px;
     }
 
     .avanti-onboarding-credit-card__number-label {
-      /* Точный цвет макета #595959; ближайший токен — text-muted. */
-      color: var(--avanti-color-text-muted);
+      color: var(--avanti-color-text-card-label);
     }
 
     .avanti-onboarding-credit-card__holder-label,
@@ -183,8 +181,7 @@ $frame-height: 258.196px;
     }
 
     .avanti-onboarding-credit-card__number {
-      /* Точный цвет макета #424242; ближайший токен — text-label (#464646). */
-      color: var(--avanti-color-text-label);
+      color: var(--avanti-color-text-bank);
     }
   }
 
@@ -194,15 +191,14 @@ $frame-height: 258.196px;
       @include inner-border(var(--avanti-color-primary), 2.29px);
 
       color: var(--avanti-color-text-black);
-      background-color: var(--avanti-color-surface-translucent);
+      background-color: var(--avanti-color-surface-glass);
       backdrop-filter: blur(6.838px);
     }
 
     .avanti-onboarding-credit-card__number-label,
     .avanti-onboarding-credit-card__holder-label,
     .avanti-onboarding-credit-card__expiry-label {
-      /* Точный цвет макета #424242; ближайший токен — text-label (#464646). */
-      color: var(--avanti-color-text-label);
+      color: var(--avanti-color-text-bank);
     }
   }
 }

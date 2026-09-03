@@ -75,7 +75,7 @@ defineProps<{
     background-image: linear-gradient(
       90deg,
       transparent 0%,
-      var(--avanti-color-text-tertiary) 50%,
+      var(--avanti-color-divider-mid) 50%,
       transparent 100%
     );
   }

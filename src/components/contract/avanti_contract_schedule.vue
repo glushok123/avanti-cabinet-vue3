@@ -139,7 +139,7 @@ function alignClass(numeric: boolean): string {
   &__row {
     /* Чередование фона — как в макете: чётные строки чуть темнее. */
     &:nth-child(even) {
-      background-color: var(--avanti-color-surface-muted);
+      background-color: var(--avanti-color-surface-zebra);
     }
 
     & + & {

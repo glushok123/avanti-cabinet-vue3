@@ -27,10 +27,9 @@ defineProps<{
   font-weight: var(--avanti-font-weight-medium);
   line-height: normal;
 
-  /* Зелёный «на связи»: в токенах проекта зелёного пока нет,
-     поэтому до его появления используется фирменный бирюзовый. */
+  /* Зелёный «на связи». */
   &__state {
-    color: var(--avanti-color-success, var(--avanti-color-primary));
+    color: var(--avanti-color-success);
   }
 
   &__reply {

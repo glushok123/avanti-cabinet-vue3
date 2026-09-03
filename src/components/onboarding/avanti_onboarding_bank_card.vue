@@ -77,9 +77,7 @@ const statusClass = computed(() => `avanti-onboarding-bank-card--${props.status}
     font-size: 12px;
     font-weight: var(--avanti-font-weight-medium);
     line-height: normal;
-
-    /* Точный цвет макета #424242; ближайший токен — text-label (#464646). */
-    color: var(--avanti-color-text-label);
+    color: var(--avanti-color-text-bank);
     text-transform: uppercase;
     letter-spacing: 0.48px;
   }
@@ -97,8 +95,7 @@ const statusClass = computed(() => `avanti-onboarding-bank-card--${props.status}
     @include inner-border(var(--avanti-color-primary));
 
     .avanti-onboarding-bank-card__status {
-      /* Точный цвет макета #1e7e34; ближайший токен — success (#22c55e). */
-      color: var(--avanti-color-success);
+      color: var(--avanti-color-success-dark);
     }
   }
 
@@ -113,7 +110,7 @@ const statusClass = computed(() => `avanti-onboarding-bank-card--${props.status}
 
   /* --- Банк ещё в очереди --- */
   &--pending {
-    @include inner-border(var(--avanti-color-border));
+    @include inner-border(var(--avanti-color-border-pending));
 
     .avanti-onboarding-bank-card__name,
     .avanti-onboarding-bank-card__status {

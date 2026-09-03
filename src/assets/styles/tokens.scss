@@ -56,6 +56,22 @@
   --avanti-color-danger-dark: #9a0606;
   --avanti-color-success: #22c55e;
 
+  /* --- Точные значения из макета онбординга и договора --- */
+  --avanti-color-success-dark: #1e7e34;
+  --avanti-color-text-step-done: #393939;
+  --avanti-color-text-bank: #424242;
+  --avanti-color-text-heading-strong: #09090b;
+  --avanti-color-text-terms: #4b5563;
+  --avanti-color-text-note: #6b7280;
+  --avanti-color-text-card-label: #595959;
+  --avanti-color-text-card-caption: #adadad;
+  --avanti-color-divider-mid: #9c9b9b;
+  --avanti-color-border-pending: rgb(159 159 159 / 22%);
+  --avanti-color-primary-surface: #f0fdff;
+  --avanti-color-primary-surface-soft: #e6f9fa;
+  --avanti-color-surface-glass: rgb(255 255 255 / 10%);
+  --avanti-color-surface-zebra: #fafbfc;
+
   /* --- Градиенты --- */
   --avanti-gradient-primary: linear-gradient(
     180deg,
@@ -71,6 +87,7 @@
   --avanti-font-weight-medium: 500;
   --avanti-font-weight-semibold: 600;
   --avanti-font-weight-bold: 700;
+  --avanti-font-weight-extrabold: 800;
 
   /* --- Радиусы --- */
   --avanti-radius-xs: 4px;
@@ -89,6 +106,14 @@
   --avanti-shadow-card: 0 2px 4px rgb(26 35 50 / 6%);
   --avanti-shadow-card-soft: 0 4px 16px rgb(26 35 50 / 3%);
   --avanti-shadow-chat-bubble: 0 2px 2px rgb(26 35 50 / 2%);
+
+  /* --- Тени экранов онбординга и дашборда --- */
+  --avanti-shadow-amount-card: 0 8px 12px rgb(36 145 170 / 10%);
+  --avanti-shadow-cta: 0 4px 8px rgb(0 0 0 / 8%), 0 12px 24px rgb(36 145 170 / 25%);
+  --avanti-shadow-unlock-card: 0 8px 12px rgb(26 35 50 / 4%);
+  --avanti-shadow-withdraw-glow: 0 0 11px #fff;
+  --avanti-shadow-unlock-glow: 0 0 7.695px #2491aa;
+  --avanti-shadow-unlock-glow-mobile: 0 0 5.7px #2491aa;
   --avanti-shadow-balance: 0 8px 12px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-circle: 0 4px 4px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-action: 0 4px 4px rgb(36 145 170 / 25%);

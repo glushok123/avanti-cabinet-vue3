@@ -45,12 +45,10 @@ defineProps<{
   width: 100%;
   padding: 16px;
   background-color: var(--avanti-color-surface);
-
-  /* В макете радиус 24px; ближайший существующий токен — 20px. */
-  border-radius: var(--avanti-radius-3xl);
+  border-radius: var(--avanti-radius-4xl);
 
   /* Обводка внутрь: габариты карточки совпадают с кадром Figma. */
-  @include inner-border(var(--avanti-color-primary-soft), 1px, var(--avanti-shadow-card-soft));
+  @include inner-border(var(--avanti-color-primary-soft), 1px, var(--avanti-shadow-unlock-card));
 
   &__head {
     display: flex;
@@ -63,7 +61,7 @@ defineProps<{
     display: flex;
     flex-direction: column;
     font-size: 20px;
-    font-weight: var(--avanti-font-weight-bold);
+    font-weight: var(--avanti-font-weight-extrabold);
     line-height: normal;
     color: var(--avanti-color-primary);
   }

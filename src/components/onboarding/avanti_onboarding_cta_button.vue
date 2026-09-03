@@ -51,9 +51,7 @@ function handleClick(): void {
   background-color: var(--avanti-color-primary);
   border: 1px solid var(--avanti-color-surface);
   border-radius: var(--avanti-radius-xl);
-
-  /* Точная тень макета: 0 4px 8px rgba(0,0,0,.08) + 0 12px 24px rgba(36,145,170,.25). */
-  box-shadow: var(--avanti-shadow-button-primary);
+  box-shadow: var(--avanti-shadow-cta);
   transition: background-color var(--avanti-transition-base);
 
   &:hover {

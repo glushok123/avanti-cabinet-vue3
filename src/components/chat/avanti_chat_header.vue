@@ -53,9 +53,8 @@ function handleClose(): void {
   justify-content: space-between;
   padding: 16px;
 
-  /* Тёмная подложка шапки. Отдельного токена поверхности пока нет —
-     используется тот же цвет, что у основного текста макета. */
-  background-color: var(--avanti-color-surface-dark, var(--avanti-color-text-strong));
+  /* Тёмная подложка шапки. */
+  background-color: var(--avanti-color-surface-dark);
 
   &__person {
     display: flex;
@@ -88,8 +87,8 @@ function handleClose(): void {
     display: block;
     width: 12px;
     height: 12px;
-    background-color: var(--avanti-color-success, var(--avanti-color-primary));
-    border: 2px solid var(--avanti-color-surface-dark, var(--avanti-color-text-strong));
+    background-color: var(--avanti-color-success);
+    border: 2px solid var(--avanti-color-surface-dark);
     border-radius: var(--avanti-radius-round);
   }
 

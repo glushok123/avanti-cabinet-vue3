@@ -43,9 +43,7 @@ defineProps<{
     &--emphasized {
       font-size: 14px;
       font-weight: var(--avanti-font-weight-medium);
-
-      /* Точный цвет макета #393939; ближайший токен — text-label (#464646). */
-      color: var(--avanti-color-text-label);
+      color: var(--avanti-color-text-step-done);
       letter-spacing: 0.56px;
     }
   }
