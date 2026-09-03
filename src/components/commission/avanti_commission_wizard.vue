@@ -10,6 +10,9 @@
   Прогресс: шаг «3. COORDINATE» изначально недоступен и открывается после
   прохождения второго. Пройденные шаги остаются кликабельными — на них можно
   вернуться, как и кнопкой «Назад» в шапке окна.
+
+  Знак «?» в поясняющей плашке открывает вложенное окно «DETTAGLI»
+  (кадр 246:6880): оно ложится поверх окна мастера и затемняет его.
 -->
 <template>
   <AvantiModal
@@ -18,6 +21,7 @@
     :title="activeContent.title"
     size="md"
     :close-label="texts.closeLabel"
+    :close-on-escape="!isInfoOpen"
     @update:open="emit('update:open', $event)"
     @close="emit('close', $event)"
   >
@@ -39,13 +43,21 @@
       :content="ibanContent"
       :panel-id="AVANTI_COMMISSION_IBAN_PANEL_ID"
       @submit="goNext"
+      @info="openInfo"
     />
     <AvantiCommissionFeePanel
       v-else-if="currentStep === 'commissione'"
       :content="feeContent"
       :panel-id="AVANTI_COMMISSION_FEE_PANEL_ID"
       @submit="goNext"
+      @info="openInfo"
     />
+    <!--
+      НЕТ В МАКЕТЕ: знак «?» у способа оплаты на шаге «3. COORDINATE»
+      поясняет SEPA Instant, а кадра с таким окном в Figma нет. Событие
+      `info` этой панели намеренно не подключено — придумывать текст нельзя
+      (вопрос к заказчику, см. отчёт).
+    -->
     <AvantiCommissionCoordinatesPanel
       v-else
       :content="coordinatesContent"
@@ -53,14 +65,28 @@
       :panel-id="AVANTI_COMMISSION_COORDINATES_PANEL_ID"
       @submit="goNext"
     />
+
   </AvantiModal>
+
+  <!--
+    Окно «DETTAGLI» стоит рядом с окном мастера, а не внутри него: так оно
+    монтируется позже и его обработчик клавиатуры оказывается в очереди
+    последним — иначе ловушка фокуса внешнего окна перехватывала бы Tab.
+  -->
+  <AvantiCommissionInfoModal
+    v-if="isInfoMounted"
+    :open="isInfoOpen"
+    :content="infoContent"
+    @update:open="isInfoOpen = $event"
+  />
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import AvantiCommissionCoordinatesPanel from '@/components/commission/avanti_commission_coordinates_panel.vue'
 import AvantiCommissionFeePanel from '@/components/commission/avanti_commission_fee_panel.vue'
 import AvantiCommissionIbanPanel from '@/components/commission/avanti_commission_iban_panel.vue'
+import AvantiCommissionInfoModal from '@/components/commission/avanti_commission_info_modal.vue'
 import AvantiIconArrowLeft from '@/components/icons/avanti_icon_arrow_left.vue'
 import AvantiModal from '@/components/ui/avanti_modal.vue'
 import AvantiModalCloseButton from '@/components/ui/avanti_modal_close_button.vue'
@@ -72,6 +98,7 @@ import {
   AVANTI_COMMISSION_FEE_PANEL_ID,
   AVANTI_COMMISSION_IBAN_CONTENT,
   AVANTI_COMMISSION_IBAN_PANEL_ID,
+  AVANTI_COMMISSION_INFO_CONTENT,
   AVANTI_COMMISSION_STEPS,
   AVANTI_COMMISSION_WIZARD_TEXTS,
 } from '@/constants/avanti_commission_content'
@@ -80,6 +107,7 @@ import type {
   AvantiCommissionCoordinatesVariant,
   AvantiCommissionFeeContent,
   AvantiCommissionIbanContent,
+  AvantiCommissionInfoContent,
   AvantiCommissionStepId,
 } from '@/types/avanti_commission'
 import type { AvantiModalCloseReason } from '@/types/avanti_modal'
@@ -97,12 +125,21 @@ const props = withDefaults(
     coordinatesContent?: AvantiCommissionCoordinatesContent
     /** Где показать приписку про поле «Causale» на третьем шаге. */
     coordinatesVariant?: AvantiCommissionCoordinatesVariant
+    /** Содержимое вложенного окна «DETTAGLI». */
+    infoContent?: AvantiCommissionInfoContent
+    /** С какого шага открывается мастер. Нужен витрине кадра 246:6880. */
+    initialStep?: AvantiCommissionStepId
+    /** Открыть окно «DETTAGLI» сразу. Нужен витрине кадра 246:6880. */
+    initialInfoOpen?: boolean
   }>(),
   {
     ibanContent: () => AVANTI_COMMISSION_IBAN_CONTENT,
     feeContent: () => AVANTI_COMMISSION_FEE_CONTENT,
     coordinatesContent: () => AVANTI_COMMISSION_COORDINATES_CONTENT,
     coordinatesVariant: 'note-outside',
+    infoContent: () => AVANTI_COMMISSION_INFO_CONTENT,
+    initialStep: 'iban',
+    initialInfoOpen: false,
   },
 )
 
@@ -127,8 +164,25 @@ const INITIAL_UNLOCKED_INDEX = 1
 /** Часть содержимого шага, которую показывает шапка окна. */
 type AvantiCommissionHead = Pick<AvantiCommissionFeeContent, 'eyebrow' | 'title'>
 
-const currentStep = ref<AvantiCommissionStepId>(steps[0].id)
+/**
+ * Класс блокировки прокрутки страницы из `use_modal_behavior`.
+ * Композабл общий и правится другими агентами, поэтому здесь он не меняется:
+ * закрытие вложенного окна снимает класс, а мастер возвращает его на место
+ * (см. `watch` по `isInfoOpen` ниже).
+ */
+const SCROLL_LOCK_CLASS = 'avanti-scroll-locked'
+
+const currentStep = ref<AvantiCommissionStepId>(props.initialStep)
 const unlockedIndex = ref<number>(INITIAL_UNLOCKED_INDEX)
+
+/**
+ * Вложенное окно «DETTAGLI». Смонтировано отдельным признаком и после
+ * открытия остаётся в дереве: так его обработчик клавиатуры регистрируется
+ * позже обработчика окна мастера и ловушка фокуса внешнего окна не
+ * перехватывает Tab у внутреннего.
+ */
+const isInfoMounted = ref<boolean>(props.initialInfoOpen)
+const isInfoOpen = ref<boolean>(props.initialInfoOpen)
 
 const currentIndex = computed(() => steps.findIndex((step) => step.id === currentStep.value))
 
@@ -189,14 +243,33 @@ function goBack(): void {
   }
 }
 
-/* Повторное открытие окна начинает сценарий заново — с первого шага. */
+/** Знак «?» в поясняющей плашке: открывается окно «DETTAGLI». */
+function openInfo(): void {
+  isInfoMounted.value = true
+  isInfoOpen.value = true
+}
+
+/* Повторное открытие окна начинает сценарий заново — с начального шага. */
 watch(
   () => props.open,
   (isOpen) => {
     if (isOpen) {
-      currentStep.value = steps[0].id
+      currentStep.value = props.initialStep
       unlockedIndex.value = INITIAL_UNLOCKED_INDEX
     }
   },
 )
+
+/*
+ * Блокировка прокрутки в `use_modal_behavior` держится одним классом на body:
+ * закрываясь, вложенное окно снимает его, хотя окно мастера ещё открыто.
+ * Возвращаем класс на место — правка общего композабла тут не наш случай.
+ */
+watch(isInfoOpen, (isOpen) => {
+  if (!isOpen && props.open) {
+    void nextTick(() => {
+      document.body.classList.add(SCROLL_LOCK_CLASS)
+    })
+  }
+})
 </script>

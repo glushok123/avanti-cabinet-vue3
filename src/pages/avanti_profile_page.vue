@@ -8,7 +8,7 @@
   то же окно, что и на выделенных страницах.
 -->
 <template>
-  <AvantiProfileLayout :data-card="dataCard" :security="security" @open="openForm">
+  <AvantiProfileLayout :data-card="dataCard" :security="security" :consultant="consultant" @open="openForm">
     <template #dialog>
       <AvantiProfileSettingsForm :open="isNameOpen" :content="nameForm" @close="closeForm" />
       <AvantiProfileSettingsForm :open="isEmailOpen" :content="emailForm" @close="closeForm" />
@@ -22,6 +22,7 @@ import { computed, ref } from 'vue'
 import AvantiProfileLayout from '@/components/profile/avanti_profile_layout.vue'
 import AvantiProfileSettingsForm from '@/components/profile/avanti_profile_settings_form.vue'
 import {
+  AVANTI_PROFILE_CONSULTANT as consultant,
   AVANTI_PROFILE_DATA_CARD as dataCard,
   AVANTI_PROFILE_EMAIL_FORM as emailForm,
   AVANTI_PROFILE_NAME_FORM as nameForm,

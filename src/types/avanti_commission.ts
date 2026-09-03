@@ -80,6 +80,34 @@ export interface AvantiCommissionFeeContent {
   paymentSystems: AvantiCommissionPaymentSystems
 }
 
+/** Абзац, середина которого набрана полужирным и тёмным. */
+export interface AvantiCommissionAccentText {
+  /** Начало фразы до выделения. */
+  lead: string
+  /** Выделенный полужирным фрагмент. */
+  accent: string
+  /** Окончание фразы после выделения. */
+  tail: string
+}
+
+/**
+ * Содержимое вложенного окна «DETTAGLI» (кадр 246:6880).
+ * Окно открывается по знаку «?» в поясняющей плашке и ложится поверх
+ * окна мастера, затемняя его.
+ */
+export interface AvantiCommissionInfoContent {
+  /** Заголовок окна: «DETTAGLI». */
+  title: string
+  /** Первый абзац пояснения — обычным начертанием. */
+  description: string
+  /** Второй абзац: середина («non è detraibile») выделена полужирным. */
+  note: AvantiCommissionAccentText
+  /** Подпись кнопки «HO CAPITO». */
+  submitLabel: string
+  /** Доступное имя крестика закрытия. */
+  closeLabel: string
+}
+
 /** События панели шага «2. COMMISSIONE». */
 export interface AvantiCommissionFeePanelEmits {
   /** Нажата кнопка «Vai alle coordinate» — мастер переходит к шагу 3. */

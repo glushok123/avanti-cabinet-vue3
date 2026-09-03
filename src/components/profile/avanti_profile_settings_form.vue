@@ -128,6 +128,20 @@ function handleSubmit(): void {
     background-color: var(--avanti-color-surface-tab);
   }
 
+  /*
+   * Метрики подписи поля из кадра 1:2977: строка подписи 20px, до поля 8px.
+   * Общий компонент подписи отдаёт line-height: normal (17px) и зазор 12px,
+   * из-за чего поле и всё под ним опускались на пиксель. Правится точечно
+   * здесь: avanti_field_label и avanti_text_field общие для проекта.
+   */
+  :deep(.avanti-field-label__text) {
+    line-height: 20px;
+  }
+
+  :deep(.avanti-text-field) {
+    gap: 8px;
+  }
+
   @include desktop-up {
     gap: 24px;
 

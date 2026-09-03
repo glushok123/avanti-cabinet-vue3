@@ -19,7 +19,12 @@
         <AvantiLogo :size="logoSize" />
       </template>
       <template #header>
-        <AvantiModalIntro :title="texts.title" :lines="subtitleLines" size="sm" />
+        <AvantiModalIntro
+          class="avanti-sign-up-page__intro"
+          :title="texts.title"
+          :lines="subtitleLines"
+          size="sm"
+        />
       </template>
       <AvantiAuthSignUpForm />
     </AvantiModal>
@@ -70,6 +75,18 @@ const logoSize = computed(() => (isMobile.value ? 'sm' : 'lg'))
   &__body {
     display: flex;
     flex: 1 0 auto;
+  }
+
+  /*
+   * В кадре между логотипом окна и заголовком 26px, а общий зазор
+   * брендового окна — 24px. Двух пикселей не хватает, и всё содержимое
+   * ниже заголовка встаёт выше макета. Правка точечная: менять общий
+   * зазор avanti_modal нельзя — он общий для всех модальных окон.
+   */
+  @include desktop-up {
+    &__intro {
+      margin-top: 2px;
+    }
   }
 }
 </style>

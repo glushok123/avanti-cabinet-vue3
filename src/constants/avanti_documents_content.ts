@@ -44,14 +44,18 @@ export const AVANTI_DOCUMENTS_SUMMARY_VERIFIED: AvantiDocumentSummary = {
   status: 'verified',
 }
 
-/** Список требуемых документов — варианты из макета. */
+/**
+ * Список требуемых документов — варианты из макета.
+ * Иконки взяты из кадра 1:935: у паспорта книжка, у двух других — карточка
+ * (в макете она одна и та же, разными иконками отличается только паспорт).
+ */
 export const AVANTI_DOCUMENTS_OPTIONS: AvantiDocumentOption[] = [
-  { id: 'passport', title: 'Passaporto', hint: 'Una foto' },
-  { id: 'id-card', title: 'Carta d’identità', hint: 'Una foto' },
-  { id: 'driver-license', title: 'Patente di guida', hint: 'Una foto' },
+  { id: 'passport', title: 'Passaporto', hint: 'Una foto', icon: 'passport' },
+  { id: 'id-card', title: 'Carta d’identità', hint: 'Una foto', icon: 'card' },
+  { id: 'driver-license', title: 'Patente di guida', hint: 'Una foto', icon: 'card' },
 ]
 
-/** Выбранный вариант в кадре «Документы неудача». */
+/** Выбранный вариант в кадре «Документы неудача». В кадре 1:935 выбора нет. */
 export const AVANTI_DOCUMENTS_SELECTED_OPTION = 'passport'
 
 /*
@@ -70,7 +74,11 @@ export const AVANTI_DOCUMENTS_FILES: AvantiDocumentFile[] = [
   },
 ]
 
-/** Тексты зоны перетаскивания. Самой зоны в Figma нет — см. отчёт. */
+/*
+ * РАСХОЖДЕНИЕ МАКЕТА: зоны перетаскивания файла нет ни в одном кадре Figma,
+ * тексты ниже придуманы. Блок сделан по ошибочному заданию и по умолчанию
+ * скрыт (проп `showDropzone` у панели). Требует согласования с заказчиком.
+ */
 export const AVANTI_DOCUMENTS_DROPZONE: AvantiDocumentsDropzone = {
   title: 'Trascina qui la foto del documento',
   hint: 'JPG, PNG o WEBP · massimo 20 MB',

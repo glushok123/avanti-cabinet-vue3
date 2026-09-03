@@ -15,7 +15,7 @@
       @change="handleChange"
     />
     <span class="avanti-documents-option__icon">
-      <AvantiIconDocuments />
+      <component :is="iconComponent" />
     </span>
     <span class="avanti-documents-option__text">
       <span class="avanti-documents-option__title">{{ option.title }}</span>
@@ -26,10 +26,13 @@
 </template>
 
 <script setup lang="ts">
+import { computed, type Component } from 'vue'
+import AvantiDocumentsIconCard from '@/components/documents/avanti_documents_icon_card.vue'
+import AvantiDocumentsIconPassport from '@/components/documents/avanti_documents_icon_passport.vue'
 import AvantiIconDocuments from '@/components/icons/avanti_icon_documents.vue'
-import type { AvantiDocumentOption } from '@/types/avanti_documents'
+import type { AvantiDocumentOption, AvantiDocumentOptionIcon } from '@/types/avanti_documents'
 
-defineProps<{
+const props = defineProps<{
   option: AvantiDocumentOption
   /** Общее имя группы переключателей. */
   name: string
@@ -38,6 +41,15 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{ select: [id: string] }>()
+
+/** Соответствие имени иконки из данных и компонента, который её рисует. */
+const ICONS: Record<AvantiDocumentOptionIcon, Component> = {
+  passport: AvantiDocumentsIconPassport,
+  card: AvantiDocumentsIconCard,
+  file: AvantiIconDocuments,
+}
+
+const iconComponent = computed<Component>(() => ICONS[props.option.icon ?? 'file'])
 
 function handleChange(event: Event): void {
   emit('select', (event.target as HTMLInputElement).value)

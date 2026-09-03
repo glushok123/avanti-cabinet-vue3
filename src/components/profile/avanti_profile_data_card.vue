@@ -86,8 +86,13 @@ function handleEdit(): void {
    * Кнопка в макете отличается от базового контурного варианта: подпись
    * тёмная, обводка тоньше, ширина по содержимому. Переопределения собраны
    * здесь, чтобы сам компонент кнопки оставался общим для проекта.
+   *
+   * Обводка рисуется внутрь: обычный border прибавлял бы 2px к высоте,
+   * из-за чего строка заголовка становилась 39px вместо 37px по макету.
    */
   &__edit.avanti-button {
+    @include inner-border(var(--avanti-color-primary), 1px);
+
     flex-shrink: 0;
     width: auto;
     height: auto;
@@ -95,7 +100,7 @@ function handleEdit(): void {
     font-size: 12px;
     font-weight: var(--avanti-font-weight-medium);
     color: var(--avanti-color-text-strong);
-    border-width: 1px;
+    border: none;
   }
 
   &__list {
@@ -113,7 +118,7 @@ function handleEdit(): void {
       gap: 16px;
     }
 
-    /* Ширина кнопки зафиксирована кадром Figma (146×40). */
+    /* Габариты кнопки зафиксированы кадром Figma (146×37). */
     &__edit.avanti-button {
       width: 146px;
       padding: 10px 12px;

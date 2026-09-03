@@ -39,6 +39,14 @@ export interface AvantiDocumentSummary {
   status: AvantiDocumentStatus
 }
 
+/**
+ * Иконка варианта требуемого документа.
+ * В кадре 1:935 у «Passaporto» книжка, у «Carta d’identità» и
+ * «Patente di guida» — одна и та же карточка; `file` оставлен запасным
+ * значением для типов документа, которых в макете пока нет.
+ */
+export type AvantiDocumentOptionIcon = 'passport' | 'card' | 'file'
+
 /** Вариант требуемого документа в списке «Scegli il tipo di documento». */
 export interface AvantiDocumentOption {
   id: string
@@ -46,6 +54,8 @@ export interface AvantiDocumentOption {
   title: string
   /** Пояснение под названием: «Una foto». */
   hint: string
+  /** Иконка слева. Не задана — рисуется общая иконка документа. */
+  icon?: AvantiDocumentOptionIcon
 }
 
 /** Загруженный файл: имя, размер и статус проверки. */

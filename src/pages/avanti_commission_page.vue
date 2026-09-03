@@ -6,13 +6,25 @@
   сверху лежит мастер. Уровень прогресса взят базовый: комиссию платят
   до разблокировки средств.
 
+  Витрина повторяет эталонный кадр 246:6880: открыт шаг «2. COMMISSIONE»,
+  а поверх окна мастера лежит вложенное окно «DETTAGLI».
+
+  НЕТ В МАКЕТЕ: кадра с активным шагом «1. IBAN» в Figma нет — содержимое
+  этого шага не спроектировано, поэтому витрина на нём не открывается
+  (вопрос к заказчику, см. отчёт).
+
   Закрытие окна на этапе вёрстки никуда не ведёт — мастер просто открывается
   заново. Переходы появятся вместе с маршрутами сценария и API.
 -->
 <template>
   <div class="avanti-commission-page">
     <AvantiDashboardView :state="state" />
-    <AvantiCommissionWizard v-model:open="isOpen" @finish="handleFinish" />
+    <AvantiCommissionWizard
+      v-model:open="isOpen"
+      initial-step="commissione"
+      initial-info-open
+      @finish="handleFinish"
+    />
     <p class="avanti-commission-page__status" role="status">{{ status }}</p>
   </div>
 </template>

@@ -27,7 +27,18 @@
           @select="handleOptionSelect"
         />
 
-        <AvantiDocumentsDropzone :dropzone="dropzone" :multiple="multiple" @select="handleFilesSelect" />
+        <!--
+          РАСХОЖДЕНИЕ МАКЕТА: зоны перетаскивания файла нет ни в одном кадре,
+          её тексты придуманы. Блок сделан по ошибочному заданию, поэтому по
+          умолчанию скрыт и включается только пропом `showDropzone`.
+          Оставлять ли его вообще — открытый вопрос к заказчику.
+        -->
+        <AvantiDocumentsDropzone
+          v-if="showDropzone && dropzone"
+          :dropzone="dropzone"
+          :multiple="multiple"
+          @select="handleFilesSelect"
+        />
 
         <div v-if="hasUploads" class="avanti-documents-panel__uploads">
           <ul v-if="files.length > 0" class="avanti-documents-panel__files" :aria-label="filesLabel">
@@ -85,8 +96,13 @@ const props = withDefaults(
     options: AvantiDocumentOption[]
     /** Выбранный тип документа. Работает как `v-model:selected-option-id`. */
     selectedOptionId?: string
-    /** Тексты зоны перетаскивания. */
-    dropzone: AvantiDocumentsDropzoneContent
+    /** Тексты зоны перетаскивания. Нужны только вместе с `showDropzone`. */
+    dropzone?: AvantiDocumentsDropzoneContent
+    /**
+     * Показать зону перетаскивания файла. По умолчанию выключена: этого блока
+     * нет ни в одном кадре макета, он сделан сверх задания и ждёт согласования.
+     */
+    showDropzone?: boolean
     files?: AvantiDocumentFile[]
     /** Доступное имя списка файлов. */
     filesLabel?: string
@@ -106,6 +122,8 @@ const props = withDefaults(
     state: 'upload',
     title: '',
     selectedOptionId: undefined,
+    dropzone: undefined,
+    showDropzone: false,
     files: () => [],
     filesLabel: undefined,
     errorText: '',

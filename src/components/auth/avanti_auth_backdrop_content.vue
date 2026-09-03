@@ -3,26 +3,33 @@
   экран одобрения кредита. Блоки берутся из тех же компонентов онбординга,
   что и страница «Кредит апрув», — своя копия разметки не заводится.
 
+  Разметка повторяет страницу одобрения: боковые отступы даёт внешняя
+  обёртка, а центрирование контентной колонки — внутренняя. Если совместить
+  их на одном элементе, padding войдёт в max-width и контент уедет вправо
+  от макетных 100px.
+
   Содержимое декоративное и перекрыто затемнением, поэтому оно спрятано
   от скринридеров и не участвует в порядке фокуса.
 -->
 <template>
   <div class="avanti-auth-backdrop-content" aria-hidden="true" inert>
-    <AvantiOnboardingApprovalHeading
-      class="avanti-auth-backdrop-content__heading"
-      :title="texts.title"
-      :subtitle="texts.subtitle"
-    />
-    <div class="avanti-auth-backdrop-content__details">
-      <AvantiOnboardingApprovalCard
-        :label="texts.amountLabel"
-        :amount="texts.amountValue"
-        :details="details"
+    <div class="avanti-auth-backdrop-content__inner">
+      <AvantiOnboardingApprovalHeading
+        class="avanti-auth-backdrop-content__heading"
+        :title="texts.title"
+        :subtitle="texts.subtitle"
       />
-      <AvantiOnboardingApprovalNote :badge="texts.noteBadge" :text="texts.note" />
+      <div class="avanti-auth-backdrop-content__details">
+        <AvantiOnboardingApprovalCard
+          :label="texts.amountLabel"
+          :amount="texts.amountValue"
+          :details="details"
+        />
+        <AvantiOnboardingApprovalNote :badge="texts.noteBadge" :text="texts.note" />
+      </div>
+      <AvantiOnboardingCtaButton class="avanti-auth-backdrop-content__cta" :label="texts.cta" />
+      <AvantiOnboardingCardStack class="avanti-auth-backdrop-content__cards" :cards="cards" />
     </div>
-    <AvantiOnboardingCtaButton class="avanti-auth-backdrop-content__cta" :label="texts.cta" />
-    <AvantiOnboardingCardStack class="avanti-auth-backdrop-content__cards" :cards="cards" />
   </div>
 </template>
 
@@ -46,11 +53,15 @@ $details-width: 633px;
 
 .avanti-auth-backdrop-content {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
-  align-items: stretch;
   width: 100%;
   padding: 24px 16px 32px;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+  }
 
   &__details {
     display: flex;
@@ -66,32 +77,37 @@ $details-width: 633px;
   }
 
   @include desktop-up {
-    @include content-container($content-width-simulation);
-
-    position: relative;
-    gap: 48px;
-    align-items: flex-start;
-    min-height: 719px;
     padding: 41px $content-gutter 60px;
 
-    &__heading {
+    .avanti-auth-backdrop-content__inner {
+      @include content-container($content-width-simulation);
+
+      position: relative;
+      gap: 48px;
+
+      /* Высота резервируется под абсолютно спозиционированную иллюстрацию. */
+      min-height: 719px;
+    }
+
+    /* Блок одобрения занимает 1145px из 1240px контентной колонки,
+       прижатый к левому краю — чтобы совпасть с логотипом в шапке. */
+    .avanti-auth-backdrop-content__heading {
       max-width: $approval-width;
     }
 
-    &__details {
-      display: flex;
-      flex-direction: column;
+    .avanti-auth-backdrop-content__details {
       gap: 22px;
       width: $details-width;
     }
 
-    &__cta {
+    /* Кнопка отделена от содержимого на 64px, а не на общие 48px. */
+    .avanti-auth-backdrop-content__cta {
       display: flex;
       align-self: flex-start;
       margin-top: 16px;
     }
 
-    &__cards {
+    .avanti-auth-backdrop-content__cards {
       position: absolute;
       top: 229px;
       left: 758.95px;

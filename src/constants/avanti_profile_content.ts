@@ -8,9 +8,11 @@
  * Кадры Figma: десктоп 1:2583 / 1:2773 / 1:2997 / 1:3226,
  * мобильные 19:1228, 17:2626, 22:2953, 22:3181.
  */
+import consultantAvatar from '@/assets/images/avanti_support_agent.png'
 import { AVANTI_HEADER_NAV_ITEMS, AVANTI_SUPPORT_NAV_ITEM } from '@/constants/avanti_dashboard_mock'
 import type { AvantiBreadcrumb, AvantiNavItem } from '@/types/avanti_dashboard'
 import type {
+  AvantiProfileConsultantContent,
   AvantiProfileDataCardContent,
   AvantiProfileFormContent,
   AvantiProfileSecurityContent,
@@ -188,3 +190,15 @@ export const AVANTI_PROFILE_TEXTS = {
   /** Доступное имя формы в модальном окне. */
   formLabel: 'Modulo impostazioni account',
 } as const
+
+/**
+ * Всплывашка чат-консультанта в правом нижнем углу экрана профиля.
+ * Текст сообщения совпадает с первой репликой переписки в кадрах чата.
+ */
+export const AVANTI_PROFILE_CONSULTANT: AvantiProfileConsultantContent = {
+  name: 'Schierano Deborah',
+  message: 'Salve. Mi chiamo Deborah, sarò la sua consulente personale dedicata.',
+  avatar: consultantAvatar,
+  count: 2,
+  countLabel: 'messaggi non letti',
+}

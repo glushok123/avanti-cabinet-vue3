@@ -9,6 +9,7 @@ import type {
   AvantiCommissionFeeAmount,
   AvantiCommissionFeeContent,
   AvantiCommissionIbanContent,
+  AvantiCommissionInfoContent,
   AvantiCommissionNoticeText,
   AvantiCommissionPaymentMethod,
   AvantiCommissionPaymentSystems,
@@ -178,6 +179,23 @@ export const AVANTI_COMMISSION_STEPS: AvantiCommissionStep[] = [
   { id: 'commissione', label: '2. COMMISSIONE', panelId: AVANTI_COMMISSION_FEE_PANEL_ID },
   { id: 'coordinate', label: '3. COORDINATE', panelId: AVANTI_COMMISSION_COORDINATES_PANEL_ID },
 ]
+
+/**
+ * Вложенное окно «DETTAGLI» (кадр 246:6880): пояснение о комиссии в два
+ * абзаца и кнопка, которая просто закрывает окно.
+ */
+export const AVANTI_COMMISSION_INFO_CONTENT: AvantiCommissionInfoContent = {
+  title: 'DETTAGLI',
+  description:
+    'Il servizio gestisce la tua pratica di credito e garantisce il trasferimento al tasso agevolato.',
+  note: {
+    lead: 'Il costo del servizio ',
+    accent: 'non è detraibile',
+    tail: ' dal credito erogato.',
+  },
+  submitLabel: 'HO CAPITO',
+  closeLabel: 'Chiudi',
+}
 
 /**
  * Подписи оболочки окна мастера.

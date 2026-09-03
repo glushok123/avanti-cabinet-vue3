@@ -139,6 +139,16 @@ function handleSelect(id: string): void {
       font-weight: var(--avanti-font-weight-medium);
     }
 
+    /*
+     * Строка подписи поля в макете занимает 20px. Без явной высоты Chrome
+     * отдаёт для Inter 14px около 17px, каждое поле становится на 3px ниже,
+     * и всё, что лежит под ним, уезжает вверх относительно макета.
+     * Правило локальное: размер `sm` встречается только в окнах входа.
+     */
+    :deep(.avanti-field-label__text) {
+      line-height: 20px;
+    }
+
     &__note {
       font-family: var(--avanti-font-family-alt);
       font-size: 14px;

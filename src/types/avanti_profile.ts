@@ -90,3 +90,19 @@ export interface AvantiProfileFormContent {
   dialog: AvantiProfileDialogContent
   fields: AvantiProfileFieldContent[]
 }
+
+/**
+ * Содержимое плавающей всплывашки чат-консультанта на экране профиля.
+ * На втором этапе те же поля приходят из API вместе с непрочитанными.
+ */
+export interface AvantiProfileConsultantContent {
+  name: string
+  /** Начало последнего сообщения; в макете обрезано многоточием. */
+  message: string
+  /** Путь к фотографии консультанта. */
+  avatar: string
+  /** Число непрочитанных сообщений; 0 — счётчик не показывается. */
+  count: number
+  /** Расшифровка счётчика для скринридеров: цифра сама по себе непонятна. */
+  countLabel: string
+}

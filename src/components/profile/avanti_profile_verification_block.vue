@@ -126,11 +126,18 @@ function handleClick(): void {
     color: var(--avanti-color-text-secondary);
   }
 
+  /*
+   * Кнопка нарисована плоской: базовый вариант с заливкой несёт на десктопе
+   * белую обводку и тень, а в кадре под кнопкой чистая подложка блока
+   * и заливка доходит до самого края (692..823 при габарите 132×36).
+   */
   &__action.avanti-button {
     height: auto;
     padding: 10px 20px;
     font-size: 13px;
     font-weight: var(--avanti-font-weight-semibold);
+    border: none;
+    box-shadow: none;
   }
 
   @include desktop-up {

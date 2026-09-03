@@ -55,6 +55,12 @@
           :progress-label="dashboardTexts.checklistProgress"
         />
       </div>
+
+      <AvantiProfileConsultantWidget
+        v-if="consultant && !isMobile"
+        class="avanti-profile-layout__consultant"
+        :content="consultant"
+      />
     </main>
 
     <AvantiBottomNav v-if="isMobile" :items="bottomNavItems" :menu-label="dashboardTexts.mainMenu" />
@@ -73,6 +79,7 @@ import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashb
 import AvantiDashboardChecklistCard from '@/components/dashboard/avanti_dashboard_checklist_card.vue'
 import AvantiProfileDataCard from '@/components/profile/avanti_profile_data_card.vue'
 import AvantiProfileSecurityCard from '@/components/profile/avanti_profile_security_card.vue'
+import AvantiProfileConsultantWidget from '@/components/profile/avanti_profile_consultant_widget.vue'
 import {
   AVANTI_CHECKLIST as checklist,
   AVANTI_DASHBOARD_TEXTS as dashboardTexts,
@@ -87,11 +94,17 @@ import {
   AVANTI_PROFILE_NAV_ITEMS as navItems,
   AVANTI_PROFILE_TEXTS as texts,
 } from '@/constants/avanti_profile_content'
-import type { AvantiProfileDataCardContent, AvantiProfileSecurityContent } from '@/types/avanti_profile'
+import type {
+  AvantiProfileConsultantContent,
+  AvantiProfileDataCardContent,
+  AvantiProfileSecurityContent,
+} from '@/types/avanti_profile'
 
 defineProps<{
   dataCard: AvantiProfileDataCardContent
   security: AvantiProfileSecurityContent
+  /** Всплывашка консультанта: есть только на кадре профиля без модального окна. */
+  consultant?: AvantiProfileConsultantContent
 }>()
 
 /** Наружу уходит идентификатор формы, которую нужно открыть. */
@@ -114,7 +127,12 @@ function handleSecurityAction(id: string): void {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+
+  /*
+   * Зазора между шапкой и контентом в макете нет: панель навигации ровно
+   * 171px, и контентная область начинается сразу под ней (кадр 1:2817).
+   */
+  gap: 0;
   min-height: 100vh;
   background-color: var(--avanti-color-page);
 
@@ -129,6 +147,7 @@ function handleSecurityAction(id: string): void {
    * не растягивается — растут боковые отступы.
    */
   &__content {
+    position: relative;
     display: flex;
     gap: 40px;
     align-items: flex-start;
@@ -136,6 +155,17 @@ function handleSecurityAction(id: string): void {
     max-width: calc($content-width-dashboard + 144px);
     padding: 0 72px 40px;
     margin-inline: auto;
+  }
+
+  /*
+   * Всплывашка не входит в поток колонок: в кадре она лежит поверх страницы
+   * и привязана к правому краю сетки (72px от края макета) и к низу
+   * контентной области — низ плашки на 98px выше её нижней границы.
+   */
+  &__consultant {
+    position: absolute;
+    right: 72px;
+    bottom: 98px;
   }
 
   &__column {
@@ -157,10 +187,6 @@ function handleSecurityAction(id: string): void {
 }
 
 @include mobile {
-  .avanti-profile-layout {
-    gap: 0;
-  }
-
   .avanti-profile-layout__content {
     flex-direction: column;
     gap: 20px;
