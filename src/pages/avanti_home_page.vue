@@ -64,17 +64,21 @@
           :progress-label="texts.checklistProgress"
         />
       </div>
-    </main>
 
-    <template v-if="isMobile">
+      <!--
+        Виджет консультанта позиционируется относительно контентной области,
+        а не окна: по макету он стоит над нижней навигацией, а не поверх неё.
+      -->
       <AvantiDashboardSupportBubble
+        v-if="isMobile"
         class="avanti-home__support-bubble"
         :src="supportBubble.src"
         :alt="supportBubble.alt"
         :count="supportBubble.count"
       />
-      <AvantiBottomNav :items="bottomNavItems" :menu-label="texts.mainMenu" />
-    </template>
+    </main>
+
+    <AvantiBottomNav v-if="isMobile" :items="bottomNavItems" :menu-label="texts.mainMenu" />
   </div>
 </template>
 
@@ -151,11 +155,18 @@ const isMobile = useIsMobile()
   }
 }
 
-/* Плавающий виджет консультанта: правый нижний угол над навигацией. */
+/*
+ * Плавающий виджет консультанта: правый нижний угол контентной области.
+ * По макету (кадр 390×1139) аватар занимает 924…981px, а нижняя навигация
+ * начинается с 1077px — то есть нижний край виджета на 96px выше неё.
+ * Отсчёт идёт от низа контентной области, а не от низа окна: иначе на
+ * экранах выше макета виджет уезжает вниз и перекрывает навигацию.
+ */
 .avanti-home__support-bubble {
   position: absolute;
   right: 19px;
-  bottom: 158px;
+  bottom: 96px;
+  z-index: 1;
 }
 
 @include mobile {
@@ -164,10 +175,14 @@ const isMobile = useIsMobile()
   }
 
   .avanti-home__content {
+    position: relative;
     flex-direction: column;
     gap: 20px;
     align-items: stretch;
-    padding: 16px 16px 0;
+
+    /* Нижний отступ 20px — тот же зазор, что между карточками: в макете
+       нижняя навигация лежит внутри контентного контейнера. */
+    padding: 16px 16px 20px;
   }
 
   /* Колонки на мобильной раскладке не нужны — карточки идут одним потоком. */

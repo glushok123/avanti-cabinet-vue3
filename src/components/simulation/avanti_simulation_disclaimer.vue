@@ -5,8 +5,13 @@
 <template>
   <div class="avanti-simulation-disclaimer">
     <span class="avanti-simulation-disclaimer__badge" aria-hidden="true">{{ badge }}</span>
+    <!--
+      Пробел между частями задаётся явно: перенос строки между тегами
+      Vue схлопывает при компиляции шаблона, и предложения слипаются.
+    -->
     <p class="avanti-simulation-disclaimer__text">
       <span class="avanti-simulation-disclaimer__soft">{{ text }}</span>
+      {{ ' ' }}
       <span class="avanti-simulation-disclaimer__strong">{{ strongText }}</span>
     </p>
   </div>
