@@ -114,12 +114,14 @@ function toggleOption(option: string, checked: boolean): void {
   /* Обводка внутрь — габариты баннера совпадают с кадром Figma (792×124). */
   @include inner-border(var(--avanti-color-primary-soft-border));
 
-  &__icon {
+  /* Дочерний комбинатор поднимает специфичность: правила раскладки должны
+     перекрывать собственные стили корня avanti_icon_circle. */
+  & > &__icon {
     grid-area: icon;
     align-self: start;
   }
 
-  &__action {
+  & > &__action {
     grid-area: action;
   }
 
@@ -197,7 +199,7 @@ function toggleOption(option: string, checked: boolean): void {
       margin-top: 10px;
     }
 
-    &__action {
+    & > &__action {
       display: none;
     }
   }
