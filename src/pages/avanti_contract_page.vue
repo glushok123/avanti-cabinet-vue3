@@ -13,6 +13,7 @@
       :user="user"
       :notifications="supportItem.notifications"
       :notifications-label="dashboardTexts.notifications"
+      :profile-label="dashboardTexts.profile"
     />
     <AvantiAppHeader
       v-else
@@ -37,6 +38,7 @@
           <AvantiContractSigningCard :card="signingCard" />
           <AvantiContractDocument
             :label="texts.documentLabel"
+            title-tag="h3"
             :heading="heading"
             :meta="meta"
             :parties="parties"

@@ -18,9 +18,10 @@
     </div>
     <template v-for="row in content.rows" :key="row.id">
       <span class="avanti-profile-security-card__divider" aria-hidden="true" />
-      <AvantiProfileSecurityRow
+      <AvantiSecurityRow
         :description="row.description"
         :action-label="row.actionLabel"
+        variant="compact"
         @action="handleAction(row.id)"
       />
     </template>
@@ -33,7 +34,7 @@
 import { computed, useId } from 'vue'
 import AvantiCard from '@/components/ui/avanti_card.vue'
 import AvantiIconShield from '@/components/icons/avanti_icon_shield.vue'
-import AvantiProfileSecurityRow from '@/components/profile/avanti_profile_security_row.vue'
+import AvantiSecurityRow from '@/components/ui/avanti_security_row.vue'
 import AvantiProfileVerificationBlock from '@/components/profile/avanti_profile_verification_block.vue'
 import type { AvantiProfileSecurityContent } from '@/types/avanti_profile'
 

@@ -16,7 +16,7 @@
             <span class="avanti-contract-signing-card__title">{{ card.title }}</span>
           </span>
         </div>
-        <button class="avanti-contract-signing-card__pdf" type="button">
+        <button class="avanti-contract-signing-card__pdf" type="button" @click="handleOpenPdf">
           <span class="avanti-contract-signing-card__pdf-icon">
             <AvantiIconDocuments />
           </span>
@@ -30,7 +30,7 @@
           </span>
           {{ card.badgeLabel }}
         </span>
-        <button class="avanti-contract-signing-card__action" type="button">
+        <button class="avanti-contract-signing-card__action" type="button" @click="handleSign">
           {{ card.actionLabel }}
         </button>
       </div>
@@ -45,6 +45,17 @@ import AvantiIconLock from '@/components/icons/avanti_icon_lock.vue'
 import type { AvantiContractSigningCard } from '@/types/avanti_contract'
 
 defineProps<{ card: AvantiContractSigningCard }>()
+
+/** Обе кнопки — заглушки: открытие PDF и переход к подписанию подключаются на этапе интеграции. */
+const emit = defineEmits<{ 'open-pdf': []; sign: [] }>()
+
+function handleOpenPdf(): void {
+  emit('open-pdf')
+}
+
+function handleSign(): void {
+  emit('sign')
+}
 </script>
 
 <style lang="scss" scoped>

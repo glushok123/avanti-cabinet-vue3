@@ -40,7 +40,11 @@ import { computed, watch } from 'vue'
 import AvantiSignatureHint from '@/components/signature/avanti_signature_hint.vue'
 import AvantiSignatureClearButton from '@/components/signature/avanti_signature_clear_button.vue'
 import { useSignatureCanvas } from '@/composables/use_signature_canvas'
-import type { AvantiSignaturePadEmits, AvantiSignaturePadTexts } from '@/types/avanti_signature'
+import type {
+  AvantiSignaturePadEmits,
+  AvantiSignaturePadInstance,
+  AvantiSignaturePadTexts,
+} from '@/types/avanti_signature'
 
 const props = withDefaults(
   defineProps<{
@@ -76,7 +80,7 @@ function handleClear(): void {
 
 watch(isEmpty, (value) => emit('change', value))
 
-defineExpose({ clear, toDataUrl, isEmpty: (): boolean => isEmpty.value })
+defineExpose<AvantiSignaturePadInstance>({ clear, toDataUrl, isEmpty: (): boolean => isEmpty.value })
 </script>
 
 <style lang="scss" scoped>

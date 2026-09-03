@@ -14,7 +14,7 @@
     </div>
     <template v-for="row in rows" :key="row.id">
       <span class="avanti-auth-security-card__divider" />
-      <AvantiAuthSecurityRow :description="row.description" :action-label="row.actionLabel" />
+      <AvantiSecurityRow :description="row.description" :action-label="row.actionLabel" />
     </template>
     <span class="avanti-auth-security-card__divider" />
     <AvantiAuthEmailVerification :content="verification" />
@@ -24,13 +24,16 @@
 <script setup lang="ts">
 import AvantiCard from '@/components/ui/avanti_card.vue'
 import AvantiIconShield from '@/components/icons/avanti_icon_shield.vue'
-import AvantiAuthSecurityRow from '@/components/auth/avanti_auth_security_row.vue'
+import AvantiSecurityRow from '@/components/ui/avanti_security_row.vue'
 import AvantiAuthEmailVerification from '@/components/auth/avanti_auth_email_verification.vue'
-import type { AvantiEmailVerificationContent, AvantiSecurityRow } from '@/types/avanti_auth'
+import type {
+  AvantiEmailVerificationContent,
+  AvantiSecurityRow as AvantiSecurityRowContent,
+} from '@/types/avanti_auth'
 
 defineProps<{
   title: string
-  rows: AvantiSecurityRow[]
+  rows: AvantiSecurityRowContent[]
   verification: AvantiEmailVerificationContent
 }>()
 </script>

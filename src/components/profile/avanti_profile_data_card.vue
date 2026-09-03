@@ -20,7 +20,13 @@
       </AvantiButton>
     </div>
     <div class="avanti-profile-data-card__list">
-      <AvantiProfileDataRow v-for="row in content.rows" :key="row.id" :label="row.label" :value="row.value" />
+      <AvantiLabelValueRow
+        v-for="row in content.rows"
+        :key="row.id"
+        :label="row.label"
+        :value="row.value"
+        size="md"
+      />
       <AvantiCopyField
         :label="content.iban.label"
         :value="content.iban.value"
@@ -35,7 +41,7 @@
 import { computed, useId } from 'vue'
 import AvantiCard from '@/components/ui/avanti_card.vue'
 import AvantiButton from '@/components/ui/avanti_button.vue'
-import AvantiProfileDataRow from '@/components/profile/avanti_profile_data_row.vue'
+import AvantiLabelValueRow from '@/components/ui/avanti_label_value_row.vue'
 import AvantiCopyField from '@/components/ui/avanti_copy_field.vue'
 import type { AvantiProfileDataCardContent } from '@/types/avanti_profile'
 

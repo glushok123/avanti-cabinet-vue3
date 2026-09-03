@@ -3,19 +3,14 @@
   <AvantiCard class="avanti-dashboard-personal-data-card" padding="lg" shadow="none" tag="section">
     <h2 class="avanti-dashboard-personal-data-card__title">{{ title }}</h2>
     <div class="avanti-dashboard-personal-data-card__list">
-      <AvantiDashboardPersonalDataRow
-        v-for="row in rows"
-        :key="row.id"
-        :label="row.label"
-        :value="row.value"
-      />
+      <AvantiLabelValueRow v-for="row in rows" :key="row.id" :label="row.label" :value="row.value" />
     </div>
   </AvantiCard>
 </template>
 
 <script setup lang="ts">
 import AvantiCard from '@/components/ui/avanti_card.vue'
-import AvantiDashboardPersonalDataRow from '@/components/dashboard/avanti_dashboard_personal_data_row.vue'
+import AvantiLabelValueRow from '@/components/ui/avanti_label_value_row.vue'
 import type { AvantiPersonalDataRow } from '@/types/avanti_dashboard'
 
 defineProps<{

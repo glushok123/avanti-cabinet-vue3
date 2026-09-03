@@ -40,7 +40,11 @@ import AvantiSignatureActions from '@/components/signature/avanti_signature_acti
 import AvantiSignatureHeader from '@/components/signature/avanti_signature_header.vue'
 import AvantiSignaturePad from '@/components/signature/avanti_signature_pad.vue'
 import AvantiSignatureTypedField from '@/components/signature/avanti_signature_typed_field.vue'
-import type { AvantiSignatureContent, AvantiSignaturePanelEmits } from '@/types/avanti_signature'
+import type {
+  AvantiSignatureContent,
+  AvantiSignaturePanelEmits,
+  AvantiSignaturePanelInstance,
+} from '@/types/avanti_signature'
 
 defineProps<{
   /** Все тексты панели. На втором этапе приходят из API. */
@@ -94,7 +98,7 @@ function toDataUrl(type?: string, quality?: number): string {
   return padRef.value?.toDataUrl(type, quality) ?? ''
 }
 
-defineExpose({ reset, toDataUrl })
+defineExpose<AvantiSignaturePanelInstance>({ reset, toDataUrl })
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <!--
   Карточка «Dati personali» левой колонки экрана подтверждения почты
   (кадр 1:3510): заголовок с кнопкой правки, список значений и поле IBAN.
-  Строки списка берутся у готового компонента личных данных дашборда.
+  Строки списка берутся у общего примитива «подпись — значение».
 -->
 <template>
   <AvantiCard class="avanti-auth-profile-data-card" padding="lg" shadow="none" tag="section">
@@ -12,12 +12,7 @@
       </AvantiButton>
     </div>
     <div class="avanti-auth-profile-data-card__list">
-      <AvantiDashboardPersonalDataRow
-        v-for="row in content.rows"
-        :key="row.id"
-        :label="row.label"
-        :value="row.value"
-      />
+      <AvantiLabelValueRow v-for="row in content.rows" :key="row.id" :label="row.label" :value="row.value" />
       <AvantiCopyField
         :label="content.ibanLabel"
         :value="content.ibanValue"
@@ -31,7 +26,7 @@
 <script setup lang="ts">
 import AvantiCard from '@/components/ui/avanti_card.vue'
 import AvantiButton from '@/components/ui/avanti_button.vue'
-import AvantiDashboardPersonalDataRow from '@/components/dashboard/avanti_dashboard_personal_data_row.vue'
+import AvantiLabelValueRow from '@/components/ui/avanti_label_value_row.vue'
 import AvantiCopyField from '@/components/ui/avanti_copy_field.vue'
 import type { AvantiProfileDataContent } from '@/types/avanti_auth'
 

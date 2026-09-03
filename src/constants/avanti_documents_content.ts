@@ -95,11 +95,3 @@ export const AVANTI_DOCUMENTS_SUCCESS: AvantiDocumentsResult = {
 
 /** Текст ошибки загрузки (кадр 95:5965). */
 export const AVANTI_DOCUMENTS_ERROR = 'Caricamento non riuscito. Controlla la connessione e riprova.'
-
-/** Развёрнутая плашка ошибки — тот же блок, что и успех, но красный. */
-export const AVANTI_DOCUMENTS_FAILURE: AvantiDocumentsResult = {
-  tone: 'error',
-  title: 'Caricamento non riuscito',
-  description: 'Controlla la connessione e riprova.',
-  hint: 'Se il problema persiste, scrivi al supporto.',
-}

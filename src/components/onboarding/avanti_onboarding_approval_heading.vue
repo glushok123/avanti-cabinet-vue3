@@ -53,7 +53,15 @@ defineProps<{
     .avanti-onboarding-approval-heading__subtitle {
       font-size: 42px;
       font-weight: var(--avanti-font-weight-semibold);
+
+      /*
+       * Микро-трекинг компенсирует разницу метрик: Chrome рисует Inter шире
+       * Figma, и вторая строка не влезает в макетные 1145px всего на 6px —
+       * заголовок ломается на три строки вместо двух. 0,2px на символ
+       * визуально незаметны, но возвращают перенос в точку из макета.
+       */
       line-height: normal;
+      letter-spacing: -0.2px;
     }
   }
 }

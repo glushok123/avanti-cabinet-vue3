@@ -5,7 +5,7 @@
 -->
 <template>
   <article class="avanti-contract-document" :aria-label="label">
-    <AvantiContractDocumentHeader :title="heading.title" :subtitle="heading.subtitle" />
+    <AvantiContractDocumentHeader :title="heading.title" :subtitle="heading.subtitle" :title-tag="titleTag" />
     <span class="avanti-contract-document__divider" />
     <AvantiContractMetaRow :meta="meta" />
     <span class="avanti-contract-document__divider" />
@@ -15,7 +15,7 @@
     <span class="avanti-contract-document__divider" />
     <AvantiContractTerms :terms="terms" />
     <span class="avanti-contract-document__divider" />
-    <AvantiContractPurposeRow :purpose="purpose" />
+    <AvantiLabelValueRow :label="purpose.label" :value="purpose.value" size="inline" tag="p" />
     <AvantiContractSchedule :schedule="schedule" />
     <AvantiContractClauseSection v-for="section in sections" :key="section.id" :section="section" />
     <AvantiContractSignatures :signatures="signatures" />
@@ -28,10 +28,10 @@ import AvantiContractDocumentHeader from '@/components/contract/avanti_contract_
 import AvantiContractFields from '@/components/contract/avanti_contract_fields.vue'
 import AvantiContractMetaRow from '@/components/contract/avanti_contract_meta_row.vue'
 import AvantiContractParties from '@/components/contract/avanti_contract_parties.vue'
-import AvantiContractPurposeRow from '@/components/contract/avanti_contract_purpose_row.vue'
 import AvantiContractSchedule from '@/components/contract/avanti_contract_schedule.vue'
 import AvantiContractSignatures from '@/components/contract/avanti_contract_signatures.vue'
 import AvantiContractTerms from '@/components/contract/avanti_contract_terms.vue'
+import AvantiLabelValueRow from '@/components/ui/avanti_label_value_row.vue'
 import type {
   AvantiContractDocumentHeading,
   AvantiContractField,
@@ -55,6 +55,8 @@ defineProps<{
   schedule: ScheduleContent
   sections: AvantiContractSection[]
   signatures: AvantiContractSignature[]
+  /** Уровень заголовка документа: зависит от того, под каким h-тегом секции стоит документ. */
+  titleTag?: string
 }>()
 </script>
 

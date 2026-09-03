@@ -165,12 +165,3 @@ export const AVANTI_DASHBOARD_STATE_LEVEL_6: AvantiDashboardState = {
   id: 'level-6',
   figmaNodes: '258:16821 (десктоп 1440×857)',
 }
-
-/** Все состояния в порядке прохождения — удобно для отладки и переключения. */
-export const AVANTI_DASHBOARD_STATES: AvantiDashboardState[] = [
-  AVANTI_DASHBOARD_STATE_BASE,
-  AVANTI_DASHBOARD_STATE_STEPS_READY,
-  AVANTI_DASHBOARD_STATE_LEVEL_4,
-  AVANTI_DASHBOARD_STATE_LEVEL_5,
-  AVANTI_DASHBOARD_STATE_LEVEL_6,
-]

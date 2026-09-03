@@ -13,15 +13,17 @@
 <script setup lang="ts">
 import AvantiNotificationBadge from '@/components/ui/avanti_notification_badge.vue'
 
-/** alt — доступное имя кнопки; сама картинка декоративная (alt=""). */
+/**
+ * alt — доступное имя кнопки, обязательное: без него у кнопки не будет
+ * доступного имени. Сама картинка декоративная (alt="").
+ */
 withDefaults(
   defineProps<{
     src: string
-    alt?: string
+    alt: string
     count?: number
   }>(),
   {
-    alt: '',
     count: 0,
   },
 )

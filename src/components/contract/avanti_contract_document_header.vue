@@ -6,7 +6,7 @@
   <div class="avanti-contract-document-header">
     <AvantiLogo size="lg" tone="black" />
     <div class="avanti-contract-document-header__heading">
-      <h2 class="avanti-contract-document-header__title">{{ title }}</h2>
+      <component :is="titleTag" class="avanti-contract-document-header__title">{{ title }}</component>
       <p class="avanti-contract-document-header__subtitle">{{ subtitle }}</p>
     </div>
   </div>
@@ -15,7 +15,14 @@
 <script setup lang="ts">
 import AvantiLogo from '@/components/ui/avanti_logo.vue'
 
-defineProps<{ title: string; subtitle: string }>()
+/**
+ * titleTag — уровень заголовка настраивается снаружи: сама панель не знает,
+ * под каким заголовком секции она стоит на странице. Размер задаёт класс,
+ * поэтому смена тега не меняет внешний вид.
+ */
+withDefaults(defineProps<{ title: string; subtitle: string; titleTag?: string }>(), {
+  titleTag: 'h2',
+})
 </script>
 
 <style lang="scss" scoped>

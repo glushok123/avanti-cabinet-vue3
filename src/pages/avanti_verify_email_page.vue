@@ -19,6 +19,7 @@
       :user="user"
       :notifications="supportItem.notifications"
       :notifications-label="dashboardTexts.notifications"
+      :profile-label="dashboardTexts.profile"
     />
     <AvantiAppHeader
       v-else

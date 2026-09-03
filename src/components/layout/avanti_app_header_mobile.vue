@@ -10,7 +10,7 @@
         <AvantiIconBell />
         <AvantiNotificationBadge v-if="notifications" :count="notifications" size="sm" />
       </button>
-      <button class="avanti-app-header-mobile__profile" type="button">
+      <button class="avanti-app-header-mobile__profile" type="button" :aria-label="profileLabelText">
         <AvantiAvatar :src="user.avatarMobile" :alt="user.name" size="sm" />
         <span class="avanti-app-header-mobile__initials">{{ user.initials }}</span>
       </button>
@@ -26,18 +26,30 @@ import AvantiNotificationBadge from '@/components/ui/avanti_notification_badge.v
 import AvantiIconBell from '@/components/icons/avanti_icon_bell.vue'
 import type { AvantiUser } from '@/types/avanti_dashboard'
 
-/** notificationsLabel — начало доступного имени кнопки уведомлений. */
+/**
+ * notificationsLabel — начало доступного имени кнопки уведомлений.
+ * profileLabel — начало доступного имени кнопки профиля: без него
+ * доступное имя собиралось бы само из alt аватара и видимых инициалов,
+ * что звучит избыточно. Проп необязателен, чтобы экраны, которые ещё
+ * не передают его, не ломались — тогда доступное имя остаётся прежним.
+ */
 const props = withDefaults(
   defineProps<{
     user: AvantiUser
     notificationsLabel: string
     notifications?: number
+    profileLabel?: string
   }>(),
   { notifications: 0 },
 )
 
 /** К подписи добавляется текущее число непрочитанных. */
 const bellLabel = computed(() => `${props.notificationsLabel}: ${props.notifications}`)
+
+/** К подписи добавляется имя пользователя — как в кнопке уведомлений со счётчиком. */
+const profileLabelText = computed(() =>
+  props.profileLabel ? `${props.profileLabel}: ${props.user.name}` : undefined,
+)
 </script>
 
 <style lang="scss" scoped>
@@ -48,7 +60,10 @@ const bellLabel = computed(() => `${props.notificationsLabel}: ${props.notificat
   width: 100%;
   padding: 12px 16px;
   background-color: var(--avanti-color-surface);
-  border-bottom: 1px solid var(--avanti-color-border);
+
+  /* Линия рисуется внутрь: браузерная граница прибавилась бы
+     к высоте, и шапка стала бы 63px вместо макетных 62px. */
+  box-shadow: inset 0 -1px 0 var(--avanti-color-border);
 
   &__actions {
     display: flex;

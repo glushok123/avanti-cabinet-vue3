@@ -163,6 +163,8 @@ export const AVANTI_DASHBOARD_TEXTS = {
   breadcrumbs: 'Percorso di navigazione',
   /** Начало подписи кнопки уведомлений, к нему добавляется счётчик. */
   notifications: 'Notifiche',
+  /** Начало доступного имени кнопки профиля в мобильной шапке, к нему добавляется имя пользователя. */
+  profile: 'Profilo',
   /** Доступное имя кнопки сворачивания чеклиста. */
   checklistToggle: 'Mostra o nascondi gli step',
   /** Доступное имя индикатора прогресса верификации. */

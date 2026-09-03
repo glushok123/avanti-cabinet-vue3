@@ -3,9 +3,9 @@
   Figma 241:23649 / 232:18067): малая надпись, значение и кнопка копирования.
 
   Копирование настоящее: значение уходит в системный буфер через
-  `navigator.clipboard`. Пока держится состояние «скопировано», иконка
-  меняется на галочку, а результат объявляется скринридеру через `aria-live`
-  в области, скрытой визуально.
+  общую композицию `@/composables/use_clipboard_copy`. Пока держится
+  состояние «скопировано», иконка меняется на галочку, а результат
+  объявляется скринридеру через `aria-live` в области, скрытой визуально.
 
   РАСХОЖДЕНИЕ МАКЕТА: состояния «скопировано» и «не удалось» в кадрах не
   нарисованы — оформление собрано из токенов палитры (фирменный цвет для
@@ -22,7 +22,7 @@
       :class="actionClass"
       type="button"
       :aria-label="actionLabel"
-      @click="copy"
+      @click="handleCopy"
     >
       <AvantiIconCheck v-if="isCopied" />
       <AvantiCommissionIconCopy v-else />
@@ -34,13 +34,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed } from 'vue'
 import AvantiCommissionIconCopy from '@/components/commission/avanti_commission_icon_copy.vue'
 import AvantiIconCheck from '@/components/icons/avanti_icon_check.vue'
+import { useClipboardCopy } from '@/composables/use_clipboard_copy'
 import type { AvantiCommissionCopyLabels, AvantiCommissionRequisite } from '@/types/avanti_commission'
-
-/** Результат последней попытки копирования. */
-type CopyStatus = 'idle' | 'copied' | 'failed'
 
 const props = defineProps<{
   /** Надпись, значение и значение для буфера. */
@@ -51,19 +49,12 @@ const props = defineProps<{
 
 const emit = defineEmits<{ copy: [id: string] }>()
 
-/** Сколько держится отметка «скопировано», мс. */
-const RESET_DELAY = 2000
-
-const status = ref<CopyStatus>('idle')
-
-let resetTimer: ReturnType<typeof setTimeout> | undefined
+/* Само копирование и состояние попытки живут в общей композиции. */
+const { status, isCopied, copy } = useClipboardCopy()
 
 const actionLabel = computed<string>(() => `${props.copyLabels.action} ${props.requisite.label}`)
 
 const actionClass = computed<string>(() => `avanti-commission-requisite-row__action--${status.value}`)
-
-/** Держится ли отметка «скопировано»: по ней подменяется иконка кнопки. */
-const isCopied = computed<boolean>(() => status.value === 'copied')
 
 /** Текст для `aria-live`; в спокойном состоянии область пуста. */
 const statusMessage = computed<string>(() => {
@@ -73,30 +64,12 @@ const statusMessage = computed<string>(() => {
   return status.value === 'failed' ? props.copyLabels.failure : ''
 })
 
-/** Возвращает строку в исходное состояние через RESET_DELAY. */
-function scheduleReset(): void {
-  clearTimeout(resetTimer)
-  resetTimer = setTimeout(() => {
-    status.value = 'idle'
-  }, RESET_DELAY)
-}
-
-async function copy(): Promise<void> {
-  const text = props.requisite.copyValue ?? props.requisite.value
-  try {
-    await navigator.clipboard.writeText(text)
-    status.value = 'copied'
+async function handleCopy(): Promise<void> {
+  const copied = await copy(props.requisite.copyValue ?? props.requisite.value)
+  if (copied) {
     emit('copy', props.requisite.id)
-  } catch {
-    /* Буфер недоступен: страница без защищённого соединения или отказ пользователя. */
-    status.value = 'failed'
   }
-  scheduleReset()
 }
-
-onBeforeUnmount(() => {
-  clearTimeout(resetTimer)
-})
 </script>
 
 <style lang="scss" scoped>

@@ -22,6 +22,7 @@
       :user="user"
       :notifications="supportItem.notifications"
       :notifications-label="texts.notifications"
+      :profile-label="texts.profile"
     />
     <AvantiAppHeader
       v-else
@@ -223,7 +224,7 @@ const isMobile = useIsMobile()
 .avanti-dashboard-view__support-bubble {
   position: absolute;
   right: 19px;
-  bottom: 96px;
+  bottom: 34px;
   z-index: 1;
 }
 

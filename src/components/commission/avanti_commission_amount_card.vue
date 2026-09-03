@@ -15,14 +15,21 @@
     </div>
     <hr class="avanti-commission-amount-card__divider" />
     <ul class="avanti-commission-amount-card__lines">
-      <AvantiCommissionAmountRow v-for="line in amount.lines" :key="line.id" :line="line" />
+      <AvantiLabelValueRow
+        v-for="line in amount.lines"
+        :key="line.id"
+        :label="line.label"
+        :value="line.value"
+        size="lg"
+        tag="li"
+      />
     </ul>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AvantiCommissionAmountRow from '@/components/commission/avanti_commission_amount_row.vue'
+import AvantiLabelValueRow from '@/components/ui/avanti_label_value_row.vue'
 import { formatAmount } from '@/composables/use_credit_simulation'
 import type { AvantiCommissionFeeAmount } from '@/types/avanti_commission'
 

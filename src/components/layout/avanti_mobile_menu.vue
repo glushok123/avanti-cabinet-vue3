@@ -2,6 +2,7 @@
   Мобильное меню: панель выезжает справа поверх затемнённой страницы.
   Закрывается по клику на затемнение, по Escape и по выбору пункта;
   пока открыто — держит фокус внутри себя и блокирует прокрутку страницы.
+  Поведение слоя живёт в `@/composables/use_modal_behavior`.
 -->
 <template>
   <Teleport to="body">
@@ -18,7 +19,6 @@
           <div class="avanti-mobile-menu__head">
             <p class="avanti-mobile-menu__title">{{ title }}</p>
             <button
-              ref="closeRef"
               class="avanti-mobile-menu__close"
               type="button"
               :aria-label="closeLabel"
@@ -52,10 +52,10 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import AvantiMobileMenuItem from '@/components/layout/avanti_mobile_menu_item.vue'
 import AvantiIconClose from '@/components/icons/avanti_icon_close.vue'
 import { resolveNavIcon } from '@/components/icons/avanti_nav_icons'
+import { useModalBehavior } from '@/composables/use_modal_behavior'
 import type { AvantiNavigationItem } from '@/types/avanti_navigation'
 
 const props = defineProps<{
@@ -72,91 +72,21 @@ const props = defineProps<{
 
 const emit = defineEmits<{ close: [] }>()
 
-/** Класс на body: блокирует прокрутку страницы под открытым меню. */
-const SCROLL_LOCK_CLASS = 'avanti-scroll-locked'
-
-/** Элементы, на которые может встать фокус внутри панели. */
-const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
-const panelRef = ref<HTMLElement | null>(null)
-const closeRef = ref<HTMLButtonElement | null>(null)
-
 function handleClose(): void {
   emit('close')
 }
 
-function focusableElements(): HTMLElement[] {
-  if (!panelRef.value) {
-    return []
-  }
-
-  return Array.from(panelRef.value.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
-}
-
-/** Ловушка фокуса: Tab и Shift+Tab ходят по кругу внутри панели. */
-function trapFocus(event: KeyboardEvent): void {
-  const elements = focusableElements()
-  if (elements.length === 0) {
-    return
-  }
-
-  const first = elements[0]
-  const last = elements[elements.length - 1]
-  const active = document.activeElement
-  const outside = panelRef.value === null || !panelRef.value.contains(active)
-
-  if (event.shiftKey && (outside || active === first)) {
-    event.preventDefault()
-    last.focus()
-    return
-  }
-
-  if (!event.shiftKey && (outside || active === last)) {
-    event.preventDefault()
-    first.focus()
-  }
-}
-
-function handleKeydown(event: KeyboardEvent): void {
-  if (!props.open) {
-    return
-  }
-
-  if (event.key === 'Escape') {
-    handleClose()
-    return
-  }
-
-  if (event.key === 'Tab') {
-    trapFocus(event)
-  }
-}
-
-function toggleScrollLock(locked: boolean): void {
-  document.body.classList.toggle(SCROLL_LOCK_CLASS, locked)
-}
-
-/* Открытие переводит фокус внутрь панели; возврат фокуса — забота вызывающей кнопки. */
-watch(
-  () => props.open,
-  (open) => {
-    toggleScrollLock(open)
-
-    if (open) {
-      void nextTick(() => {
-        closeRef.value?.focus()
-      })
-    }
-  },
-)
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeydown)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleKeydown)
-  toggleScrollLock(false)
+/*
+ * Ловушка фокуса, Escape и блокировка прокрутки — общая композиция модального
+ * слоя. Фокус при открытии уходит на первый элемент панели (кнопку закрытия),
+ * а возврат фокуса на бургер остаётся заботой шапки, которая меню открыла.
+ */
+const panelRef = useModalBehavior({
+  isOpen: () => props.open,
+  closeOnEscape: () => true,
+  onEscape: handleClose,
+  initialFocus: 'first',
+  restoreFocus: false,
 })
 </script>
 
@@ -262,7 +192,7 @@ $panel-width: 300px;
 </style>
 
 <style lang="scss">
-/* Глобальный класс: пока меню открыто, страница под ним не прокручивается. */
+/* Глобальный класс модального слоя: страница под открытым меню не прокручивается. */
 body.avanti-scroll-locked {
   overflow: hidden;
 }

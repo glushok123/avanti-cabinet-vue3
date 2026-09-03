@@ -73,6 +73,54 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/avanti_chat_page.vue'),
     meta: { title: 'Avanti — Assistenza' },
   },
+  {
+    path: '/sign-up',
+    name: 'sign-up',
+    component: () => import('@/pages/avanti_sign_up_page.vue'),
+    meta: { title: 'Avanti - Crea account' },
+  },
+  {
+    path: '/sign-in',
+    name: 'sign-in',
+    component: () => import('@/pages/avanti_sign_in_page.vue'),
+    meta: { title: 'Avanti - Accedi' },
+  },
+  {
+    path: '/verify-email',
+    name: 'verify-email',
+    component: () => import('@/pages/avanti_verify_email_page.vue'),
+    meta: { title: 'Avanti - Verifica email' },
+  },
+  {
+    path: '/iban',
+    name: 'iban',
+    component: () => import('@/pages/avanti_iban_page.vue'),
+    meta: { title: 'Avanti - IBAN' },
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('@/pages/avanti_profile_page.vue'),
+    meta: { title: 'Avanti - Profilo' },
+  },
+  {
+    path: '/profile/name',
+    name: 'change-name',
+    component: () => import('@/pages/avanti_change_name_page.vue'),
+    meta: { title: 'Avanti - Modifica nome' },
+  },
+  {
+    path: '/profile/email',
+    name: 'change-email',
+    component: () => import('@/pages/avanti_change_email_page.vue'),
+    meta: { title: 'Avanti - Cambia email' },
+  },
+  {
+    path: '/profile/password',
+    name: 'change-password',
+    component: () => import('@/pages/avanti_change_password_page.vue'),
+    meta: { title: 'Avanti - Cambia password' },
+  },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 

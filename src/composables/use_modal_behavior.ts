@@ -1,45 +1,64 @@
 import { nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue'
 
 /**
- * Поведение модального окна, не зависящее от его оформления:
+ * Поведение модального слоя, не зависящее от его оформления:
  * блокировка прокрутки страницы, ловушка фокуса, возврат фокуса
  * инициатору и закрытие по Escape.
  *
- * Вынесено из `avanti_modal.vue`, чтобы сам компонент отвечал только
- * за разметку и оставался с запасом до лимита в 300 строк.
+ * Одна реализация на все модальные слои проекта: центрированное окно
+ * `avanti_modal.vue`, выезжающая панель чата `avanti_chat_dialog.vue`
+ * и мобильное меню `avanti_mobile_menu.vue`. Различия между ними
+ * описаны параметрами `initialFocus` и `restoreFocus`.
  */
 
-/** Класс на body: пока окно открыто, страница под ним не прокручивается. */
+/** Класс на body: пока слой открыт, страница под ним не прокручивается. */
 const SCROLL_LOCK_CLASS = 'avanti-scroll-locked'
 
-/** Кандидаты на фокус внутри окна; реально отбираются по tabIndex >= 0. */
+/** Кандидаты на фокус внутри слоя; реально отбираются по tabIndex >= 0. */
 const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
-/** Что окно сообщает о себе композиции. */
+/**
+ * Куда уходит фокус при открытии:
+ * `container` — на сам контейнер (окно объявляет себя целиком),
+ * `first` — на первый фокусируемый элемент (панели: кнопка закрытия).
+ */
+export type AvantiModalInitialFocus = 'container' | 'first'
+
+/** Что слой сообщает о себе композиции. */
 export interface AvantiModalBehaviorOptions {
-  /** Окно открыто прямо сейчас. */
+  /** Слой открыт прямо сейчас. */
   isOpen: () => boolean
-  /** Escape закрывает окно. */
+  /** Escape закрывает слой. */
   closeOnEscape: () => boolean
   /** Вызывается, когда пользователь нажал Escape при разрешённом закрытии. */
   onEscape: () => void
+  /** Куда уводить фокус при открытии. По умолчанию — на контейнер. */
+  initialFocus?: AvantiModalInitialFocus
+  /** Возвращать ли фокус инициатору при закрытии. По умолчанию — да. */
+  restoreFocus?: boolean
 }
 
 /**
- * Возвращает ссылку, которую компонент вешает на корневой элемент окна:
+ * Возвращает ссылку, которую компонент вешает на корневой элемент слоя:
  * по ней считаются фокусируемые элементы и уводится фокус при открытии.
  */
 export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLElement | null> {
   const windowRef = ref<HTMLElement | null>(null)
 
-  /** Элемент, с которого окно открыли: на него возвращается фокус при закрытии. */
+  /** Элемент, с которого слой открыли: на него возвращается фокус при закрытии. */
   let opener: HTMLElement | null = null
 
-  /** Ловушка фокуса: Tab и Shift+Tab ходят по кругу внутри окна. */
-  function trapFocus(event: KeyboardEvent): void {
+  /** Фокусируемые элементы внутри слоя в порядке обхода Tab. */
+  function focusableElements(): HTMLElement[] {
     const box = windowRef.value
     const found = box?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []
-    const elements = Array.from(found).filter((el) => el.tabIndex >= 0 && !el.hasAttribute('disabled'))
+    return Array.from(found).filter((el) => el.tabIndex >= 0 && !el.hasAttribute('disabled'))
+  }
+
+  /** Ловушка фокуса: Tab и Shift+Tab ходят по кругу внутри слоя. */
+  function trapFocus(event: KeyboardEvent): void {
+    const box = windowRef.value
+    const elements = focusableElements()
     if (elements.length === 0) {
       event.preventDefault()
       box?.focus()
@@ -75,18 +94,29 @@ export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLE
     document.body.classList.toggle(SCROLL_LOCK_CLASS, locked)
   }
 
-  /* Открытие уводит фокус в окно и запоминает инициатора, закрытие его возвращает. */
+  /** Уводит фокус внутрь слоя так, как просит компонент. */
+  function focusInside(): void {
+    if (options.initialFocus === 'first') {
+      focusableElements()[0]?.focus()
+      return
+    }
+    windowRef.value?.focus()
+  }
+
+  /* Открытие уводит фокус в слой и запоминает инициатора, закрытие его возвращает. */
   watch(
     options.isOpen,
     (open) => {
       toggleScrollLock(open)
       if (!open) {
-        opener?.focus()
+        if (options.restoreFocus !== false) {
+          opener?.focus()
+        }
         opener = null
         return
       }
       opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
-      void nextTick(() => windowRef.value?.focus())
+      void nextTick(focusInside)
     },
     { immediate: true },
   )

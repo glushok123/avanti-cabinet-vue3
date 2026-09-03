@@ -5,6 +5,7 @@
   в шапке кабинета, при этом страница под ней остаётся видимой.
   Закрывается по Escape и по клику вне панели, пока открыта — держит фокус
   внутри себя и блокирует прокрутку страницы.
+  Поведение слоя живёт в `@/composables/use_modal_behavior`.
 -->
 <template>
   <Teleport to="body">
@@ -26,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useModalBehavior } from '@/composables/use_modal_behavior'
 
 const props = defineProps<{
   /** Панель открыта. */
@@ -37,92 +38,21 @@ const props = defineProps<{
 
 const emit = defineEmits<{ close: [] }>()
 
-/** Класс на body: пока диалог открыт, страница под ним не прокручивается. */
-const SCROLL_LOCK_CLASS = 'avanti-chat-scroll-locked'
-
-/** Элементы, на которые может встать фокус внутри панели. */
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
-const panelRef = ref<HTMLElement | null>(null)
-
 function handleClose(): void {
   emit('close')
 }
 
-function focusableElements(): HTMLElement[] {
-  if (!panelRef.value) {
-    return []
-  }
-
-  return Array.from(panelRef.value.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
-}
-
-/** Ловушка фокуса: Tab и Shift+Tab ходят по кругу внутри панели. */
-function trapFocus(event: KeyboardEvent): void {
-  const elements = focusableElements()
-  if (elements.length === 0) {
-    return
-  }
-
-  const first = elements[0]
-  const last = elements[elements.length - 1]
-  const active = document.activeElement
-  const outside = panelRef.value === null || !panelRef.value.contains(active)
-
-  if (event.shiftKey && (outside || active === first)) {
-    event.preventDefault()
-    last.focus()
-    return
-  }
-
-  if (!event.shiftKey && (outside || active === last)) {
-    event.preventDefault()
-    first.focus()
-  }
-}
-
-function handleKeydown(event: KeyboardEvent): void {
-  if (!props.open) {
-    return
-  }
-
-  if (event.key === 'Escape') {
-    handleClose()
-    return
-  }
-
-  if (event.key === 'Tab') {
-    trapFocus(event)
-  }
-}
-
-function toggleScrollLock(locked: boolean): void {
-  document.body.classList.toggle(SCROLL_LOCK_CLASS, locked)
-}
-
-/* Открытие переводит фокус внутрь панели; возврат фокуса — забота вызывающей кнопки. */
-watch(
-  () => props.open,
-  (open) => {
-    toggleScrollLock(open)
-
-    if (open) {
-      void nextTick(() => {
-        focusableElements()[0]?.focus()
-      })
-    }
-  },
-  { immediate: true },
-)
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeydown)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', handleKeydown)
-  toggleScrollLock(false)
+/*
+ * Ловушка фокуса, Escape и блокировка прокрутки — общая композиция модального
+ * слоя. Фокус при открытии уходит на первый элемент панели (кнопку закрытия),
+ * а возврат фокуса остаётся заботой вызывающей кнопки.
+ */
+const panelRef = useModalBehavior({
+  isOpen: () => props.open,
+  closeOnEscape: () => true,
+  onEscape: handleClose,
+  initialFocus: 'first',
+  restoreFocus: false,
 })
 </script>
 
@@ -193,8 +123,8 @@ $panel-width: 420px;
 </style>
 
 <style lang="scss">
-/* Глобальный класс: пока панель чата открыта, страница под ней не прокручивается. */
-body.avanti-chat-scroll-locked {
+/* Глобальный класс модального слоя: страница под открытой панелью не прокручивается. */
+body.avanti-scroll-locked {
   overflow: hidden;
 }
 </style>
