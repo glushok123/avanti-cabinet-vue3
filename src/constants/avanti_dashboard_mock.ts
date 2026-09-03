@@ -86,6 +86,12 @@ export const AVANTI_LOCK_BANNER: AvantiLockBannerContent = {
   options: ['Documenti', 'Firma'],
 }
 
+/*
+ * РАСХОЖДЕНИЕ МАКЕТА: в поле «Cognome» (фамилия) в макете стоит название
+ * банка, а в «Nome» (имя) — имя и фамилия целиком. Значения оставлены
+ * как в макете, чтобы вёрстка совпадала с ним пиксель в пиксель;
+ * на этапе интеграции сюда придут данные пользователя из API.
+ */
 export const AVANTI_PERSONAL_DATA: AvantiPersonalDataContent = {
   title: 'Dati personali',
   rows: [
@@ -149,6 +155,8 @@ export const AVANTI_SUPPORT_BUBBLE: AvantiSupportBubbleContent = {
  * Вынесены сюда, чтобы в компонентах не было зашитых строк локали.
  */
 export const AVANTI_DASHBOARD_TEXTS = {
+  /** Заголовок страницы: в макете не показан, нужен для скринридеров. */
+  pageTitle: 'Area personale',
   /** Доступное имя основного меню — десктопная шапка и нижняя навигация. */
   mainMenu: 'Menu principale',
   /** Доступное имя блока хлебных крошек. */

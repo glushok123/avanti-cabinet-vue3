@@ -19,6 +19,7 @@
         class="avanti-dashboard-checklist-card__toggle"
         type="button"
         :aria-expanded="expanded"
+        :aria-controls="listId"
         :aria-label="toggleLabel"
         @click="toggle"
       >
@@ -27,7 +28,7 @@
       </button>
     </div>
     <span class="avanti-dashboard-checklist-card__divider" aria-hidden="true" />
-    <div v-if="expanded" class="avanti-dashboard-checklist-card__list">
+    <div v-if="expanded" :id="listId" class="avanti-dashboard-checklist-card__list">
       <template v-for="(item, index) in items" :key="item.id">
         <span v-if="index > 0" class="avanti-dashboard-checklist-card__divider" aria-hidden="true" />
         <AvantiDashboardChecklistItem
@@ -70,6 +71,9 @@ defineProps<{
 
 /** Заголовок связан с секцией через aria-labelledby, поэтому нужен id. */
 const titleId = useId()
+
+/** Связывает кнопку сворачивания со списком шагов для скринридеров. */
+const listId = useId()
 
 /** По макету карточка развёрнута; кнопка со шевроном сворачивает список. */
 const expanded = ref(true)

@@ -53,6 +53,13 @@ export const AVANTI_SIMULATION_TEXTS = {
   durationSliderLabel: 'Durata del rimborso in mesi',
   summaryAmountDesktop: 'Importo richiesto',
   summaryAmountMobile: 'Importo richiesto',
+  /*
+   * РАСХОЖДЕНИЕ МАКЕТА: десктопный фрейм подписывает строку как
+   * «Data di restituzione» (дата возврата), хотя значение — сумма
+   * ежемесячного платежа в €/mese. Мобильный фрейм называет ту же строку
+   * корректно: «Rata di restituzione» (размер платежа). Обе подписи
+   * воспроизведены как в макете; нужно подтверждение заказчика.
+   */
   summaryPaymentDesktop: 'Data di restituzione',
   summaryPaymentMobile: 'Rata di restituzione',
   summaryMonthsDesktop: 'Mesi',

@@ -6,6 +6,11 @@
 -->
 <template>
   <div class="avanti-home">
+    <!--
+      В макете у страницы нет видимого заголовка, но без h1 ломается
+      иерархия для скринридеров, поэтому заголовок скрыт визуально.
+    -->
+    <h1 class="avanti-home__title">{{ texts.pageTitle }}</h1>
     <AvantiAppHeaderMobile
       v-if="isMobile"
       :user="user"
@@ -120,6 +125,11 @@ const isMobile = useIsMobile()
   gap: 20px;
   min-height: 100vh;
   background-color: var(--avanti-color-page);
+
+  /* Заголовок нужен только для доступности — в макете его нет. */
+  &__title {
+    @include visually-hidden;
+  }
 }
 
 /*

@@ -64,6 +64,20 @@ watch(
   },
 )
 
+/*
+ * Границы суммы зависят от ширины экрана (в макете десктоп и мобильная
+ * подписаны разными максимумами). При переходе через брейкпоинт текущее
+ * значение может оказаться вне новых границ — приводим его сразу,
+ * не дожидаясь потери фокуса.
+ */
+watch([() => props.min, () => props.max], () => {
+  const clamped = clampAmount(props.modelValue, props.min, props.max)
+  if (clamped !== props.modelValue) {
+    emit('update:modelValue', clamped)
+    displayValue.value = formatAmount(clamped)
+  }
+})
+
 /** Количество цифр в строке — по нему восстанавливается позиция каретки. */
 function countDigits(text: string): number {
   return text.replace(/\D/g, '').length
