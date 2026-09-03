@@ -1,0 +1,92 @@
+/**
+ * Дизайн-токены Avanti.
+ * Значения сняты напрямую из Figma-макета и являются единственным источником
+ * правды по цветам, теням, радиусам и типографике. В компонентах запрещено
+ * использовать «сырые» hex-значения — только эти переменные.
+ */
+:root {
+  /* --- Брендовые цвета --- */
+  --avanti-color-primary: #2491aa;
+  --avanti-color-primary-dark: #1a7488;
+  --avanti-color-primary-soft: #eaf4f6;
+  --avanti-color-primary-soft-border: #c7e3ea;
+  --avanti-color-logo-accent: #245caa;
+
+  /* --- Поверхности --- */
+  --avanti-color-surface: #ffffff;
+  --avanti-color-surface-muted: #f8fafb;
+  --avanti-color-surface-neutral: #f4f4f5;
+  --avanti-color-page: #f8fafb;
+
+  /* Фон мобильного фрейма симуляции — в макете на 1 пункт светлее десктопного. */
+  --avanti-color-page-mobile: #f9fafb;
+
+  /* --- Текст --- */
+  --avanti-color-text-strong: #1a2332;
+  --avanti-color-text-heading: #111827;
+  --avanti-color-text-black: #000000;
+  --avanti-color-text-muted: #747474;
+  --avanti-color-text-secondary: #71717a;
+  --avanti-color-text-tertiary: #a1a1aa;
+  --avanti-color-text-on-primary: #ffffff;
+  --avanti-color-text-on-primary-soft: #eaf4f6;
+  --avanti-color-text-on-primary-dim: #f3f3f3;
+
+  /* --- Границы и разделители --- */
+  --avanti-color-border: #e4e4e7;
+  --avanti-color-border-soft: #e2edf0;
+  --avanti-color-border-neutral: #d4d4d8;
+  --avanti-color-divider: #f0f2f5;
+
+  /* Разделитель внутри бирюзовой карточки итогов (мобильная версия). */
+  --avanti-color-divider-on-primary: rgb(255 255 255 / 31%);
+  --avanti-color-track: #e9e9e9;
+
+  /* --- Статусные --- */
+  --avanti-color-danger: #ef4444;
+  --avanti-color-danger-dark: #9a0606;
+
+  /* --- Градиенты --- */
+  --avanti-gradient-primary: linear-gradient(
+    180deg,
+    var(--avanti-color-primary) 0%,
+    var(--avanti-color-primary-dark) 100%
+  );
+
+  /* --- Типографика --- */
+  --avanti-font-family-base: 'Inter', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, sans-serif;
+  --avanti-font-family-alt: 'Geist', 'Inter', -apple-system, sans-serif;
+  --avanti-font-weight-light: 300;
+  --avanti-font-weight-regular: 400;
+  --avanti-font-weight-medium: 500;
+  --avanti-font-weight-semibold: 600;
+  --avanti-font-weight-bold: 700;
+
+  /* --- Радиусы --- */
+  --avanti-radius-xs: 4px;
+  --avanti-radius-sm: 8px;
+  --avanti-radius-md: 12px;
+  --avanti-radius-lg: 14px;
+  --avanti-radius-xl: 16px;
+  --avanti-radius-2xl: 19px;
+  --avanti-radius-3xl: 20px;
+  --avanti-radius-pill: 99px;
+  --avanti-radius-round: 50%;
+
+  /* --- Тени --- */
+  --avanti-shadow-card: 0 2px 4px rgb(26 35 50 / 6%);
+  --avanti-shadow-card-soft: 0 4px 16px rgb(26 35 50 / 3%);
+  --avanti-shadow-balance: 0 8px 12px rgb(36 145 170 / 19%);
+  --avanti-shadow-icon-circle: 0 4px 4px rgb(36 145 170 / 19%);
+  --avanti-shadow-icon-action: 0 4px 4px rgb(36 145 170 / 25%);
+  --avanti-shadow-amount-field: 0 4px 18.6px rgb(0 0 0 / 33%);
+  --avanti-shadow-amount-field-mobile: 0 4px 5px rgb(0 0 0 / 5%);
+  --avanti-shadow-summary: 3px 6px 15.4px rgb(0 0 0 / 25%);
+  --avanti-shadow-summary-mobile: 0 8px 10px rgb(0 0 0 / 18%);
+  --avanti-shadow-button-primary: 0 4px 11.6px rgb(0 0 0 / 25%);
+  --avanti-shadow-button-primary-mobile: 0 4px 4px rgb(0 0 0 / 16%);
+
+  /* --- Переходы --- */
+  --avanti-transition-fast: 0.15s ease;
+  --avanti-transition-base: 0.2s ease;
+}

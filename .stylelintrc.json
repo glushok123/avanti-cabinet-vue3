@@ -1,0 +1,32 @@
+{
+  "extends": ["stylelint-config-standard-scss", "stylelint-config-recess-order"],
+  "rules": {
+    "selector-class-pattern": [
+      "^avanti(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      {
+        "message": "Классы именуются по BEM с префиксом avanti-: .avanti-block__element--modifier"
+      }
+    ],
+    "color-no-hex": [
+      true,
+      {
+        "message": "Цвета задаются только токенами из tokens.scss (var(--avanti-color-...))"
+      }
+    ],
+    "scss/dollar-variable-pattern": "^[a-z][a-z0-9-]*$",
+    "declaration-property-value-no-unknown": null,
+    "no-descending-specificity": null,
+    "custom-property-pattern": "^avanti-[a-z0-9-]+$"
+  },
+  "overrides": [
+    {
+      "files": ["src/assets/styles/tokens.scss"],
+      "rules": { "color-no-hex": null }
+    },
+    {
+      "files": ["src/components/icons/**/*.vue"],
+      "rules": { "color-no-hex": null }
+    }
+  ],
+  "ignoreFiles": ["dist/**", "node_modules/**", "_figma_assets/**"]
+}

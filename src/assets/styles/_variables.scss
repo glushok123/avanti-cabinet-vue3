@@ -1,0 +1,11 @@
+// Брейкпоинты макета: мобильный фрейм 390px, десктопный фрейм 1440px.
+$breakpoint-mobile-max: 767px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+// Опорные ширины макета — используются для проверки pixel-perfect.
+$layout-width-desktop: 1440px;
+$layout-width-mobile: 390px;
+
+// Максимальная ширина контентной области десктопа (1440 - 72*2 паддинга).
+$layout-content-max: 1296px;

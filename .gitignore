@@ -1,0 +1,17 @@
+node_modules/
+dist/
+dist-singlefile/
+*.local
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+npm-debug.log*
+.env
+.env.*
+!.env.example
+
+# Сырые выгрузки ассетов из Figma — в репозиторий не попадают,
+# используемые файлы лежат в src/assets.
+_figma_assets/
