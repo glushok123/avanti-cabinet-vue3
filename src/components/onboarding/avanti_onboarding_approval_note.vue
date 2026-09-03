@@ -64,7 +64,9 @@ defineProps<{
       font-size: 18px;
       font-weight: var(--avanti-font-weight-light);
       line-height: normal;
-      letter-spacing: 0.72px;
+
+      /* Трекинг доводит строку до макетных 585px: Chrome набирает её уже. */
+      letter-spacing: 0.77px;
     }
   }
 }

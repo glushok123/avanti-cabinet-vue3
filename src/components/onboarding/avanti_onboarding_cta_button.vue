@@ -39,6 +39,9 @@ function handleClick(): void {
   @include button-reset;
   @include focus-ring;
 
+  /* Обводка рисуется внутрь: иначе кнопка шире макетных 375px на 2px. */
+  @include inner-border(var(--avanti-color-surface), 1px, var(--avanti-shadow-cta));
+
   display: flex;
   gap: 12px;
   align-items: center;
@@ -49,9 +52,7 @@ function handleClick(): void {
   overflow: hidden;
   color: var(--avanti-color-text-on-primary);
   background-color: var(--avanti-color-primary);
-  border: 1px solid var(--avanti-color-surface);
   border-radius: var(--avanti-radius-xl);
-  box-shadow: var(--avanti-shadow-cta);
   transition: background-color var(--avanti-transition-base);
 
   &:hover {

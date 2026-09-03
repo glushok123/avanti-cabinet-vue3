@@ -130,10 +130,11 @@ $frame-height: 258.196px;
 
   &__holder,
   &__expiry {
+    /* Строка в макете 20px (18.79 после сжатия по вертикали на 0.94). */
     position: absolute;
-    top: 216px;
+    top: 217px;
     font-size: 13.738px;
-    line-height: normal;
+    line-height: 20px;
   }
 
   &__holder {
@@ -188,7 +189,7 @@ $frame-height: 258.196px;
   /* --- Стеклянная карта (верхняя) --- */
   &--glass {
     .avanti-onboarding-credit-card__plate {
-      @include inner-border(var(--avanti-color-primary), 2.29px);
+      @include inner-border(var(--avanti-color-border-card-glass), 2.29px);
 
       color: var(--avanti-color-text-black);
       background-color: var(--avanti-color-surface-glass);

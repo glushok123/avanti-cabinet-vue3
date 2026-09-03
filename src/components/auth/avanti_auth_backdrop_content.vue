@@ -24,6 +24,7 @@
           :label="texts.amountLabel"
           :amount="texts.amountValue"
           :details="details"
+          inline-details
         />
         <AvantiOnboardingApprovalNote :badge="texts.noteBadge" :text="texts.note" />
       </div>
