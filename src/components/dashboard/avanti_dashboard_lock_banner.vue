@@ -18,13 +18,13 @@
     >
       <AvantiIconLock />
     </AvantiIconCircle>
-    <p class="avanti-dashboard-lock-banner__title">{{ title }}</p>
+    <p :id="titleId" class="avanti-dashboard-lock-banner__title">{{ title }}</p>
     <p class="avanti-dashboard-lock-banner__subtitle">{{ subtitle }}</p>
     <AvantiBadge class="avanti-dashboard-lock-banner__badge" tone="primary" uppercase>
       <span class="avanti-dashboard-lock-banner__counter">{{ counterLabel }}</span>
       <span class="avanti-dashboard-lock-banner__counter-short">{{ counterShortLabel }}</span>
     </AvantiBadge>
-    <div class="avanti-dashboard-lock-banner__options">
+    <div class="avanti-dashboard-lock-banner__options" role="group" :aria-labelledby="titleId">
       <AvantiCheckbox
         v-for="option in options"
         :key="option"
@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, useId, watch } from 'vue'
 import AvantiIconCircle from '@/components/ui/avanti_icon_circle.vue'
 import AvantiBadge from '@/components/ui/avanti_badge.vue'
 import AvantiCheckbox from '@/components/ui/avanti_checkbox.vue'
@@ -65,6 +65,15 @@ const props = defineProps<{
   options: string[]
   actionLabel: string
 }>()
+
+/**
+ * Набор чекбоксов — это группа, а не россыпь отдельных полей, поэтому у неё
+ * есть общее имя: заголовок баннера. Взят `role="group"` с `aria-labelledby`,
+ * а не `fieldset`+`legend`: у fieldset собственные браузерные поля и рамка,
+ * а сброс их в grid-раскладке баннера сдвинул бы её относительно макета.
+ */
+const uid = useId()
+const titleId = computed(() => `${uid}-title`)
 
 /**
  * Отмеченные пункты хранятся множеством значений, а не массивом по индексу:

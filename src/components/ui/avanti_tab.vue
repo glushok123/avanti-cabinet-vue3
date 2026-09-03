@@ -16,7 +16,7 @@
     :class="stateClasses"
     type="button"
     role="tab"
-    :aria-controls="panelId"
+    :aria-controls="controlledPanelId"
     :aria-selected="selected"
     :aria-disabled="locked"
     :tabindex="tabIndex"
@@ -44,6 +44,13 @@ const props = withDefaults(
     elementId?: string
     /** `id` панели с содержимым шага. */
     panelId?: string
+    /**
+     * Панель шага сейчас есть в DOM. Мастер, который рендерит только открытый
+     * шаг, должен передать `false` остальным вкладкам: `aria-controls` на
+     * несуществующий `id` скринридер считает ошибкой разметки.
+     * По умолчанию `true` — вкладки с постоянными панелями ведут себя как прежде.
+     */
+    panelRendered?: boolean
   }>(),
   {
     selected: false,
@@ -51,12 +58,18 @@ const props = withDefaults(
     tabbable: false,
     elementId: undefined,
     panelId: undefined,
+    panelRendered: true,
   },
 )
 
 const emit = defineEmits<{ select: [] }>()
 
 const locked = computed(() => props.state === 'locked')
+
+/** Ссылка на панель ставится, только когда панель действительно отрисована. */
+const controlledPanelId = computed<string | undefined>(() =>
+  props.panelRendered ? props.panelId : undefined,
+)
 
 /**
  * Недоступный шаг помечается `aria-disabled`, а не `disabled`: так он остаётся

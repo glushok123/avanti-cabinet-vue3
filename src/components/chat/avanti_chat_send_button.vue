@@ -1,15 +1,12 @@
 <!--
   Кнопка отправки сообщения: круг 44×44 с фирменным градиентом.
-  Тип button (а не submit) — отправку инициирует обработчик панели.
+
+  Тип submit: кнопка стоит в форме панели ввода, и отправку обрабатывает её
+  `@submit`. С типом button форма не отправлялась по Enter из поля ввода —
+  сообщение уходило только по щелчку мышью.
 -->
 <template>
-  <button
-    class="avanti-chat-send-button"
-    type="button"
-    :aria-label="label"
-    :disabled="disabled"
-    @click="handleClick"
-  >
+  <button class="avanti-chat-send-button" type="submit" :aria-label="label" :disabled="disabled">
     <span class="avanti-chat-send-button__icon">
       <AvantiChatIconSend />
     </span>
@@ -28,12 +25,6 @@ withDefaults(
   }>(),
   { disabled: false },
 )
-
-const emit = defineEmits<{ send: [] }>()
-
-function handleClick(): void {
-  emit('send')
-}
 </script>
 
 <style lang="scss" scoped>

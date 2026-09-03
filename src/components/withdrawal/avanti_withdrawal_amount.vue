@@ -24,6 +24,7 @@
       :max="max"
       :step="step"
       :aria-label="sliderLabel"
+      :value-text="valueText"
       thumb-size="sm"
       @update:model-value="handleUpdate"
     />

@@ -18,6 +18,7 @@
       :tabbable="isTabbable(index)"
       :element-id="tabElementId(item)"
       :panel-id="item.panelId"
+      :panel-rendered="!singlePanel || item.id === modelValue"
       @select="choose(item)"
     />
   </div>
@@ -36,9 +37,16 @@ const props = withDefaults(
     items: AvantiTabItem[]
     /** Доступное имя полосы вкладок. */
     label?: string
+    /**
+     * Мастер рисует только панель текущего шага. Тогда aria-controls
+     * остальных вкладок указывал бы на отсутствующие в DOM элементы,
+     * поэтому у них ссылка не выводится.
+     */
+    singlePanel?: boolean
   }>(),
   {
     label: undefined,
+    singlePanel: false,
   },
 )
 

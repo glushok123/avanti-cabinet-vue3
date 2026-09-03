@@ -9,13 +9,25 @@ import { nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue'
  * `avanti_modal.vue`, выезжающая панель чата `avanti_chat_dialog.vue`
  * и мобильное меню `avanti_mobile_menu.vue`. Различия между ними
  * описаны параметрами `initialFocus` и `restoreFocus`.
+ *
+ * Слои складываются в общий стек (см. `openLayers`): клавиатуру обслуживает
+ * только верхний слой, а прокрутка страницы разблокируется, лишь когда стек
+ * опустел. Без этого вложенное окно и окно под ним боролись бы за фокус,
+ * а закрытие вложенного снимало бы блокировку с ещё открытой страницы.
  */
 
-/** Класс на body: пока слой открыт, страница под ним не прокручивается. */
+/** Класс на body: пока открыт хотя бы один слой, страница не прокручивается. */
 const SCROLL_LOCK_CLASS = 'avanti-scroll-locked'
 
 /** Кандидаты на фокус внутри слоя; реально отбираются по tabIndex >= 0. */
 const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
+/**
+ * Стек открытых слоёв, общий на всё приложение: последний элемент — верхний
+ * слой, тот, что нарисован поверх остальных. Обработчик клавиатуры висит
+ * у каждого слоя, но срабатывает только у верхнего.
+ */
+const openLayers: symbol[] = []
 
 /**
  * Куда уходит фокус при открытии:
@@ -38,12 +50,45 @@ export interface AvantiModalBehaviorOptions {
   restoreFocus?: boolean
 }
 
+/** Прокрутка страницы заблокирована, пока в стеке есть хотя бы один слой. */
+function syncScrollLock(): void {
+  document.body.classList.toggle(SCROLL_LOCK_CLASS, openLayers.length > 0)
+}
+
+/** Слой открылся: встаёт на вершину стека и забирает себе клавиатуру. */
+function pushLayer(layer: symbol): void {
+  if (!openLayers.includes(layer)) {
+    openLayers.push(layer)
+    syncScrollLock()
+  }
+}
+
+/**
+ * Слой закрылся или размонтирован. Снимаем его из любого места стека:
+ * компонент может уйти из дерева и не с вершины.
+ */
+function removeLayer(layer: symbol): void {
+  const index = openLayers.indexOf(layer)
+  if (index !== -1) {
+    openLayers.splice(index, 1)
+    syncScrollLock()
+  }
+}
+
+/** Клавиатуру обслуживает только верхний слой стека. */
+function isTopLayer(layer: symbol): boolean {
+  return openLayers[openLayers.length - 1] === layer
+}
+
 /**
  * Возвращает ссылку, которую компонент вешает на корневой элемент слоя:
  * по ней считаются фокусируемые элементы и уводится фокус при открытии.
  */
 export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLElement | null> {
   const windowRef = ref<HTMLElement | null>(null)
+
+  /** Метка этого слоя в общем стеке. */
+  const layer = Symbol('avanti-modal-layer')
 
   /** Элемент, с которого слой открыли: на него возвращается фокус при закрытии. */
   let opener: HTMLElement | null = null
@@ -78,7 +123,7 @@ export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLE
   }
 
   function handleKeydown(event: KeyboardEvent): void {
-    if (!options.isOpen()) {
+    if (!options.isOpen() || !isTopLayer(layer)) {
       return
     }
     if (event.key === 'Escape' && options.closeOnEscape()) {
@@ -88,10 +133,6 @@ export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLE
     if (event.key === 'Tab') {
       trapFocus(event)
     }
-  }
-
-  function toggleScrollLock(locked: boolean): void {
-    document.body.classList.toggle(SCROLL_LOCK_CLASS, locked)
   }
 
   /** Уводит фокус внутрь слоя так, как просит компонент. */
@@ -107,8 +148,8 @@ export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLE
   watch(
     options.isOpen,
     (open) => {
-      toggleScrollLock(open)
       if (!open) {
+        removeLayer(layer)
         if (options.restoreFocus !== false) {
           opener?.focus()
         }
@@ -116,6 +157,7 @@ export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLE
         return
       }
       opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+      pushLayer(layer)
       void nextTick(focusInside)
     },
     { immediate: true },
@@ -127,7 +169,7 @@ export function useModalBehavior(options: AvantiModalBehaviorOptions): Ref<HTMLE
 
   onBeforeUnmount(() => {
     window.removeEventListener('keydown', handleKeydown)
-    toggleScrollLock(false)
+    removeLayer(layer)
   })
 
   return windowRef

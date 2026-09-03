@@ -19,7 +19,7 @@
     <AvantiCommissionAmountCard :amount="content.amount" />
     <AvantiCommissionNotice :text="content.notice" @info="emit('info')" />
     <AvantiCommissionPaymentMethod :method="content.payment" />
-    <AvantiButton class="avanti-commission-iban-panel__submit" @click="emit('submit')">
+    <AvantiButton class="avanti-commission-iban-panel__submit" size="md" @click="emit('submit')">
       {{ content.submitLabel }}
       <template #icon-after>
         <AvantiIconArrowRight />
@@ -59,22 +59,6 @@ const tabId = computed<string>(() => `${props.panelId}-tab`)
 </script>
 
 <style lang="scss" scoped>
-/*
- * Оформление кнопки из макета. Базовая кнопка на десктопе вырастает до 60px
- * и 24px текста, поэтому набор применяется дважды — в базовых стилях и внутри
- * desktop-up, где он гасит её правила той же специфичностью.
- */
-@mixin submit-appearance($height) {
-  gap: 8px;
-  height: $height;
-  padding: 12px 16px;
-  font-size: 16px;
-  font-weight: var(--avanti-font-weight-semibold);
-  border: none;
-  border-radius: var(--avanti-radius-sm);
-  box-shadow: var(--avanti-shadow-input);
-}
-
 .avanti-commission-iban-panel {
   display: flex;
   flex-direction: column;
@@ -82,17 +66,11 @@ const tabId = computed<string>(() => `${props.panelId}-tab`)
   align-items: stretch;
   width: 100%;
 
-  &__submit {
-    @include submit-appearance(48px);
-  }
-
   @include desktop-up {
     gap: 24px;
 
     /* Кнопка отбита от блока оплаты сильнее остальных промежутков. */
     &__submit {
-      @include submit-appearance(50px);
-
       margin-top: 8px;
     }
   }

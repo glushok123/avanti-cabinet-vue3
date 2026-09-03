@@ -13,6 +13,10 @@
 
   Справа в поле может стоять кнопка (слот `icon`), под полем — пояснение
   с круглым значком «i».
+
+  Состояния поля (`disabled`, `invalid`, `errorMessage`) и подпись `hint`
+  просто прокидываются в примитив: рисует их он, здесь только габариты.
+  По умолчанию все они пустые — поведение поля без них прежнее.
 -->
 <template>
   <div class="avanti-modal-field" :class="sizeClass">
@@ -25,6 +29,10 @@
       :name="name"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
+      :hint="hint"
+      :disabled="disabled"
+      :invalid="invalid"
+      :error-message="errorMessage"
       @update:model-value="handleUpdate"
     >
       <template v-if="$slots.icon" #icon>
@@ -51,6 +59,13 @@ const props = withDefaults(
     name?: string
     placeholder?: string
     autocomplete?: string
+    /** Поясняющая подпись под надписью поля — примитив рисует её сам. */
+    hint?: string
+    disabled?: boolean
+    /** Ошибочное состояние без текста ошибки. */
+    invalid?: boolean
+    /** Текст ошибки под полем; непустое значение само включает invalid. */
+    errorMessage?: string
     /** Пояснение под полем; пустая строка убирает его. */
     note?: string
     size?: AvantiModalFieldSize
@@ -62,6 +77,10 @@ const props = withDefaults(
     name: undefined,
     placeholder: '',
     autocomplete: undefined,
+    hint: '',
+    disabled: false,
+    invalid: false,
+    errorMessage: '',
     note: '',
     size: 'md',
     id: undefined,
@@ -174,6 +193,9 @@ function handleUpdate(value: string): void {
     justify-content: center;
     width: 16px;
     height: 16px;
+
+    /* Кегль знака «i» из кадра Figma — дробная величина перенесена как есть,
+       отдельного токена под неё нет. То же значение в `avanti_iban_hint`. */
     font-size: 12.8px;
     font-weight: var(--avanti-font-weight-semibold);
     line-height: normal;
@@ -188,6 +210,8 @@ function handleUpdate(value: string): void {
     font-weight: var(--avanti-font-weight-light);
     line-height: normal;
     color: var(--avanti-color-text-muted);
+
+    /* Трекинг из кадра Figma: 4% кегля (12 × 0.04). Токена трекинга нет. */
     letter-spacing: 0.48px;
   }
 
@@ -223,6 +247,8 @@ function handleUpdate(value: string): void {
 
     &__note-text {
       font-size: 14px;
+
+      /* Тот же трекинг 4% кегля, что и на мобильной, но при 14px (14 × 0.04). */
       letter-spacing: 0.56px;
     }
   }

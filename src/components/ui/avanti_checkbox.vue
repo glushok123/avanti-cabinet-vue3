@@ -43,6 +43,9 @@ function handleChange(event: Event): void {
 
 <style lang="scss" scoped>
 .avanti-checkbox {
+  /* Якорь для скрытого input: иначе при фокусе с клавиатуры страница
+     прокручивается к его абсолютной позиции в начале документа. */
+  position: relative;
   display: inline-flex;
   gap: 8px;
   align-items: center;

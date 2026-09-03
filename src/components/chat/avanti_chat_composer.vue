@@ -1,6 +1,10 @@
 <!--
   Нижняя панель ввода: кнопка вложения, текстовое поле и кнопка отправки.
   Поле — управляемое (v-model), отправка идёт наверх событием send.
+
+  Отправку целиком берёт на себя `@submit` формы: так сообщение уходит и по
+  щелчку по кнопке (она типа submit), и по Enter из поля ввода. Отдельного
+  обработчика щелчка у кнопки нет — иначе одно сообщение уходило бы дважды.
 -->
 <template>
   <form class="avanti-chat-composer" @submit.prevent="handleSend">
@@ -14,7 +18,7 @@
       :placeholder="placeholder"
       @input="handleInput"
     />
-    <AvantiChatSendButton :label="sendLabel" :disabled="isEmpty" @send="handleSend" />
+    <AvantiChatSendButton :label="sendLabel" :disabled="isEmpty" />
   </form>
 </template>
 

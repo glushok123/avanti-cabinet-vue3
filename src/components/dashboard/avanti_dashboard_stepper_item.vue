@@ -10,6 +10,7 @@
       <AvantiIconPen v-else />
     </span>
     <span class="avanti-dashboard-stepper-item__label">{{ label }}</span>
+    <span class="avanti-dashboard-stepper-item__status">{{ statusLabel }}</span>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import { computed } from 'vue'
 import AvantiIconCheck from '@/components/icons/avanti_icon_check.vue'
 import AvantiIconUpload from '@/components/icons/avanti_icon_upload.vue'
 import AvantiIconPen from '@/components/icons/avanti_icon_pen.vue'
+import { AVANTI_STEP_STATUS_LABELS } from '@/constants/avanti_dashboard_status_labels'
 import type { AvantiStepStatus } from '@/types/avanti_dashboard'
 
 const props = defineProps<{
@@ -27,6 +29,12 @@ const props = defineProps<{
 
 const isCompleted = computed(() => props.status === 'completed')
 const isCurrent = computed(() => props.status === 'current')
+
+/**
+ * Статус шага словами: иконка внутри круга декоративная, и без этой строки
+ * пройденный, текущий и ожидающий шаги звучали бы одинаково.
+ */
+const statusLabel = computed(() => AVANTI_STEP_STATUS_LABELS[props.status])
 const statusClass = computed(() => `avanti-dashboard-stepper-item--${props.status}`)
 </script>
 
@@ -57,6 +65,12 @@ const statusClass = computed(() => `avanti-dashboard-stepper-item--${props.statu
     line-height: normal;
     text-align: center;
     white-space: nowrap;
+  }
+
+  /* Статус словами: его читает скринридер, на экране его нет. Строка выведена
+     из потока абсолютным позиционированием, поэтому зазор колонки не растёт. */
+  &__status {
+    @include visually-hidden;
   }
 
   /* --- Завершённый шаг --- */

@@ -16,6 +16,7 @@
         :max="max"
         :step="step"
         :aria-label="sliderLabel"
+        :value-text="durationValueText"
         @update:model-value="handleUpdate"
       >
         <template #value>
@@ -31,11 +32,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import AvantiSimulationSectionHeading from '@/components/simulation/avanti_simulation_section_heading.vue'
 import AvantiSimulationRangeHint from '@/components/simulation/avanti_simulation_range_hint.vue'
 import AvantiRangeSlider from '@/components/ui/avanti_range_slider.vue'
 
-defineProps<{
+const props = defineProps<{
   overline: string
   title: string
   /** Текущий срок возврата в месяцах. */
@@ -52,6 +54,12 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{ 'update:modelValue': [value: number] }>()
+
+/**
+ * Озвучиваемое значение слайдера: скринридер иначе прочитает голое число
+ * без единицы измерения («24» вместо «24 mesi»).
+ */
+const durationValueText = computed(() => `${props.modelValue} ${props.unit}`)
 
 function handleUpdate(value: number): void {
   emit('update:modelValue', value)

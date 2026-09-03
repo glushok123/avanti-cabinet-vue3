@@ -5,6 +5,10 @@
 
   Шапка владеет мобильным меню целиком: кнопка, состояние «открыто»
   и возврат фокуса на кнопку после закрытия живут в одном месте.
+
+  Меню открывается модальным окном (role="dialog"), поэтому у кнопки стоит
+  `aria-haspopup="dialog"`, а не `aria-expanded`: по WAI-ARIA APG раскрытие
+  описывает только элементы, которые разворачиваются на месте.
 -->
 <template>
   <header class="avanti-simulation-header">
@@ -15,7 +19,7 @@
         ref="menuButtonRef"
         class="avanti-simulation-header__menu"
         type="button"
-        :aria-expanded="isMenuOpen"
+        aria-haspopup="dialog"
         :aria-label="menuLabel"
         @click="openMenu"
       >

@@ -47,10 +47,15 @@
         />
       </template>
       <div class="avanti-profile-settings-form__actions">
-        <AvantiButton class="avanti-profile-settings-form__button" variant="outline" @click="handleClose">
+        <AvantiButton
+          class="avanti-profile-settings-form__button"
+          variant="outline"
+          uppercase
+          @click="handleClose"
+        >
           {{ content.dialog.cancelLabel }}
         </AvantiButton>
-        <AvantiButton class="avanti-profile-settings-form__button" type="submit">
+        <AvantiButton class="avanti-profile-settings-form__button" type="submit" uppercase>
           {{ content.dialog.submitLabel }}
         </AvantiButton>
       </div>
@@ -120,7 +125,6 @@ function handleSubmit(): void {
     padding: 8px 16px;
     font-size: 15px;
     font-weight: var(--avanti-font-weight-semibold);
-    text-transform: uppercase;
     border-width: 1px;
   }
 

@@ -121,10 +121,3 @@ $panel-width: 420px;
   }
 }
 </style>
-
-<style lang="scss">
-/* Глобальный класс модального слоя: страница под открытой панелью не прокручивается. */
-body.avanti-scroll-locked {
-  overflow: hidden;
-}
-</style>

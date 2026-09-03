@@ -13,6 +13,7 @@ import type {
   AvantiDocumentsActions,
   AvantiDocumentsDropzone,
   AvantiDocumentsResult,
+  AvantiDocumentsState,
 } from '@/types/avanti_documents'
 
 /** Общие подписи панели. */
@@ -75,9 +76,10 @@ export const AVANTI_DOCUMENTS_FILES: AvantiDocumentFile[] = [
 ]
 
 /*
- * РАСХОЖДЕНИЕ МАКЕТА: зоны перетаскивания файла нет ни в одном кадре Figma,
+ * НЕТ В МАКЕТЕ: зоны перетаскивания файла нет ни в одном кадре Figma,
  * тексты ниже придуманы. Блок сделан по ошибочному заданию и по умолчанию
- * скрыт (проп `showDropzone` у панели). Требует согласования с заказчиком.
+ * выключен (проп `showDropzone` у панели), поэтому в поставке не показывается.
+ * Требует согласования с заказчиком.
  */
 export const AVANTI_DOCUMENTS_DROPZONE: AvantiDocumentsDropzone = {
   title: 'Trascina qui la foto del documento',
@@ -103,3 +105,63 @@ export const AVANTI_DOCUMENTS_SUCCESS: AvantiDocumentsResult = {
 
 /** Текст ошибки загрузки (кадр 95:5965). */
 export const AVANTI_DOCUMENTS_ERROR = 'Caricamento non riuscito. Controlla la connessione e riprova.'
+/**
+ * Кадр макета, собранный из данных выше. Витрина `/documents` выбирает кадр
+ * по query-параметру `state` — так свёрстанные мобильные экраны открываются
+ * ссылкой, без правки кода (тот же приём, что у `/home?state=`).
+ */
+export interface AvantiDocumentsFrame {
+  /** Состояние панели. */
+  state: AvantiDocumentsState
+  /** Строка типа документа над разделителем. */
+  summary: AvantiDocumentSummary
+  /** Отмеченный тип документа. Пустая строка — выбора нет. */
+  selectedOptionId: string
+  /** Загруженные файлы под списком вариантов. */
+  files: AvantiDocumentFile[]
+  /** Текст узкой плашки ошибки. Пустая строка — плашки нет. */
+  errorText: string
+  /** Кнопки действий. Не заданы — блока кнопок нет. */
+  actions?: AvantiDocumentsActions
+  /** Плашка результата: показывается в состоянии `verified`. */
+  result?: AvantiDocumentsResult
+}
+
+/** Кадры витрины по значению query-параметра `state`. */
+export const AVANTI_DOCUMENTS_FRAMES: Record<string, AvantiDocumentsFrame> = {
+  /* Кадр 1:935 «Документы всплывашка»: окно только что открыто, выбора нет. */
+  base: {
+    state: 'upload',
+    summary: AVANTI_DOCUMENTS_SUMMARY,
+    selectedOptionId: '',
+    files: [],
+    errorText: '',
+  },
+  /* Кадр 22:3657: тип выбран, файл загружен, доступна кнопка отправки. */
+  upload: {
+    state: 'upload',
+    summary: AVANTI_DOCUMENTS_SUMMARY,
+    selectedOptionId: AVANTI_DOCUMENTS_SELECTED_OPTION,
+    files: AVANTI_DOCUMENTS_FILES,
+    errorText: '',
+    actions: AVANTI_DOCUMENTS_ACTIONS,
+  },
+  /* Кадр 95:5965 «Документы неудача»: под списком файлов плашка ошибки. */
+  error: {
+    state: 'error',
+    summary: AVANTI_DOCUMENTS_SUMMARY,
+    selectedOptionId: AVANTI_DOCUMENTS_SELECTED_OPTION,
+    files: AVANTI_DOCUMENTS_FILES,
+    errorText: AVANTI_DOCUMENTS_ERROR,
+    actions: AVANTI_DOCUMENTS_ACTIONS,
+  },
+  /* Кадр 95:6532 «Документы удача»: вместо списка и кнопок — плашка успеха. */
+  verified: {
+    state: 'verified',
+    summary: AVANTI_DOCUMENTS_SUMMARY_VERIFIED,
+    selectedOptionId: AVANTI_DOCUMENTS_SELECTED_OPTION,
+    files: [],
+    errorText: '',
+    result: AVANTI_DOCUMENTS_SUCCESS,
+  },
+}

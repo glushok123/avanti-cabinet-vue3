@@ -39,7 +39,7 @@
       autocomplete="new-password"
       size="sm"
     />
-    <AvantiButton class="avanti-auth-sign-up-form__submit" type="submit">
+    <AvantiButton class="avanti-auth-sign-up-form__submit" size="sm" type="submit">
       {{ texts.submit }}
     </AvantiButton>
     <p class="avanti-auth-sign-up-form__note">{{ shared.note }}</p>
@@ -106,13 +106,6 @@ function handleSelect(id: string): void {
     align-self: stretch;
   }
 
-  & &__submit {
-    height: 44px;
-    padding: 12px 16px;
-    font-size: 15px;
-    border-radius: var(--avanti-radius-sm);
-  }
-
   &__note {
     font-size: 11px;
     font-weight: var(--avanti-font-weight-regular);
@@ -130,13 +123,6 @@ function handleSelect(id: string): void {
 
     &__tabs {
       align-self: center;
-    }
-
-    & &__submit {
-      height: 50px;
-      padding: 8px 16px;
-      font-size: 16px;
-      font-weight: var(--avanti-font-weight-medium);
     }
 
     /*

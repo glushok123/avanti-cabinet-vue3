@@ -3,9 +3,13 @@
   Нужна, чтобы панель можно было открыть по роуту и посмотреть отдельно:
   в кабинете её открывает кнопка «Assistenza» в шапке (десктоп) и пункт
   нижней навигации (мобильная). Сама панель — модальная и не зависит от страницы.
+
+  Корень страницы — `<main>`: заголовок h1 обязан лежать внутри лендмарка,
+  а собственной шапки у страницы нет, поэтому отдельная обёртка не нужна —
+  так раскладка остаётся ровно прежней.
 -->
 <template>
-  <div class="avanti-chat-page">
+  <main class="avanti-chat-page">
     <h1 class="avanti-chat-page__title">{{ texts.pageTitle }}</h1>
     <div ref="launcherRef" class="avanti-chat-page__launcher">
       <AvantiButton @click="handleOpen">{{ texts.openLabel }}</AvantiButton>
@@ -20,7 +24,7 @@
       @close="handleClose"
       @send="handleSend"
     />
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">

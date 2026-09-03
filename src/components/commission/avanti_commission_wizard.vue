@@ -21,7 +21,6 @@
     :title="activeContent.title"
     size="md"
     :close-label="texts.closeLabel"
-    :close-on-escape="!isInfoOpen"
     @update:open="emit('update:open', $event)"
     @close="emit('close', $event)"
   >
@@ -35,6 +34,7 @@
       :model-value="currentStep"
       :items="tabItems"
       :label="texts.stepsLabel"
+      single-panel
       @update:model-value="selectStep"
     />
 
@@ -56,7 +56,7 @@
       НЕТ В МАКЕТЕ: знак «?» у способа оплаты на шаге «3. COORDINATE»
       поясняет SEPA Instant, а кадра с таким окном в Figma нет. Событие
       `info` этой панели намеренно не подключено — придумывать текст нельзя
-      (вопрос к заказчику, см. отчёт).
+      (вопрос к заказчику, см. README, раздел «Расхождения в макете»).
     -->
     <AvantiCommissionCoordinatesPanel
       v-else
@@ -68,20 +68,16 @@
   </AvantiModal>
 
   <!--
-    Окно «DETTAGLI» стоит рядом с окном мастера, а не внутри него: так оно
-    монтируется позже и его обработчик клавиатуры оказывается в очереди
-    последним — иначе ловушка фокуса внешнего окна перехватывала бы Tab.
+    Окно «DETTAGLI» стоит рядом с окном мастера, а не внутри него: оно ложится
+    поверх мастера отдельным слоем. Порядок слоёв и клавиатуру между ними
+    разводит стек в `use_modal_behavior`, поэтому монтировать окно как-то
+    по-особенному не нужно.
   -->
-  <AvantiCommissionInfoModal
-    v-if="isInfoMounted"
-    :open="isInfoOpen"
-    :content="infoContent"
-    @update:open="isInfoOpen = $event"
-  />
+  <AvantiCommissionInfoModal :open="isInfoOpen" :content="infoContent" @update:open="isInfoOpen = $event" />
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import AvantiCommissionCoordinatesPanel from '@/components/commission/avanti_commission_coordinates_panel.vue'
 import AvantiCommissionFeePanel from '@/components/commission/avanti_commission_fee_panel.vue'
 import AvantiCommissionIbanPanel from '@/components/commission/avanti_commission_iban_panel.vue'
@@ -163,24 +159,10 @@ const INITIAL_UNLOCKED_INDEX = 1
 /** Часть содержимого шага, которую показывает шапка окна. */
 type AvantiCommissionHead = Pick<AvantiCommissionFeeContent, 'eyebrow' | 'title'>
 
-/**
- * Класс блокировки прокрутки страницы из `use_modal_behavior`.
- * Композабл общий и правится другими агентами, поэтому здесь он не меняется:
- * закрытие вложенного окна снимает класс, а мастер возвращает его на место
- * (см. `watch` по `isInfoOpen` ниже).
- */
-const SCROLL_LOCK_CLASS = 'avanti-scroll-locked'
-
 const currentStep = ref<AvantiCommissionStepId>(props.initialStep)
 const unlockedIndex = ref<number>(INITIAL_UNLOCKED_INDEX)
 
-/**
- * Вложенное окно «DETTAGLI». Смонтировано отдельным признаком и после
- * открытия остаётся в дереве: так его обработчик клавиатуры регистрируется
- * позже обработчика окна мастера и ловушка фокуса внешнего окна не
- * перехватывает Tab у внутреннего.
- */
-const isInfoMounted = ref<boolean>(props.initialInfoOpen)
+/** Вложенное окно «DETTAGLI» открыто. */
 const isInfoOpen = ref<boolean>(props.initialInfoOpen)
 
 const currentIndex = computed(() => steps.findIndex((step) => step.id === currentStep.value))
@@ -244,7 +226,6 @@ function goBack(): void {
 
 /** Знак «?» в поясняющей плашке: открывается окно «DETTAGLI». */
 function openInfo(): void {
-  isInfoMounted.value = true
   isInfoOpen.value = true
 }
 
@@ -258,17 +239,4 @@ watch(
     }
   },
 )
-
-/*
- * Блокировка прокрутки в `use_modal_behavior` держится одним классом на body:
- * закрываясь, вложенное окно снимает его, хотя окно мастера ещё открыто.
- * Возвращаем класс на место — правка общего композабла тут не наш случай.
- */
-watch(isInfoOpen, (isOpen) => {
-  if (!isOpen && props.open) {
-    void nextTick(() => {
-      document.body.classList.add(SCROLL_LOCK_CLASS)
-    })
-  }
-})
 </script>

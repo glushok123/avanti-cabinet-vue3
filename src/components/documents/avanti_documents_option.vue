@@ -63,6 +63,9 @@ $icon-radius: 10px;
 .avanti-documents-option {
   @include inner-border(var(--avanti-color-primary-soft-border));
 
+  /* Якорь для скрытого input: иначе при фокусе с клавиатуры страница
+     прокручивается к его абсолютной позиции в начале документа. */
+  position: relative;
   display: flex;
   gap: 12px;
   align-items: center;

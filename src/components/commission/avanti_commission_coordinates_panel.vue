@@ -47,7 +47,7 @@
         <button class="avanti-commission-coordinates-panel__receipt" type="button" @click="emit('receipt')">
           {{ content.receiptNote }}
         </button>
-        <AvantiButton class="avanti-commission-coordinates-panel__submit" @click="emit('submit')">
+        <AvantiButton class="avanti-commission-coordinates-panel__submit" size="md" @click="emit('submit')">
           {{ content.submitLabel }}
           <template #icon-after>
             <AvantiIconArrowRight />
@@ -103,22 +103,6 @@ const causaleText = computed<string>(() => {
 </script>
 
 <style lang="scss" scoped>
-/*
- * Оформление кнопки из макета. Базовая кнопка на десктопе вырастает до 60px
- * и 24px текста, поэтому набор применяется дважды — в базовых стилях и внутри
- * desktop-up, где он гасит её правила той же специфичностью.
- */
-@mixin submit-appearance($height) {
-  gap: 8px;
-  height: $height;
-  padding: 12px 16px;
-  font-size: 16px;
-  font-weight: var(--avanti-font-weight-semibold);
-  border: none;
-  border-radius: var(--avanti-radius-sm);
-  box-shadow: var(--avanti-shadow-input);
-}
-
 .avanti-commission-coordinates-panel {
   display: flex;
   flex-direction: column;
@@ -169,8 +153,6 @@ const causaleText = computed<string>(() => {
 
   /* Отступ до кнопки: 12px между строками блока плюс 8px над самой кнопкой. */
   &__submit {
-    @include submit-appearance(48px);
-
     margin-top: 12px;
   }
 
@@ -182,8 +164,6 @@ const causaleText = computed<string>(() => {
     }
 
     &__submit {
-      @include submit-appearance(50px);
-
       margin-top: 20px;
     }
   }

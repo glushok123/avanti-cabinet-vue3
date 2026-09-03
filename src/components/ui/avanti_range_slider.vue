@@ -29,6 +29,7 @@
       :step="step"
       :value="modelValue"
       :aria-label="ariaLabel"
+      :aria-valuetext="valueText"
       @input="handleInput"
     />
   </div>
@@ -50,6 +51,13 @@ const props = withDefaults(
     max?: number
     step?: number
     ariaLabel?: string
+    /**
+     * Текстовое представление значения для скринридера: «24 mesi», «8.300 €».
+     * Без него озвучивается голое число, а единица измерения и валюта
+     * остаются только в видимой подписи. Необязателен: если не передан,
+     * поведение прежнее — читается само число.
+     */
+    valueText?: string
     thumbSize?: ThumbSize
   }>(),
   {
@@ -57,6 +65,7 @@ const props = withDefaults(
     max: 100,
     step: 1,
     ariaLabel: undefined,
+    valueText: undefined,
     thumbSize: 'md',
   },
 )
@@ -141,6 +150,9 @@ $thumb-size-sm: 22px;
     height: var(--avanti-slider-thumb);
     pointer-events: none;
     background-color: var(--avanti-color-surface);
+
+    /* Толщина обводки ползунка — дробное значение из кадра Figma; отдельного
+       токена под неё нет, поэтому перенесена как есть. */
     border: 1.333px solid var(--avanti-color-track);
     border-radius: var(--avanti-radius-round);
 

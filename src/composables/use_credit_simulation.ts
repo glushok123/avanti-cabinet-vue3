@@ -15,8 +15,8 @@ const AMOUNT_FORMATTER = new Intl.NumberFormat('it-IT', {
   useGrouping: true,
 })
 
-/** Неразрывный пробел — разделитель разрядов в десктопной карточке итогов. */
-const NARROW_SPACE = '\u00a0'
+/** Неразрывный пробел U+00A0 — разделитель разрядов в десктопной карточке итогов. */
+const NON_BREAKING_SPACE = '\u00a0'
 
 /**
  * Форматирует сумму в итальянском стиле с точкой-разделителем: 12000 → «12.000».
@@ -30,7 +30,7 @@ export function formatAmount(value: number): string {
  * Такой вариант используется в десктопной карточке итогов.
  */
 export function formatAmountSpaced(value: number): string {
-  return formatAmount(value).replace(/\./g, NARROW_SPACE)
+  return formatAmount(value).replace(/\./g, NON_BREAKING_SPACE)
 }
 
 /**

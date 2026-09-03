@@ -11,7 +11,8 @@
         <AvantiNotificationBadge v-if="notifications" :count="notifications" size="sm" />
       </button>
       <button class="avanti-app-header-mobile__profile" type="button" :aria-label="profileLabelText">
-        <AvantiAvatar :src="user.avatarMobile" :alt="user.name" size="sm" />
+        <!-- Аватар декоративный: имя пользователя уже входит в подпись кнопки. -->
+        <AvantiAvatar :src="user.avatarMobile" alt="" size="sm" />
         <span class="avanti-app-header-mobile__initials">{{ user.initials }}</span>
       </button>
     </div>
@@ -28,10 +29,11 @@ import type { AvantiUser } from '@/types/avanti_dashboard'
 
 /**
  * notificationsLabel — начало доступного имени кнопки уведомлений.
- * profileLabel — начало доступного имени кнопки профиля: без него
- * доступное имя собиралось бы само из alt аватара и видимых инициалов,
- * что звучит избыточно. Проп необязателен, чтобы экраны, которые ещё
- * не передают его, не ломались — тогда доступное имя остаётся прежним.
+ * profileLabel — начало доступного имени кнопки профиля; к нему добавляется
+ * имя пользователя. Аватар внутри кнопки помечен пустым alt: иначе имя
+ * прозвучало бы дважды — из подписи кнопки и из alt картинки. Проп
+ * необязателен, чтобы экраны, которые ещё не передают его, не ломались —
+ * тогда именем кнопки остаются видимые инициалы.
  */
 const props = withDefaults(
   defineProps<{

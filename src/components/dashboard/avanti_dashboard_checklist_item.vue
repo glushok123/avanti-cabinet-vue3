@@ -36,6 +36,7 @@
     <AvantiIconCircle v-else :size="arrowSize" :icon-size="arrowIconSize" :tone="statusTone">
       <AvantiIconArrowRight />
     </AvantiIconCircle>
+    <span class="avanti-dashboard-checklist-item__status">{{ statusLabel }}</span>
   </div>
 </template>
 
@@ -49,6 +50,7 @@ import AvantiIconShield from '@/components/icons/avanti_icon_shield.vue'
 import AvantiIconUserCheck from '@/components/icons/avanti_icon_user_check.vue'
 import AvantiIconUpload from '@/components/icons/avanti_icon_upload.vue'
 import AvantiIconSignature from '@/components/icons/avanti_icon_signature.vue'
+import { AVANTI_STEP_STATUS_LABELS } from '@/constants/avanti_dashboard_status_labels'
 import type { AvantiChecklistIcon, AvantiStepStatus } from '@/types/avanti_dashboard'
 
 const props = withDefaults(
@@ -85,6 +87,14 @@ const circleStatus = computed(() => props.iconStatus ?? props.status)
 const markerState = computed(() => props.markerStatus ?? circleStatus.value)
 
 const isCompleted = computed(() => markerState.value === 'completed')
+
+/**
+ * Статус словами — то же, что показывает маркер справа (галочка или стрелка).
+ * Обе иконки помечены `aria-hidden`, поэтому без этой строки все шаги
+ * звучали бы одинаково. Подпись повторяет именно состояние маркера, чтобы
+ * озвученное совпадало с нарисованным.
+ */
+const statusLabel = computed(() => AVANTI_STEP_STATUS_LABELS[markerState.value])
 const statusClass = computed(() => `avanti-dashboard-checklist-item--${props.status}`)
 
 /* В просторной карточке кружок-стрелка крупнее: 32px с иконкой 16px. */
@@ -137,6 +147,12 @@ const statusTone = computed(() => (markerState.value === 'current' ? 'primary' :
     font-size: 11px;
     font-weight: var(--avanti-font-weight-medium);
     color: var(--avanti-color-primary);
+  }
+
+  /* Статус словами: его читает скринридер, на экране его нет. Строка выведена
+     из потока абсолютным позиционированием, поэтому зазор строки не растёт. */
+  &__status {
+    @include visually-hidden;
   }
 
   /* --- Текущий шаг: усиленное начертание --- */

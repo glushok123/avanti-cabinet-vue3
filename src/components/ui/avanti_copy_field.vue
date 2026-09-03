@@ -24,9 +24,9 @@
 -->
 <template>
   <div class="avanti-copy-field" :class="sizeClass">
-    <span :id="labelId" class="avanti-copy-field__label">{{ label }}</span>
+    <span class="avanti-copy-field__label">{{ label }}</span>
     <div class="avanti-copy-field__control">
-      <span class="avanti-copy-field__value" :aria-labelledby="labelId">{{ value }}</span>
+      <span class="avanti-copy-field__value">{{ value }}</span>
       <button
         class="avanti-copy-field__copy"
         :class="copyClass"
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { computed } from 'vue'
 import AvantiIconCheck from '@/components/icons/avanti_icon_check.vue'
 import AvantiIconCopy from '@/components/icons/avanti_icon_copy.vue'
 import { useClipboardCopy } from '@/composables/use_clipboard_copy'
@@ -73,8 +73,6 @@ const props = withDefaults(
 
 const emit = defineEmits<{ copy: [] }>()
 
-const uid = useId()
-const labelId = computed(() => `${uid}-label`)
 const sizeClass = computed(() => `avanti-copy-field--${props.size}`)
 
 const { status, isCopied, copy } = useClipboardCopy()

@@ -14,16 +14,19 @@
     class="avanti-commission-method-note"
     :class="modifierClasses"
     :type="buttonType"
-    :aria-label="ariaLabel"
+    :aria-describedby="descriptionId"
     @click="handleClick"
   >
     <span class="avanti-commission-method-note__mark" aria-hidden="true">{{ glyph }}</span>
     <span class="avanti-commission-method-note__text">{{ text }}</span>
+    <span v-if="descriptionId" :id="descriptionId" class="avanti-commission-method-note__description">{{
+      actionLabel
+    }}</span>
   </component>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 
 /** Заливка плашки: светло-бирюзовая или белая. */
 type NoteTone = 'soft' | 'plain'
@@ -43,7 +46,12 @@ const props = withDefaults(
     tone?: NoteTone
     /** Плашка нажимается и сообщает об этом наружу событием `activate`. */
     interactive?: boolean
-    /** Доступное имя кнопки; нужно только нажимаемой плашке. */
+    /**
+     * Пояснение к действию кнопки: уходит в `aria-describedby`, а не в
+     * `aria-label`. Доступное имя кнопки — её видимая подпись `text`:
+     * иначе голосовое управление не находило бы кнопку по тому, что
+     * написано на ней (WCAG 2.5.3 «Label in Name»).
+     */
     actionLabel?: string
   }>(),
   {
@@ -57,13 +65,20 @@ const props = withDefaults(
 
 const emit = defineEmits<{ activate: [] }>()
 
+const uid = useId()
+
 const tag = computed<string>(() => (props.interactive ? 'button' : 'p'))
 
 /** У кнопки обязателен явный `type`, у абзаца атрибута быть не должно. */
 const buttonType = computed<string | undefined>(() => (props.interactive ? 'button' : undefined))
 
-/** Доступное имя нужно только кнопке: у абзаца имя — его собственный текст. */
-const ariaLabel = computed<string | undefined>(() => (props.interactive ? props.actionLabel : undefined))
+/**
+ * Пояснение подключается только нажимаемой плашке и только если текст задан:
+ * у абзаца описания нет, а пустой `aria-describedby` ссылался бы в пустоту.
+ */
+const descriptionId = computed<string | undefined>(() =>
+  props.interactive && props.actionLabel ? `${uid}-description` : undefined,
+)
 
 const modifierClasses = computed<string[]>(() => [
   `avanti-commission-method-note--${props.tone}`,
@@ -112,6 +127,13 @@ function handleClick(): void {
     font-weight: var(--avanti-font-weight-regular);
     line-height: 1;
     border-radius: var(--avanti-radius-pill);
+  }
+
+  /* Пояснение к действию: его читает скринридер, на экране его нет.
+     Абсолютное позиционирование выводит строку из flex-раскладки, поэтому
+     ни зазор, ни габариты плашки не меняются. */
+  &__description {
+    @include visually-hidden;
   }
 
   /* Знак справа от подписи: порядок меняется, разметка остаётся прежней. */
