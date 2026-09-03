@@ -1,18 +1,32 @@
 <!--
   Карточка чеклиста верификации: заголовок с кнопкой сворачивания,
   список шагов с разделителями и сегментированный индикатор прогресса.
+
+  Вариант `default` — базовое состояние (надзаголовок + заголовок).
+  Вариант `ready` — «фонды готовы к выводу»: надзаголовка нет, заголовок
+  становится крупным фирменным, а на мобильной шапка встаёт на фирменную
+  подложку с круглой галочкой слева.
 -->
 <template>
   <AvantiCard
-    class="avanti-dashboard-checklist-card"
+    :class="['avanti-dashboard-checklist-card', variantClass]"
     padding="none"
     shadow="soft"
     tag="section"
     :aria-labelledby="titleId"
   >
     <div class="avanti-dashboard-checklist-card__head">
+      <AvantiIconCircle
+        v-if="isReady"
+        class="avanti-dashboard-checklist-card__head-check"
+        :size="22"
+        icon-size="xs"
+        tone="primary"
+      >
+        <AvantiIconCheck />
+      </AvantiIconCircle>
       <div class="avanti-dashboard-checklist-card__head-text">
-        <span class="avanti-dashboard-checklist-card__eyebrow">{{ eyebrow }}</span>
+        <span v-if="eyebrow" class="avanti-dashboard-checklist-card__eyebrow">{{ eyebrow }}</span>
         <h2 :id="titleId" class="avanti-dashboard-checklist-card__title">{{ title }}</h2>
       </div>
       <button
@@ -36,6 +50,7 @@
           :note="item.note"
           :status="item.status"
           :icon="item.icon"
+          :icon-status="item.iconStatus"
         />
       </template>
     </div>
@@ -47,27 +62,36 @@
 </template>
 
 <script setup lang="ts">
-import { ref, useId } from 'vue'
+import { computed, ref, useId } from 'vue'
 import AvantiCard from '@/components/ui/avanti_card.vue'
+import AvantiIconCircle from '@/components/ui/avanti_icon_circle.vue'
 import AvantiProgressSegments from '@/components/ui/avanti_progress_segments.vue'
 import AvantiDashboardChecklistItem from '@/components/dashboard/avanti_dashboard_checklist_item.vue'
 import AvantiIconChevronUp from '@/components/icons/avanti_icon_chevron_up.vue'
 import AvantiIconChevronRight from '@/components/icons/avanti_icon_chevron_right.vue'
-import type { AvantiChecklistItem } from '@/types/avanti_dashboard'
+import AvantiIconCheck from '@/components/icons/avanti_icon_check.vue'
+import type { AvantiChecklistItem, AvantiChecklistVariant } from '@/types/avanti_dashboard'
 
 /**
  * toggleLabel — доступное имя кнопки со шевроном,
  * progressLabel — доступное имя индикатора прогресса (оба без видимого текста).
  */
-defineProps<{
-  eyebrow: string
-  title: string
-  items: AvantiChecklistItem[]
-  total: number
-  completed: number
-  toggleLabel: string
-  progressLabel: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    eyebrow: string
+    title: string
+    items: AvantiChecklistItem[]
+    total: number
+    completed: number
+    toggleLabel: string
+    progressLabel: string
+    variant?: AvantiChecklistVariant
+  }>(),
+  { variant: 'default' },
+)
+
+const isReady = computed(() => props.variant === 'ready')
+const variantClass = computed(() => `avanti-dashboard-checklist-card--${props.variant}`)
 
 /** Заголовок связан с секцией через aria-labelledby, поэтому нужен id. */
 const titleId = useId()
@@ -160,6 +184,45 @@ function toggle(): void {
   &__progress {
     width: 100%;
     padding: 12px 16px 16px;
+  }
+
+  /*
+   * --- Состояние «фонды готовы к выводу» ---
+   * Кадры Figma: 241:25321, 258:14783, 258:16652, 258:16821 (десктоп),
+   * 107:8830, 232:17490 (мобильная).
+   */
+  &--ready {
+    /* Круглая галочка есть только в мобильных кадрах. */
+    .avanti-dashboard-checklist-card__head-check {
+      display: none;
+    }
+
+    .avanti-dashboard-checklist-card__title {
+      font-size: 15px;
+      font-weight: var(--avanti-font-weight-bold);
+      color: var(--avanti-color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.75px;
+    }
+
+    @include mobile {
+      .avanti-dashboard-checklist-card__head {
+        background-color: var(--avanti-color-primary-soft);
+      }
+
+      .avanti-dashboard-checklist-card__head-check {
+        display: flex;
+      }
+
+      /* На мобильной заголовок остаётся тёмным 13px, как в базовом кадре. */
+      .avanti-dashboard-checklist-card__title {
+        font-size: 13px;
+        font-weight: var(--avanti-font-weight-semibold);
+        color: var(--avanti-color-text-strong);
+        text-transform: none;
+        letter-spacing: normal;
+      }
+    }
   }
 
   @include mobile {

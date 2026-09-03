@@ -15,7 +15,7 @@
       <span class="avanti-dashboard-balance-card__amount">{{ amount }}</span>
       <span class="avanti-dashboard-balance-card__details">{{ details }}</span>
     </div>
-    <AvantiDashboardWithdrawButton :label="actionLabel" />
+    <AvantiDashboardWithdrawButton :label="actionLabel" :state="actionState" />
     <div class="avanti-dashboard-balance-card__footer">
       <span class="avanti-dashboard-balance-card__line" aria-hidden="true" />
       <span class="avanti-dashboard-balance-card__note">{{ note }}</span>
@@ -26,16 +26,22 @@
 <script setup lang="ts">
 import AvantiBadge from '@/components/ui/avanti_badge.vue'
 import AvantiDashboardWithdrawButton from '@/components/dashboard/avanti_dashboard_withdraw_button.vue'
+import type { AvantiWithdrawState } from '@/types/avanti_dashboard'
 
-defineProps<{
-  caption: string
-  description: string
-  statusLabel: string
-  amount: string
-  details: string
-  note: string
-  actionLabel: string
-}>()
+/** actionState — доступность кнопки вывода; по умолчанию базовое `locked`. */
+withDefaults(
+  defineProps<{
+    caption: string
+    description: string
+    statusLabel: string
+    amount: string
+    details: string
+    note: string
+    actionLabel: string
+    actionState?: AvantiWithdrawState
+  }>(),
+  { actionState: 'locked' },
+)
 </script>
 
 <style lang="scss" scoped>

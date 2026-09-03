@@ -30,6 +30,7 @@
     <main class="avanti-home__content">
       <div class="avanti-home__column avanti-home__column--main">
         <AvantiDashboardStepper
+          v-if="stepper"
           :title="stepper.title"
           :progress-label="stepper.progressLabel"
           :steps="stepper.steps"
@@ -42,8 +43,10 @@
           :details="balance.details"
           :note="balance.note"
           :action-label="balance.actionLabel"
+          :action-state="balance.actionState"
         />
         <AvantiDashboardLockBanner
+          v-if="lockBanner"
           :title="lockBanner.title"
           :subtitle="lockBanner.subtitle"
           :counter-label="lockBanner.counterLabel"
@@ -51,10 +54,17 @@
           :options="lockBanner.options"
           :action-label="texts.lockBannerAction"
         />
+        <AvantiDashboardUnlockCard
+          v-if="unlock"
+          :title-lines="unlock.titleLines"
+          :help-label="unlock.helpLabel"
+          :steps="unlock.steps"
+        />
       </div>
 
       <div class="avanti-home__column avanti-home__column--side">
         <AvantiDashboardPersonalDataCard
+          v-if="personalData"
           class="avanti-home__personal-data"
           :title="personalData.title"
           :rows="personalData.rows"
@@ -65,6 +75,7 @@
           :items="checklist.items"
           :total="checklist.total"
           :completed="checklist.completed"
+          :variant="checklist.variant"
           :toggle-label="texts.checklistToggle"
           :progress-label="texts.checklistProgress"
         />
@@ -95,23 +106,28 @@ import AvantiBottomNav from '@/components/layout/avanti_bottom_nav.vue'
 import AvantiDashboardStepper from '@/components/dashboard/avanti_dashboard_stepper.vue'
 import AvantiDashboardBalanceCard from '@/components/dashboard/avanti_dashboard_balance_card.vue'
 import AvantiDashboardLockBanner from '@/components/dashboard/avanti_dashboard_lock_banner.vue'
+import AvantiDashboardUnlockCard from '@/components/dashboard/avanti_dashboard_unlock_card.vue'
 import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashboard_personal_data_card.vue'
 import AvantiDashboardChecklistCard from '@/components/dashboard/avanti_dashboard_checklist_card.vue'
 import AvantiDashboardSupportBubble from '@/components/dashboard/avanti_dashboard_support_bubble.vue'
 import {
-  AVANTI_BALANCE as balance,
   AVANTI_BOTTOM_NAV_ITEMS as bottomNavItems,
   AVANTI_BREADCRUMBS as breadcrumbs,
-  AVANTI_CHECKLIST as checklist,
   AVANTI_DASHBOARD_TEXTS as texts,
   AVANTI_HEADER_NAV_ITEMS as navItems,
-  AVANTI_LOCK_BANNER as lockBanner,
-  AVANTI_PERSONAL_DATA as personalData,
-  AVANTI_STEPPER as stepper,
   AVANTI_SUPPORT_BUBBLE as supportBubble,
   AVANTI_SUPPORT_NAV_ITEM as supportItem,
   AVANTI_USER as user,
 } from '@/constants/avanti_dashboard_mock'
+import { AVANTI_DASHBOARD_STATE_BASE } from '@/constants/avanti_dashboard_states'
+
+/**
+ * Уровень прогресса, который показывает страница. Разметка у всех уровней
+ * одна: чтобы открыть другой, достаточно подставить сюда другое состояние
+ * из avanti_dashboard_states — блоки, которых на уровне нет, равны null
+ * и не выводятся.
+ */
+const { stepper, balance, lockBanner, unlock, personalData, checklist } = AVANTI_DASHBOARD_STATE_BASE
 
 /** Отличается сама разметка шапки и навигации, поэтому нужен JS-признак. */
 const isMobile = useIsMobile()

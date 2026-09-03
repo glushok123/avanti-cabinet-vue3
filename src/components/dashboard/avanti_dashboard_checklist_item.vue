@@ -1,6 +1,10 @@
 <!--
   Строка чеклиста верификации: круглая иконка шага, заголовок с подписью
   и маркер состояния справа (галочка для завершённых, стрелка для остальных).
+
+  Оформление текста задаётся пропом `status`, оформление кружков — `iconStatus`.
+  Обычно они совпадают; расходятся только в состоянии «фонды разблокированы»,
+  где макет заливает кружки всех шагов, не меняя начертание подписей.
 -->
 <template>
   <div class="avanti-dashboard-checklist-item" :class="statusClass">
@@ -44,6 +48,7 @@ const props = defineProps<{
   note: string
   status: AvantiStepStatus
   icon: AvantiChecklistIcon
+  iconStatus?: AvantiStepStatus
 }>()
 
 /** Сопоставление имени иконки из данных с компонентом. */
@@ -59,19 +64,22 @@ function resolveIcon(name: AvantiChecklistIcon): Component {
   return iconByName[name]
 }
 
-const isCompleted = computed(() => props.status === 'completed')
+/** Статус кружков: собственный, если задан, иначе общий статус шага. */
+const circleStatus = computed(() => props.iconStatus ?? props.status)
+
+const isCompleted = computed(() => circleStatus.value === 'completed')
 const statusClass = computed(() => `avanti-dashboard-checklist-item--${props.status}`)
 
 /** Тон круга слева: заливка, обводка или нейтральный фон. */
 const iconTone = computed(() => {
-  if (props.status === 'completed') {
+  if (circleStatus.value === 'completed') {
     return 'primary'
   }
-  return props.status === 'current' ? 'outline' : 'neutral'
+  return circleStatus.value === 'current' ? 'outline' : 'neutral'
 })
 
 /** Тон круга-маркера справа. */
-const statusTone = computed(() => (props.status === 'current' ? 'primary' : 'neutral'))
+const statusTone = computed(() => (circleStatus.value === 'current' ? 'primary' : 'neutral'))
 </script>
 
 <style lang="scss" scoped>

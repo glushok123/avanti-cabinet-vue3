@@ -29,17 +29,34 @@ export interface AvantiChecklistItem {
   id: string
   title: string
   note: string
+  /** Статус текста: он задаёт начертание и цвет заголовка и подписи. */
   status: AvantiStepStatus
   icon: AvantiChecklistIcon
+  /**
+   * Статус кружков (левая иконка шага и правый маркер), если он расходится
+   * с текстовым. В состоянии «фонды разблокированы» макет заливает все кружки
+   * фирменным цветом, но начертание текста последних шагов не меняет.
+   * По умолчанию повторяет `status`.
+   */
+  iconStatus?: AvantiStepStatus
 }
+
+/**
+ * Оформление шапки чеклиста.
+ * `default` — надзаголовок 11px и заголовок 13px (базовое состояние),
+ * `ready` — один крупный фирменный заголовок 15px без надзаголовка.
+ */
+export type AvantiChecklistVariant = 'default' | 'ready'
 
 /** Содержимое карточки чеклиста верификации. */
 export interface AvantiChecklistContent {
+  /** В варианте `ready` надзаголовка в макете нет — тогда сюда идёт пустая строка. */
   eyebrow: string
   title: string
   items: AvantiChecklistItem[]
   total: number
   completed: number
+  variant?: AvantiChecklistVariant
 }
 
 /** Допустимые иконки пунктов навигации. */
@@ -86,6 +103,13 @@ export interface AvantiPersonalDataContent {
   rows: AvantiPersonalDataRow[]
 }
 
+/**
+ * Состояние кнопки «Preleva i fondi».
+ * `locked` — шаги не пройдены, кнопка заблокирована и полупрозрачная,
+ * `ready` — средства разблокированы: активная кнопка с обводкой и свечением.
+ */
+export type AvantiWithdrawState = 'locked' | 'ready'
+
 /** Содержимое градиентной карточки одобренной суммы. */
 export interface AvantiBalanceContent {
   caption: string
@@ -95,6 +119,8 @@ export interface AvantiBalanceContent {
   details: string
   note: string
   actionLabel: string
+  /** По умолчанию `locked` — как в базовом состоянии макета. */
+  actionState?: AvantiWithdrawState
 }
 
 /** Содержимое баннера с замком. */
@@ -108,9 +134,46 @@ export interface AvantiLockBannerContent {
   options: string[]
 }
 
+/** Иконки шагов карточки «SBLOCCO DEI FONDI COMPLETATO». */
+export type AvantiUnlockIcon = 'database' | 'lock-open' | 'wallet'
+
+/** Шаг карточки разблокировки средств. */
+export interface AvantiUnlockStep {
+  id: string
+  icon: AvantiUnlockIcon
+  title: string
+  note: string
+  /** Круг шага подсвечен фирменным свечением («Prelievo disponibile»). */
+  highlighted?: boolean
+}
+
+/** Содержимое карточки разблокировки средств. */
+export interface AvantiUnlockContent {
+  /** Заголовок разбит на строки так же, как в макете. */
+  titleLines: string[]
+  helpLabel: string
+  steps: AvantiUnlockStep[]
+}
+
 /** Плавающий виджет чат-консультанта на мобильной главной. */
 export interface AvantiSupportBubbleContent {
   src: string
   alt: string
   count: number
+}
+
+/**
+ * Полный набор данных главной страницы для одного уровня прогресса.
+ * Блоки, которых на уровне нет, равны null — страница их не выводит.
+ */
+export interface AvantiDashboardState {
+  id: string
+  /** Кадры Figma, по которым собрано состояние. */
+  figmaNodes: string
+  stepper: AvantiStepperContent | null
+  balance: AvantiBalanceContent
+  lockBanner: AvantiLockBannerContent | null
+  unlock: AvantiUnlockContent | null
+  personalData: AvantiPersonalDataContent | null
+  checklist: AvantiChecklistContent
 }
