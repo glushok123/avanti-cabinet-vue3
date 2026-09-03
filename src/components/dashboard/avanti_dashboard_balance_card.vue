@@ -151,9 +151,11 @@ withDefaults(
       letter-spacing: 0.1px;
     }
 
+    /* В мобильном кадре сумма набрана без трекинга: с −0,54px строка выходит
+       на 3px короче эталонных 150px и цифры уезжают влево. */
     &__amount {
       font-size: 36px;
-      letter-spacing: -0.54px;
+      letter-spacing: normal;
     }
 
     &__details {
@@ -169,7 +171,7 @@ withDefaults(
     }
 
     &__note {
-      font-weight: var(--avanti-font-weight-medium);
+      font-weight: var(--avanti-font-weight-regular);
       white-space: normal;
     }
   }

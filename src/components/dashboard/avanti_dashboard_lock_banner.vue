@@ -166,9 +166,12 @@ function toggleOption(option: string, checked: boolean): void {
   }
 
   @include mobile {
+    /* Колонка бейджа зарезервирована и в верхних рядах: в макете заголовок
+       переносится на «completa», а во всю ширину баннера он уместил бы
+       ещё два слова. */
     grid-template-areas:
-      'icon    title   title'
-      'icon    sub     sub'
+      'icon    title   .'
+      'icon    sub     .'
       'options options badge';
     grid-template-columns: 32px minmax(0, 1fr) auto;
     gap: 2px 12px;
@@ -179,6 +182,12 @@ function toggleOption(option: string, checked: boolean): void {
 
     &__subtitle {
       font-size: 11px;
+    }
+
+    /* Кружок с замком занимает только ряды заголовка и подписи и стоит
+       по их центру: в макете его верх приходится на 483px, а не на 474px. */
+    & > &__icon {
+      align-self: center;
     }
 
     &__badge {

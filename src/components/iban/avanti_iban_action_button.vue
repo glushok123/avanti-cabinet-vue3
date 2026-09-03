@@ -6,9 +6,18 @@
 
   Вариант `primary` — фирменная заливка, `outline` — светлая подложка
   с фирменной обводкой.
+
+  Проп `uppercase` отключается для кнопки формы вывода средств: в кадре
+  31:6452 надпись набрана обычным регистром («Vai alla commissione»),
+  тогда как в модальной панели она прописная.
 -->
 <template>
-  <button class="avanti-iban-action-button" :class="variantClass" :type="type" :disabled="disabled">
+  <button
+    class="avanti-iban-action-button"
+    :class="[variantClass, { 'avanti-iban-action-button--sentence': !uppercase }]"
+    :type="type"
+    :disabled="disabled"
+  >
     <slot />
   </button>
 </template>
@@ -23,8 +32,10 @@ const props = withDefaults(
     variant?: AvantiIbanButtonVariant
     type?: 'button' | 'submit'
     disabled?: boolean
+    /** Прописные буквы надписи; в форме вывода средств их нет. */
+    uppercase?: boolean
   }>(),
-  { variant: 'primary', type: 'button', disabled: false },
+  { variant: 'primary', type: 'button', disabled: false, uppercase: true },
 )
 
 const variantClass = computed(() => `avanti-iban-action-button--${props.variant}`)
@@ -54,6 +65,12 @@ const variantClass = computed(() => `avanti-iban-action-button--${props.variant}
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+
+  /* Надпись обычным регистром: в макете она ещё и легче по начертанию. */
+  &--sentence {
+    font-weight: var(--avanti-font-weight-regular);
+    text-transform: none;
   }
 
   &--primary {

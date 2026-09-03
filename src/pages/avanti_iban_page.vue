@@ -54,6 +54,7 @@
           :items="checklist.items"
           :total="checklist.total"
           :completed="checklist.completed"
+          :counter="checklistCounter"
           :toggle-label="texts.checklistToggle"
           :progress-label="texts.checklistProgress"
         />
@@ -63,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useIsMobile } from '@/composables/use_is_mobile'
 import AvantiAppHeader from '@/components/layout/avanti_app_header.vue'
 import AvantiAppHeaderMobile from '@/components/layout/avanti_app_header_mobile.vue'
@@ -74,7 +75,6 @@ import AvantiIbanAmountCard from '@/components/iban/avanti_iban_amount_card.vue'
 import AvantiIbanTransferForm from '@/components/iban/avanti_iban_transfer_form.vue'
 import {
   AVANTI_BREADCRUMBS as breadcrumbs,
-  AVANTI_CHECKLIST as checklist,
   AVANTI_DASHBOARD_TEXTS as texts,
   AVANTI_HEADER_NAV_ITEMS as navItems,
   AVANTI_PERSONAL_DATA as personalData,
@@ -84,6 +84,7 @@ import {
 } from '@/constants/avanti_dashboard_mock'
 import {
   AVANTI_IBAN_AMOUNT_CONTENT as amount,
+  AVANTI_IBAN_CHECKLIST as checklist,
   AVANTI_IBAN_MOCK,
   AVANTI_IBAN_PAGE_TITLE as pageTitle,
   AVANTI_IBAN_TRANSFER_CONTENT as transfer,
@@ -91,6 +92,12 @@ import {
 
 /** Отличается сама разметка шапки, поэтому нужен JS-признак. */
 const isMobile = useIsMobile()
+
+/*
+ * Бейдж со счётчиком и просторная раскладка чеклиста есть только в
+ * десктопном кадре: мобильный (33:6665) показывает компактную карточку.
+ */
+const checklistCounter = computed<string>(() => (isMobile.value ? '' : (checklist.counter ?? '')))
 
 /* В макете поле номера пустое, а владелец счёта уже подставлен из профиля. */
 const iban = ref<string>('')

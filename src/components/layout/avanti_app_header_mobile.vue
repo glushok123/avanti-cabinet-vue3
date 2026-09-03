@@ -82,7 +82,9 @@ const profileLabelText = computed(() =>
     justify-content: center;
     width: 38px;
     height: 38px;
-    color: var(--avanti-color-text-strong);
+
+    /* В мобильном кадре колокольчик нарисован фирменным бирюзовым. */
+    color: var(--avanti-color-primary);
 
     /* Значение из Figma, отдельного токена нет. */
     border-radius: 6.333px;

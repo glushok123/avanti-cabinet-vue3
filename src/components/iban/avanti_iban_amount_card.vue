@@ -48,7 +48,10 @@ defineProps<{ content: AvantiIbanAmountContent }>()
   &__caption {
     font-size: 16px;
     font-weight: var(--avanti-font-weight-semibold);
-    line-height: normal;
+
+    /* В макете строка ровно 19px: `normal` даёт 20 и опускает всё,
+       что идёт ниже по карточке, на пиксель. */
+    line-height: 19px;
     color: var(--avanti-color-text-on-primary-soft);
     text-transform: uppercase;
     letter-spacing: 0.16px;

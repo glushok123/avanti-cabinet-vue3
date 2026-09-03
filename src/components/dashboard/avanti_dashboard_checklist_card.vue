@@ -6,10 +6,18 @@
   Вариант `ready` — «фонды готовы к выводу»: надзаголовка нет, заголовок
   становится крупным фирменным, а на мобильной шапка встаёт на фирменную
   подложку с круглой галочкой слева.
+
+  Проп `counter` включает просторную версию 464×516 из кадров пошагового
+  флоу (1:268, 31:6467): бейдж в шапке, поля 24px и толстые полосы прогресса
+  без разделителя над ними. Без него карточка компактная, как на главной.
 -->
 <template>
   <AvantiCard
-    :class="['avanti-dashboard-checklist-card', variantClass]"
+    :class="[
+      'avanti-dashboard-checklist-card',
+      variantClass,
+      { 'avanti-dashboard-checklist-card--counter': counter },
+    ]"
     padding="none"
     shadow="soft"
     tag="section"
@@ -29,17 +37,20 @@
         <span v-if="eyebrow" class="avanti-dashboard-checklist-card__eyebrow">{{ eyebrow }}</span>
         <h2 :id="titleId" class="avanti-dashboard-checklist-card__title">{{ title }}</h2>
       </div>
-      <button
-        class="avanti-dashboard-checklist-card__toggle"
-        type="button"
-        :aria-expanded="expanded"
-        :aria-controls="listId"
-        :aria-label="toggleLabel"
-        @click="toggle"
-      >
-        <AvantiIconChevronUp v-if="expanded" />
-        <AvantiIconChevronRight v-else />
-      </button>
+      <div class="avanti-dashboard-checklist-card__aside">
+        <AvantiBadge v-if="counter" tone="soft">{{ counter }}</AvantiBadge>
+        <button
+          class="avanti-dashboard-checklist-card__toggle"
+          type="button"
+          :aria-expanded="expanded"
+          :aria-controls="listId"
+          :aria-label="toggleLabel"
+          @click="toggle"
+        >
+          <AvantiIconChevronUp v-if="expanded" />
+          <AvantiIconChevronRight v-else />
+        </button>
+      </div>
     </div>
     <span class="avanti-dashboard-checklist-card__divider" aria-hidden="true" />
     <div v-if="expanded" :id="listId" class="avanti-dashboard-checklist-card__list">
@@ -51,6 +62,8 @@
           :status="item.status"
           :icon="item.icon"
           :icon-status="item.iconStatus"
+          :marker-status="item.markerStatus"
+          :spacious="Boolean(counter)"
         />
       </template>
     </div>
@@ -63,6 +76,7 @@
 
 <script setup lang="ts">
 import { computed, ref, useId } from 'vue'
+import AvantiBadge from '@/components/ui/avanti_badge.vue'
 import AvantiCard from '@/components/ui/avanti_card.vue'
 import AvantiIconCircle from '@/components/ui/avanti_icon_circle.vue'
 import AvantiProgressSegments from '@/components/ui/avanti_progress_segments.vue'
@@ -86,8 +100,10 @@ const props = withDefaults(
     toggleLabel: string
     progressLabel: string
     variant?: AvantiChecklistVariant
+    /** Подпись бейджа-счётчика; включает просторную версию карточки. */
+    counter?: string
   }>(),
-  { variant: 'default' },
+  { variant: 'default', counter: '' },
 )
 
 const isReady = computed(() => props.variant === 'ready')
@@ -136,6 +152,11 @@ function toggle(): void {
   &__eyebrow {
     font-size: 11px;
     font-weight: var(--avanti-font-weight-bold);
+
+    /* Строка надзаголовка в макете ровно 13px: `normal` даёт 14, из-за
+       чего шапка становилась на пиксель выше (66 вместо 65 на десктопе,
+       66 вместо 65 на мобильной) и утягивала вниз всё, что под ней. */
+    line-height: 13px;
     color: var(--avanti-color-primary);
     text-transform: uppercase;
     letter-spacing: 0.55px;
@@ -145,6 +166,13 @@ function toggle(): void {
     font-size: 13px;
     font-weight: var(--avanti-font-weight-semibold);
     color: var(--avanti-color-text-strong);
+  }
+
+  &__aside {
+    display: flex;
+    flex-shrink: 0;
+    gap: 10px;
+    align-items: center;
   }
 
   &__toggle {
@@ -184,6 +212,27 @@ function toggle(): void {
   &__progress {
     width: 100%;
     padding: 12px 16px 16px;
+  }
+
+  /* --- Просторная карточка со счётчиком (1:268, 241:23384, 31:6467) --- */
+  &--counter {
+    .avanti-dashboard-checklist-card__head {
+      gap: 0;
+      padding: 20px 24px;
+    }
+
+    /* Разделителя между списком и прогрессом в этих кадрах нет. */
+    .avanti-dashboard-checklist-card__list + .avanti-dashboard-checklist-card__divider {
+      display: none;
+    }
+
+    .avanti-dashboard-checklist-card__progress {
+      padding: 16px 24px 20px;
+    }
+
+    :deep(.avanti-progress-segments__item) {
+      height: 6px;
+    }
   }
 
   /*

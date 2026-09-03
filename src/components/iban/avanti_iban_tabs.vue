@@ -69,9 +69,12 @@ function select(id: string): void {
     justify-content: center;
     min-width: 0;
     height: 50px;
-    padding: 8px 16px;
+
+    /* Боковые поля 12px: в макете (31:6439) надпись «Trasferimento su
+       carta» занимает 218 из 244px сегмента и при 16px не помещается. */
+    padding: 8px 12px;
     font-size: 16px;
-    font-weight: var(--avanti-font-weight-medium);
+    font-weight: var(--avanti-font-weight-regular);
     line-height: 20px;
     text-align: center;
     text-transform: uppercase;

@@ -47,7 +47,9 @@
         autocomplete="name"
         @update:model-value="updateOwner"
       />
-      <AvantiIbanActionButton @click="submit">{{ content.submitLabel }}</AvantiIbanActionButton>
+      <AvantiIbanActionButton :uppercase="false" @click="submit">
+        {{ content.submitLabel }}
+      </AvantiIbanActionButton>
     </div>
   </section>
 </template>
@@ -153,7 +155,11 @@ $panel-radius: 23px;
     text-align: center;
   }
 
-  /* Кнопка закрытия прижата к правому краю и не влияет на высоту шапки. */
+  /*
+   * Кнопка закрытия прижата к правому краю и не влияет на высоту шапки.
+   * Собственный отступ снизу — 4px: вместе с `gap: 8px` шапки он даёт
+   * ровно 12px до заголовка, как в макете (низ кнопки 644, заголовок 656).
+   */
   &__close {
     @include button-reset;
     @include focus-ring;
@@ -165,7 +171,7 @@ $panel-radius: 23px;
     justify-content: center;
     width: 32px;
     height: 32px;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     color: var(--avanti-color-primary);
     border-radius: var(--avanti-radius-round);
     transition: color var(--avanti-transition-fast);
@@ -192,6 +198,10 @@ $panel-radius: 23px;
     font-weight: var(--avanti-font-weight-regular);
     line-height: 20px;
     color: var(--avanti-color-text-secondary);
+
+    /* Chrome набирает эту строку на 9px шире Figma (323 против 314);
+       трекинг возвращает её к ширине макета. */
+    letter-spacing: -0.2px;
   }
 
   &__body {

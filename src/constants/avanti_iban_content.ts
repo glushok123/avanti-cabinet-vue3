@@ -3,6 +3,8 @@
  * Строки взяты из макета без изменений (итальянская локаль), чтобы в
  * компонентах не было зашитого текста.
  */
+import { AVANTI_CHECKLIST } from '@/constants/avanti_dashboard_mock'
+import type { AvantiChecklistContent } from '@/types/avanti_dashboard'
 import type {
   AvantiIbanAmountContent,
   AvantiIbanPanelContent,
@@ -82,6 +84,26 @@ export const AVANTI_IBAN_MOCK = {
   /** Владелец счёта — совпадает с профилем пользователя в кабинете. */
   owner: 'Marco Rossi',
 } as const
+
+/**
+ * Чеклист верификации на странице «Ввод айбана после шагов» (кадр 31:6467).
+ * От главной страницы отличается состоянием: в шапке появляется бейдж
+ * «5 / 5 completati», индикатор закрашен целиком, кружки всех шагов залиты.
+ * Начертание подписей двух последних шагов при этом остаётся «текущим», а
+ * справа у них стоит стрелка перехода — поэтому `status`, `iconStatus` и
+ * `markerStatus` у них расходятся.
+ */
+export const AVANTI_IBAN_CHECKLIST: AvantiChecklistContent = {
+  ...AVANTI_CHECKLIST,
+  counter: '5 / 5 completati',
+  completed: 5,
+  items: AVANTI_CHECKLIST.items.map((item) => ({
+    ...item,
+    status: item.status === 'pending' ? ('current' as const) : item.status,
+    iconStatus: 'completed' as const,
+    markerStatus: item.status === 'completed' ? ('completed' as const) : ('current' as const),
+  })),
+}
 
 /** Заголовок страницы «Ввод айбана после шагов» для скринридеров и вкладки. */
 export const AVANTI_IBAN_PAGE_TITLE = 'IBAN per l’accredito'

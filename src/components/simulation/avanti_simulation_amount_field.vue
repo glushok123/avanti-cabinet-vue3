@@ -157,21 +157,35 @@ function handleBlur(): void {
   color: var(--avanti-color-primary);
   cursor: text;
   background-color: var(--avanti-color-surface);
-  border: 1px solid var(--avanti-color-primary);
   border-radius: var(--avanti-radius-lg);
-  box-shadow: var(--avanti-shadow-amount-field-mobile);
+
+  /*
+   * Мобильный макет отводит полю ровно 57px и рисует обводку внутрь кадра.
+   * Обычный border прибавился бы к габаритам (59px) и сдвинул бы вниз всё
+   * содержимое страницы, поэтому линия нарисована inset-тенью.
+   */
+  @include inner-border(
+    var(--avanti-color-primary),
+    1px,
+    var(--avanti-shadow-amount-field-mobile)
+  );
+
   transition:
     border-color var(--avanti-transition-fast),
     box-shadow var(--avanti-transition-fast);
 
   &:hover {
-    border-color: var(--avanti-color-primary-dark);
+    @include inner-border(
+      var(--avanti-color-primary-dark),
+      1px,
+      var(--avanti-shadow-amount-field-mobile)
+    );
   }
 
   /* Фокус подсвечивается мягким бирюзовым кольцом поверх тени из макета. */
   &:focus-within {
-    border-color: var(--avanti-color-primary-dark);
     box-shadow:
+      inset 0 0 0 1px var(--avanti-color-primary-dark),
       var(--avanti-shadow-amount-field-mobile),
       0 0 0 3px var(--avanti-color-primary-soft-border);
   }
@@ -205,10 +219,19 @@ function handleBlur(): void {
     padding: 17px;
     font-size: 40px;
     text-transform: uppercase;
+
+    /* На десктопе высота поля задана явно, поэтому обводка обычная. */
+    border: 1px solid var(--avanti-color-primary);
     border-radius: var(--avanti-radius-2xl);
     box-shadow: var(--avanti-shadow-amount-field);
 
+    &:hover {
+      border-color: var(--avanti-color-primary-dark);
+      box-shadow: var(--avanti-shadow-amount-field);
+    }
+
     &:focus-within {
+      border-color: var(--avanti-color-primary-dark);
       box-shadow:
         var(--avanti-shadow-amount-field),
         0 0 0 3px var(--avanti-color-primary-soft-border);

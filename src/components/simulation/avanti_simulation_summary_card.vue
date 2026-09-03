@@ -45,10 +45,17 @@ const isMobile = useIsMobile()
     width: 100%;
   }
 
+  /*
+   * В макете разделитель — линия нулевой высоты: она не раздвигает строки,
+   * а лежит посередине отступа между ними. Отрицательный margin возвращает
+   * браузерному блоку то же поведение, иначе карточка выходит на 2px выше
+   * макетных 222px и утягивает вниз всё, что под ней.
+   */
   &__divider {
     display: block;
     width: 100%;
     height: 1px;
+    margin-top: -1px;
     background-color: var(--avanti-color-divider-on-primary);
   }
 

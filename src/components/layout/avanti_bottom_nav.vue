@@ -35,11 +35,15 @@ function resolveVariant(item: AvantiNavItem): 'default' | 'accent' {
 .avanti-bottom-nav {
   display: flex;
   flex-shrink: 0;
-  align-items: center;
+
+  /* В макете пункты выровнены по нижнему краю: их низ приходится на 10,5px
+     от низа панели, поэтому кнопка «Assistenza» стоит выше обычных пунктов
+     ровно на разницу их высот. Центрирование давало сдвиг на 1–1,5px. */
+  align-items: flex-end;
   justify-content: space-between;
   width: 100%;
   height: 62px;
-  padding: 0 20px;
+  padding: 0 20px 10.5px;
   background-color: var(--avanti-color-surface);
   border-top: 2px solid var(--avanti-color-primary);
 }

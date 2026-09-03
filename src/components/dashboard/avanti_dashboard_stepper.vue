@@ -137,9 +137,11 @@ function lineClass(step: AvantiStepperStep): string {
       flex: 0 0 auto;
     }
 
+    /* В мобильном кадре соединитель проходит не по центру кружка,
+       а на 16px ниже верха ряда — замерено по эталону. */
     &__line {
       flex: 1 1 0;
-      margin-top: 9px;
+      margin-top: 16px;
 
       &::after {
         right: 0;
