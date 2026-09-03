@@ -7,25 +7,11 @@
   }
 }
 
-/// Стили применяются от планшета и выше (768px+).
-@mixin tablet-up {
-  @media (min-width: $breakpoint-tablet) {
-    @content;
-  }
-}
-
 /// Стили применяются от десктопа и выше (1024px+).
 @mixin desktop-up {
   @media (min-width: $breakpoint-desktop) {
     @content;
   }
-}
-
-/// Обрезает текст в одну строку с многоточием.
-@mixin truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /// Скрывает элемент визуально, оставляя его доступным скринридерам.
@@ -46,10 +32,10 @@
   padding: 0;
   font: inherit;
   color: inherit;
+  appearance: none;
   cursor: pointer;
   background: none;
   border: none;
-  appearance: none;
 }
 
 /// Видимый фокус для клавиатурной навигации.
@@ -57,5 +43,29 @@
   &:focus-visible {
     outline: 2px solid var(--avanti-color-primary);
     outline-offset: $offset;
+  }
+}
+
+/// Контентная область страницы.
+/// Ширина ограничена макетом и центрируется: при увеличении экрана растут
+/// только боковые отступы, сам контент остаётся прежнего размера.
+@mixin content-container($max-width) {
+  width: 100%;
+  max-width: $max-width;
+  margin-inline: auto;
+}
+
+/// Обводка «внутрь», как в Figma.
+/// Обычный border в браузере прибавляется к габаритам элемента, из-за чего
+/// карточка получается на 2px больше, чем в макете. inset-тень рисует ту же
+/// линию поверх фона и на размер не влияет — размеры совпадают с Figma.
+/// Второй аргумент позволяет добавить обычную тень к той же декларации.
+@mixin inner-border($color, $width: 1px, $shadow: null) {
+  @if $shadow {
+    box-shadow:
+      inset 0 0 0 $width $color,
+      $shadow;
+  } @else {
+    box-shadow: inset 0 0 0 $width $color;
   }
 }

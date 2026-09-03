@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-type CardPadding = 'none' | 'sm' | 'md' | 'lg'
+type CardPadding = 'none' | 'lg'
 type CardShadow = 'none' | 'card' | 'soft'
 
 const props = withDefaults(
@@ -22,7 +22,7 @@ const props = withDefaults(
     tag?: string
   }>(),
   {
-    padding: 'md',
+    padding: 'none',
     shadow: 'card',
     tag: 'div',
   },
@@ -34,8 +34,9 @@ const shadowClass = computed(() => `avanti-card--shadow-${props.shadow}`)
 
 <style lang="scss" scoped>
 .avanti-card {
+  /* Обводка рисуется внутрь (см. миксин inner-border), поэтому габариты
+     карточки совпадают с размерами кадра в Figma до пикселя. */
   background-color: var(--avanti-color-surface);
-  border: 1px solid var(--avanti-color-border);
   border-radius: var(--avanti-radius-xl);
 
   &--padding-none {
@@ -43,29 +44,20 @@ const shadowClass = computed(() => `avanti-card--shadow-${props.shadow}`)
     overflow: hidden;
   }
 
-  &--padding-sm {
-    padding: 16px;
-  }
-
-  &--padding-md {
-    padding: 20px 24px;
-  }
-
   &--padding-lg {
     padding: 24px;
   }
 
   &--shadow-none {
-    box-shadow: none;
+    @include inner-border(var(--avanti-color-border));
   }
 
   &--shadow-card {
-    border-color: var(--avanti-color-border-soft);
-    box-shadow: var(--avanti-shadow-card);
+    @include inner-border(var(--avanti-color-border-soft), 1px, var(--avanti-shadow-card));
   }
 
   &--shadow-soft {
-    box-shadow: var(--avanti-shadow-card-soft);
+    @include inner-border(var(--avanti-color-border), 1px, var(--avanti-shadow-card-soft));
   }
 }
 </style>

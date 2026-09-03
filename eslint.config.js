@@ -12,6 +12,15 @@ export default [
   skipFormatting,
 
   {
+    // Скрипты проверок выполняются в Node, а не в браузере.
+    name: 'avanti/node-scripts',
+    files: ['scripts/**/*.mjs', 'eslint.config.js'],
+    languageOptions: {
+      globals: { process: 'readonly', console: 'readonly' },
+    },
+  },
+
+  {
     name: 'avanti/project-rules',
     files: ['**/*.vue', '**/*.ts'],
     rules: {
@@ -20,8 +29,9 @@ export default [
        */
 
       // 1. Никаких inline-стилей: ни статических style="...", ни привязок :style.
-      //    Единственное исключение — компоненты, где :style передаёт одну
-      //    CSS-переменную; такие места помечены комментарием и отключением правила.
+      //    Внимание: это правило ловит только литералы; привязку к переменной
+      //    (:style="obj") оно пропускает, поэтому дополнительно работает
+      //    scripts/check_inline_styles.mjs — он и является основной проверкой.
       'vue/no-static-inline-styles': ['error', { allowBinding: false }],
 
       // 2. Никакого inline-JS в шаблоне: логика выносится в script setup.

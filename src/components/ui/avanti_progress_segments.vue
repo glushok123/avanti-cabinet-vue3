@@ -4,7 +4,14 @@
   от фирменного к нейтральному, остальные нейтральные.
 -->
 <template>
-  <div class="avanti-progress-segments" role="progressbar" :aria-valuenow="completed" :aria-valuemin="0" :aria-valuemax="total">
+  <div
+    class="avanti-progress-segments"
+    role="progressbar"
+    :aria-label="label"
+    :aria-valuenow="completed"
+    :aria-valuemin="0"
+    :aria-valuemax="total"
+  >
     <span
       v-for="segment in total"
       :key="segment"
@@ -15,8 +22,10 @@
 </template>
 
 <script setup lang="ts">
+/** label — доступное имя индикатора: у него нет видимого заголовка. */
 const props = withDefaults(
   defineProps<{
+    label: string
     total?: number
     completed?: number
   }>(),

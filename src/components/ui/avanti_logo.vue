@@ -50,7 +50,10 @@ const toneClass = computed(() => `avanti-logo--tone-${props.tone}`)
 
   &__wordmark {
     font-weight: var(--avanti-font-weight-bold);
-    line-height: normal;
+
+    /* line-height: 1 — чтобы высота логотипа определялась знаком, а не
+       межстрочным интервалом шрифта: иначе шапка становится на 1px выше макета. */
+    line-height: 1;
     white-space: nowrap;
   }
 

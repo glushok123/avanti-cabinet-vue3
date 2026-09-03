@@ -9,6 +9,9 @@
 -->
 <template>
   <div class="avanti-slider" :style="progressStyle">
+    <div class="avanti-slider__value">
+      <slot name="value" />
+    </div>
     <div class="avanti-slider__track">
       <div class="avanti-slider__fill" />
     </div>
@@ -72,12 +75,23 @@ $thumb-size: 32px;
   width: 100%;
   height: $thumb-size;
 
+  /*
+   * Слот подписи над ползунком. Позиция считается из той же доли заполнения,
+   * что и заливка, поэтому потребителю не нужно повторять расчёт у себя.
+   */
+  &__value {
+    position: absolute;
+    bottom: 100%;
+    left: calc(var(--avanti-slider-progress) * (100% - #{$thumb-size}) + #{$thumb-size} * 0.5);
+    transform: translateX(-50%);
+  }
+
   &__track {
     width: 100%;
     height: 8px;
     overflow: hidden;
     background-color: var(--avanti-color-track);
-    border-radius: 100px;
+    border-radius: var(--avanti-radius-pill);
 
     @include desktop-up {
       height: 12px;
@@ -88,7 +102,7 @@ $thumb-size: 32px;
     width: calc(var(--avanti-slider-progress) * 100%);
     height: 100%;
     background-color: var(--avanti-color-primary);
-    border-radius: 100px;
+    border-radius: var(--avanti-radius-pill);
   }
 
   &__thumb {
@@ -122,9 +136,9 @@ $thumb-size: 32px;
     width: 100%;
     height: 100%;
     margin: 0;
+    appearance: none;
     cursor: pointer;
     opacity: 0;
-    appearance: none;
 
     &::-webkit-slider-thumb {
       width: $thumb-size;

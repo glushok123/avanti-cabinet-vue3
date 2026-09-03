@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-type BadgeSize = 'sm' | 'md'
+type BadgeSize = 'sm' | 'md' | 'lg'
 
 const props = withDefaults(
   defineProps<{
@@ -34,8 +34,8 @@ const sizeClass = computed(() => `avanti-notification-badge--${props.size}`)
   line-height: normal;
   color: var(--avanti-color-text-on-primary);
   background-color: var(--avanti-color-danger);
-  border-style: solid;
   border-color: var(--avanti-color-surface);
+  border-style: solid;
   border-radius: var(--avanti-radius-round);
 
   &--sm {
@@ -54,6 +54,17 @@ const sizeClass = computed(() => `avanti-notification-badge--${props.size}`)
     height: 22px;
     font-size: 11px;
     border-width: 2px;
+  }
+
+  /* Счётчик плавающего виджета консультанта: без обводки, тёмно-красный. */
+  &--lg {
+    top: -2px;
+    right: -6px;
+    width: 28.444px;
+    height: 28.444px;
+    font-size: 17.778px;
+    background-color: var(--avanti-color-danger-dark);
+    border-width: 0;
   }
 }
 </style>

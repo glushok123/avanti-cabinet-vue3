@@ -8,7 +8,12 @@ import { onBeforeUnmount, onMounted, ref, type Ref } from 'vue'
  * @param query — медиавыражение, например '(max-width: 767px)'.
  */
 export function useMediaQuery(query: string): Ref<boolean> {
-  const matches = ref(false)
+  /*
+   * Значение считывается сразу при создании, а не в onMounted: иначе первый
+   * кадр на мобильном рисуется десктопной раскладкой и происходит «моргание».
+   * Проверка window нужна для серверного рендера и юнит-тестов.
+   */
+  const matches = ref(typeof window !== 'undefined' && window.matchMedia(query).matches)
   let mediaQueryList: MediaQueryList | null = null
 
   function handleChange(event: MediaQueryListEvent | MediaQueryList): void {

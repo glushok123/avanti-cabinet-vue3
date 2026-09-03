@@ -10,25 +10,30 @@
   --avanti-color-primary-dark: #1a7488;
   --avanti-color-primary-soft: #eaf4f6;
   --avanti-color-primary-soft-border: #c7e3ea;
-  --avanti-color-logo-accent: #245caa;
 
   /* --- Поверхности --- */
-  --avanti-color-surface: #ffffff;
+  --avanti-color-surface: #fff;
   --avanti-color-surface-muted: #f8fafb;
+
+  /* Полупрозрачная белая подложка бейджа на градиентной карточке. */
+  --avanti-color-surface-translucent: rgb(255 255 255 / 20%);
   --avanti-color-surface-neutral: #f4f4f5;
   --avanti-color-page: #f8fafb;
 
   /* Фон мобильного фрейма симуляции — в макете на 1 пункт светлее десктопного. */
   --avanti-color-page-mobile: #f9fafb;
 
+  /* Затемнение под выезжающим мобильным меню. */
+  --avanti-color-overlay: rgb(26 35 50 / 45%);
+
   /* --- Текст --- */
   --avanti-color-text-strong: #1a2332;
   --avanti-color-text-heading: #111827;
-  --avanti-color-text-black: #000000;
+  --avanti-color-text-black: #000;
   --avanti-color-text-muted: #747474;
   --avanti-color-text-secondary: #71717a;
   --avanti-color-text-tertiary: #a1a1aa;
-  --avanti-color-text-on-primary: #ffffff;
+  --avanti-color-text-on-primary: #fff;
   --avanti-color-text-on-primary-soft: #eaf4f6;
   --avanti-color-text-on-primary-dim: #f3f3f3;
 
@@ -79,10 +84,16 @@
   --avanti-shadow-balance: 0 8px 12px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-circle: 0 4px 4px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-action: 0 4px 4px rgb(36 145 170 / 25%);
+
+  /* Свечение вокруг аватара плавающего чат-консультанта. */
+  --avanti-shadow-support-glow: 0 0 14.222px 3.556px rgb(36 145 170 / 70%);
   --avanti-shadow-amount-field: 0 4px 18.6px rgb(0 0 0 / 33%);
   --avanti-shadow-amount-field-mobile: 0 4px 5px rgb(0 0 0 / 5%);
   --avanti-shadow-summary: 3px 6px 15.4px rgb(0 0 0 / 25%);
   --avanti-shadow-summary-mobile: 0 8px 10px rgb(0 0 0 / 18%);
+
+  /* Тень выезжающей панели мобильного меню — падает влево, на затемнение. */
+  --avanti-shadow-drawer: -8px 0 24px rgb(0 0 0 / 18%);
   --avanti-shadow-button-primary: 0 4px 11.6px rgb(0 0 0 / 25%);
   --avanti-shadow-button-primary-mobile: 0 4px 4px rgb(0 0 0 / 16%);
 

@@ -40,8 +40,8 @@ const toneClass = computed(() => `avanti-badge--${props.tone}`)
   border-radius: var(--avanti-radius-pill);
 
   &--uppercase {
-    letter-spacing: 0.33px;
     text-transform: uppercase;
+    letter-spacing: 0.33px;
   }
 
   &--primary {
@@ -51,7 +51,7 @@ const toneClass = computed(() => `avanti-badge--${props.tone}`)
 
   &--translucent {
     padding: 4px 10px;
-    background-color: rgb(255 255 255 / 20%);
+    background-color: var(--avanti-color-surface-translucent);
   }
 }
 </style>

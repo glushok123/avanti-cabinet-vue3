@@ -11,10 +11,12 @@
     "build": "vue-tsc --noEmit && vite build",
     "build:singlefile": "vite build --mode singlefile --outDir dist-singlefile",
     "preview": "vite preview",
-    "lint": "npm run lint:limits && npm run lint:js && npm run lint:css",
+    "lint": "npm run lint:limits && npm run lint:inline && npm run lint:js && npm run lint:css && npm run lint:format",
     "lint:js": "eslint .",
     "lint:css": "stylelint \"src/**/*.{vue,scss}\"",
     "lint:limits": "node scripts/check_file_limits.mjs",
+    "lint:inline": "node scripts/check_inline_styles.mjs",
+    "lint:format": "prettier --check \"src/**/*.{vue,ts,scss}\"",
     "format": "prettier --write \"src/**/*.{vue,ts,scss}\""
   },
   "dependencies": {
@@ -23,11 +25,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@types/node": "^26.4.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.3.0",
     "eslint": "^9.19.0",
     "eslint-plugin-vue": "^9.32.0",
+    "postcss-html": "^2.0.0",
     "prettier": "^3.4.2",
     "sass-embedded": "^1.83.4",
     "stylelint": "^16.14.1",
