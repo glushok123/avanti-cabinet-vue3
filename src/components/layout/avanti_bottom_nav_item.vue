@@ -1,32 +1,53 @@
 <!--
   Пункт мобильной нижней навигации: иконка над подписью.
   Вариант «accent» — «Assistenza» с фирменной заливкой.
+
+  С маршрутом пункт рендерится ссылкой (RouterLink), без него — кнопкой:
+  оформление у них общее, поэтому корневой класс один и тот же.
 -->
 <template>
-  <button class="avanti-bottom-nav-item" :class="[variantClass, activeClass]" type="button">
+  <component
+    :is="rootTag"
+    class="avanti-bottom-nav-item"
+    :class="[variantClass, activeClass]"
+    v-bind="rootAttrs"
+    :aria-current="ariaCurrent"
+  >
     <span class="avanti-bottom-nav-item__icon">
       <slot name="icon" />
     </span>
     <span class="avanti-bottom-nav-item__label">{{ label }}</span>
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 
 type BottomNavItemVariant = 'default' | 'accent'
 
 const props = withDefaults(
   defineProps<{
     label: string
+    /** Маршрут пункта. Без него пункт остаётся кнопкой без перехода. */
+    to?: string
     active?: boolean
     variant?: BottomNavItemVariant
   }>(),
   {
+    to: undefined,
     active: false,
     variant: 'default',
   },
 )
+
+const rootTag = computed(() => (props.to ? RouterLink : 'button'))
+
+/** У ссылки нужен маршрут, у кнопки — явный тип, иначе она отправляет форму. */
+const rootAttrs = computed(() => (props.to ? { to: props.to } : { type: 'button' as const }))
+
+/** Активный пункт передаётся не только цветом: скринридер объявляет текущую страницу. */
+const ariaCurrent = computed(() => (props.active ? ('page' as const) : undefined))
 
 const variantClass = computed(() => `avanti-bottom-nav-item--${props.variant}`)
 const activeClass = computed(() => (props.active ? 'avanti-bottom-nav-item--active' : ''))

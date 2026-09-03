@@ -30,9 +30,9 @@ export const AVANTI_USER: AvantiUser = {
 
 /** Пункты горизонтального меню десктопной шапки. */
 export const AVANTI_HEADER_NAV_ITEMS: AvantiNavItem[] = [
-  { id: 'home', label: 'Home', icon: 'home', active: true },
-  { id: 'documents', label: 'Documenti', icon: 'documents', active: false },
-  { id: 'profile', label: 'Profilo', icon: 'profile', active: false },
+  { id: 'home', label: 'Home', icon: 'home', to: '/home' },
+  { id: 'documents', label: 'Documenti', icon: 'documents', to: '/documents' },
+  { id: 'profile', label: 'Profilo', icon: 'profile', to: '/profile' },
 ]
 
 /** Кнопка поддержки — вынесена отдельно: у неё своё оформление и счётчик. */
@@ -40,7 +40,7 @@ export const AVANTI_SUPPORT_NAV_ITEM: AvantiNavItem = {
   id: 'support',
   label: 'Assistenza',
   icon: 'chat',
-  active: false,
+  to: '/chat',
   accent: true,
   notifications: 4,
 }

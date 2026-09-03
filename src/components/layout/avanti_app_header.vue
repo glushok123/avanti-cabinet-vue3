@@ -15,7 +15,8 @@
               :key="item.id"
               class="avanti-app-header__menu-item"
               :label="item.label"
-              :active="item.active"
+              :to="item.to"
+              :active="isActive(item)"
             >
               <template #icon>
                 <component :is="resolveNavIcon(item.icon)" />
@@ -23,7 +24,13 @@
             </AvantiNavItem>
           </nav>
         </div>
-        <AvantiNavItem :label="supportItem.label" variant="accent" :notifications="supportItem.notifications">
+        <AvantiNavItem
+          :label="supportItem.label"
+          :to="supportItem.to"
+          :active="isActive(supportItem)"
+          variant="accent"
+          :notifications="supportItem.notifications"
+        >
           <template #icon>
             <component :is="resolveNavIcon(supportItem.icon)" />
           </template>
@@ -38,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { useActiveNavSection } from '@/composables/use_nav_active'
 import AvantiLogo from '@/components/ui/avanti_logo.vue'
 import AvantiNavItem from '@/components/layout/avanti_nav_item.vue'
 import AvantiUserCard from '@/components/layout/avanti_user_card.vue'
@@ -57,6 +65,17 @@ defineProps<{
   menuLabel: string
   breadcrumbsLabel: string
 }>()
+
+/**
+ * Подсветка пункта выводится из адреса, а не хранится в данных: иначе при
+ * переходе подсвеченными оказались бы сразу два пункта — заданный в моке
+ * и соответствующий текущему маршруту.
+ */
+const activeSection = useActiveNavSection()
+
+function isActive(item: NavItem): boolean {
+  return item.id === activeSection.value
+}
 </script>
 
 <style lang="scss" scoped>

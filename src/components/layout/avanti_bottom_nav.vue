@@ -8,7 +8,8 @@
       v-for="item in items"
       :key="item.id"
       :label="item.label"
-      :active="item.active"
+      :to="item.to"
+      :active="isActive(item)"
       :variant="resolveVariant(item)"
     >
       <template #icon>
@@ -19,12 +20,20 @@
 </template>
 
 <script setup lang="ts">
+import { useActiveNavSection } from '@/composables/use_nav_active'
 import AvantiBottomNavItem from '@/components/layout/avanti_bottom_nav_item.vue'
 import { resolveNavIcon } from '@/components/icons/avanti_nav_icons'
 import type { AvantiNavItem } from '@/types/avanti_dashboard'
 
 /** menuLabel — доступное имя навигации (в макете у неё нет заголовка). */
 defineProps<{ items: AvantiNavItem[]; menuLabel: string }>()
+
+/** Подсветка выводится из адреса — та же логика, что в десктопной шапке. */
+const activeSection = useActiveNavSection()
+
+function isActive(item: AvantiNavItem): boolean {
+  return item.id === activeSection.value
+}
 
 function resolveVariant(item: AvantiNavItem): 'default' | 'accent' {
   return item.accent ? 'accent' : 'default'

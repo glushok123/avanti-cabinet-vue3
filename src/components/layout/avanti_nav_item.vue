@@ -2,19 +2,29 @@
   Пункт горизонтального меню десктопной шапки.
   Иконка приходит слотом, подпись и состояние — пропами.
   Вариант «accent» — кнопка «Assistenza» с фирменной заливкой и счётчиком.
+
+  С маршрутом пункт рендерится ссылкой (RouterLink), без него — кнопкой:
+  оформление у них общее, поэтому корневой класс один и тот же.
 -->
 <template>
-  <button class="avanti-nav-item" :class="[variantClass, activeClass]" type="button">
+  <component
+    :is="rootTag"
+    class="avanti-nav-item"
+    :class="[variantClass, activeClass]"
+    v-bind="rootAttrs"
+    :aria-current="ariaCurrent"
+  >
     <span class="avanti-nav-item__icon">
       <slot name="icon" />
     </span>
     <span class="avanti-nav-item__label">{{ label }}</span>
     <AvantiNotificationBadge v-if="notifications" :count="notifications" size="md" />
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import AvantiNotificationBadge from '@/components/ui/avanti_notification_badge.vue'
 
 type NavItemVariant = 'default' | 'accent'
@@ -22,16 +32,27 @@ type NavItemVariant = 'default' | 'accent'
 const props = withDefaults(
   defineProps<{
     label: string
+    /** Маршрут пункта. Без него пункт остаётся кнопкой без перехода. */
+    to?: string
     active?: boolean
     variant?: NavItemVariant
     notifications?: number
   }>(),
   {
+    to: undefined,
     active: false,
     variant: 'default',
     notifications: 0,
   },
 )
+
+const rootTag = computed(() => (props.to ? RouterLink : 'button'))
+
+/** У ссылки нужен маршрут, у кнопки — явный тип, иначе она отправляет форму. */
+const rootAttrs = computed(() => (props.to ? { to: props.to } : { type: 'button' as const }))
+
+/** Активный пункт передаётся не только цветом: скринридер объявляет текущую страницу. */
+const ariaCurrent = computed(() => (props.active ? ('page' as const) : undefined))
 
 const variantClass = computed(() => `avanti-nav-item--${props.variant}`)
 const activeClass = computed(() => (props.active ? 'avanti-nav-item--active' : ''))

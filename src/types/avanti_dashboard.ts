@@ -81,7 +81,13 @@ export interface AvantiNavItem {
   id: string
   label: string
   icon: AvantiNavIcon
-  active: boolean
+  /** Маршрут пункта. Без него пункт не ведёт никуда. */
+  to?: string
+  /**
+   * Подсветка пункта. Выводится из текущего маршрута
+   * (`useActiveNavSection`), в данных не хранится.
+   */
+  active?: boolean
   /** Пункт с фирменной заливкой («Assistenza»). */
   accent?: boolean
   /** Счётчик непрочитанных уведомлений. */
