@@ -41,6 +41,13 @@ export interface AvantiProfileVerificationContent {
   hintLabel: string
 }
 
+/**
+ * Набор метрик карточки «Sicurezza»: подобран под кадры, а не под абстрактную
+ * шкалу. `default` — кадр подтверждения почты, `compact` — кадр профиля.
+ * Тот же вариант карточка передаёт своим строкам (avanti_security_row).
+ */
+export type AvantiProfileSecurityVariant = 'default' | 'compact'
+
 /** Содержимое карточки «Sicurezza». */
 export interface AvantiProfileSecurityContent {
   title: string

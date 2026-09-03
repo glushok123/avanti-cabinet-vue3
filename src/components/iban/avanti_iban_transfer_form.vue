@@ -40,10 +40,11 @@
         :placeholder="content.ibanPlaceholder"
         @update:model-value="updateIban"
       />
-      <AvantiIbanTextField
+      <AvantiIbanField
         :model-value="currentOwner"
         :label="content.ownerLabel"
         :placeholder="content.ownerPlaceholder"
+        format="plain"
         autocomplete="name"
         @update:model-value="updateOwner"
       />
@@ -59,7 +60,6 @@ import { ref, watch } from 'vue'
 import AvantiIconClose from '@/components/icons/avanti_icon_close.vue'
 import AvantiIbanTabs from '@/components/iban/avanti_iban_tabs.vue'
 import AvantiIbanField from '@/components/iban/avanti_iban_field.vue'
-import AvantiIbanTextField from '@/components/iban/avanti_iban_text_field.vue'
 import AvantiIbanActionButton from '@/components/iban/avanti_iban_action_button.vue'
 import type { AvantiIbanTransferContent } from '@/types/avanti_iban'
 

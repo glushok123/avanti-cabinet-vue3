@@ -1,16 +1,21 @@
 <!--
-  Форма регистрации внутри модального окна: переключатель экранов, почта,
-  пароль с подтверждением, кнопка и подпись о шифровании.
+  Форма модального окна авторизации: переключатель экранов, почта, пароль,
+  кнопка и подпись о шифровании.
+
+  Кадры регистрации (0:1235 / 7:1017) и входа (0:1338 / 8:1017) собраны из
+  одной и той же формы и отличаются тремя вещами — все три задаёт проп `mode`:
+  порядком половин переключателя (активная стоит первой), полем подтверждения
+  пароля (только регистрация) и назначением автозаполнения пароля.
 
   Контейнером служит примитив avanti_form_card с тегом form; собственные
   поля, тень и скругления ему не нужны — их даёт модальное окно.
 -->
 <template>
-  <AvantiFormCard class="avanti-auth-sign-up-form" tag="form" @submit.prevent="handleSubmit">
+  <AvantiFormCard class="avanti-auth-form" tag="form" @submit.prevent="handleSubmit">
     <AvantiSegmentedNav
-      class="avanti-auth-sign-up-form__tabs"
+      class="avanti-auth-form__tabs"
       :items="tabs"
-      :active-id="activeTab"
+      :active-id="mode"
       @select="handleSelect"
     />
     <AvantiModalField
@@ -27,49 +32,62 @@
       :show-label="shared.showPassword"
       :hide-label="shared.hidePassword"
       name="password"
-      autocomplete="new-password"
+      :autocomplete="passwordAutocomplete"
       size="sm"
     />
     <AvantiModalPasswordField
+      v-if="isSignUp"
       v-model="values.passwordConfirm"
-      :label="texts.passwordConfirmLabel"
+      :label="shared.passwordConfirmLabel"
       :show-label="shared.showPassword"
       :hide-label="shared.hidePassword"
       name="password-confirm"
       autocomplete="new-password"
       size="sm"
     />
-    <AvantiButton class="avanti-auth-sign-up-form__submit" size="sm" type="submit">
+    <AvantiButton class="avanti-auth-form__submit" size="sm" type="submit">
       {{ texts.submit }}
     </AvantiButton>
-    <p class="avanti-auth-sign-up-form__note">{{ shared.note }}</p>
+    <p class="avanti-auth-form__note">{{ shared.note }}</p>
   </AvantiFormCard>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import AvantiFormCard from '@/components/ui/avanti_form_card.vue'
 import AvantiButton from '@/components/ui/avanti_button.vue'
 import AvantiSegmentedNav from '@/components/ui/avanti_segmented_nav.vue'
 import AvantiModalField from '@/components/ui/avanti_modal_field.vue'
 import AvantiModalPasswordField from '@/components/ui/avanti_modal_password_field.vue'
 import {
+  AVANTI_AUTH_SCREEN_TEXTS,
   AVANTI_AUTH_SHARED_TEXTS as shared,
   AVANTI_AUTH_TABS,
-  AVANTI_SIGN_UP_TEXTS as texts,
 } from '@/constants/avanti_auth_content'
-import type { AvantiAuthTabId, AvantiSignUpFormValues } from '@/types/avanti_auth'
+import type { AvantiAuthFormValues, AvantiAuthMode } from '@/types/avanti_auth'
+
+const props = defineProps<{ mode: AvantiAuthMode }>()
 
 const emit = defineEmits<{
-  submit: [values: AvantiSignUpFormValues]
+  submit: [values: AvantiAuthFormValues]
   select: [id: string]
 }>()
 
-/** На экране регистрации активна левая половина. */
-const tabs = [AVANTI_AUTH_TABS.signUp, AVANTI_AUTH_TABS.signIn]
-const activeTab: AvantiAuthTabId = AVANTI_AUTH_TABS.signUp.id
+const isSignUp = computed<boolean>(() => props.mode === 'sign-up')
 
-const values = reactive<AvantiSignUpFormValues>({
+const texts = computed(() => AVANTI_AUTH_SCREEN_TEXTS[props.mode])
+
+/** В обоих кадрах активная половина переключателя стоит слева. */
+const tabs = computed(() =>
+  isSignUp.value
+    ? [AVANTI_AUTH_TABS.signUp, AVANTI_AUTH_TABS.signIn]
+    : [AVANTI_AUTH_TABS.signIn, AVANTI_AUTH_TABS.signUp],
+)
+
+/** Менеджеру паролей нужно знать, придумывают пароль или вводят прежний. */
+const passwordAutocomplete = computed<string>(() => (isSignUp.value ? 'new-password' : 'current-password'))
+
+const values = reactive({
   email: '',
   password: '',
   passwordConfirm: '',
@@ -77,7 +95,7 @@ const values = reactive<AvantiSignUpFormValues>({
 
 /* Отправка появится вместе с API: вёрстка только сообщает о событии. */
 function handleSubmit(): void {
-  emit('submit', { ...values })
+  emit('submit', isSignUp.value ? { ...values } : { email: values.email, password: values.password })
 }
 
 function handleSelect(id: string): void {
@@ -92,7 +110,7 @@ function handleSelect(id: string): void {
  * дочернего компонента получает оба класса, и составной селектор гарантированно
  * перебивает собственные правила примитива независимо от порядка стилей.
  */
-.avanti-auth-sign-up-form {
+.avanti-auth-form {
   &.avanti-form-card {
     gap: 16px;
 

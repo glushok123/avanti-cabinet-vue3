@@ -1,92 +1,14 @@
 <!--
-  Страница «Создать аккаунт» (кадры 0:1235 и 7:1017).
-  Модальное окно регистрации лежит поверх экрана одобрения кредита:
-  фон собран из тех же компонентов онбординга, что и страница «Кредит апрув».
-  Оболочка окна — общий примитив avanti_modal в брендовом варианте.
+  Страница маршрута «/sign-up» — кадры «Создать аккаунт» (0:1235 и 7:1017).
 
-  Переходы (крестик, вкладка «Accedi», отправка формы) появятся вместе
-  с маршрутами и API — на этапе вёрстки страница на события не подписана.
+  Разметка у регистрации и входа общая и живёт в `avanti_auth_layout`:
+  страница задаёт только режим экрана. Так же устроены страницы профиля
+  над общим `avanti_profile_layout`.
 -->
 <template>
-  <div class="avanti-sign-up-page">
-    <h1 class="avanti-sign-up-page__title">{{ texts.pageTitle }}</h1>
-    <AvantiSimulationHeader :menu-label="shared.menu" />
-    <main class="avanti-sign-up-page__body">
-      <AvantiAuthBackdropContent />
-    </main>
-    <AvantiModal :open="isOpen" variant="brand" :label="texts.dialogLabel" :close-label="shared.closeLabel">
-      <template #header-center>
-        <AvantiLogo :size="logoSize" />
-      </template>
-      <template #header>
-        <AvantiModalIntro
-          class="avanti-sign-up-page__intro"
-          :title="texts.title"
-          :lines="subtitleLines"
-          size="sm"
-        />
-      </template>
-      <AvantiAuthSignUpForm />
-    </AvantiModal>
-  </div>
+  <AvantiAuthLayout mode="sign-up" />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useIsMobile } from '@/composables/use_is_mobile'
-import AvantiSimulationHeader from '@/components/layout/avanti_simulation_header.vue'
-import AvantiAuthBackdropContent from '@/components/auth/avanti_auth_backdrop_content.vue'
-import AvantiModal from '@/components/ui/avanti_modal.vue'
-import AvantiModalIntro from '@/components/ui/avanti_modal_intro.vue'
-import AvantiLogo from '@/components/ui/avanti_logo.vue'
-import AvantiAuthSignUpForm from '@/components/auth/avanti_auth_sign_up_form.vue'
-import {
-  AVANTI_AUTH_SHARED_TEXTS as shared,
-  AVANTI_SIGN_UP_TEXTS as texts,
-} from '@/constants/avanti_auth_content'
-
-/** В макете окно открыто всегда: закрытие подключается вместе с маршрутами. */
-const isOpen = true
-
-/** Подпись под заголовком в макете умещается в одну строку. */
-const subtitleLines = [shared.subtitle]
-
-const isMobile = useIsMobile()
-
-/** В макете логотип окна мельче шапочного: sm на мобильной, lg на десктопе. */
-const logoSize = computed(() => (isMobile.value ? 'sm' : 'lg'))
+import AvantiAuthLayout from '@/components/auth/avanti_auth_layout.vue'
 </script>
-
-<style lang="scss" scoped>
-.avanti-sign-up-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-
-  /* Иллюстрация фона выходит за правый край контентной колонки. */
-  overflow-x: hidden;
-  background-color: var(--avanti-color-page);
-
-  /* Заголовок нужен только для доступности — в макете его нет. */
-  &__title {
-    @include visually-hidden;
-  }
-
-  &__body {
-    display: flex;
-    flex: 1 0 auto;
-  }
-
-  /*
-   * В кадре между логотипом окна и заголовком 26px, а общий зазор
-   * брендового окна — 24px. Двух пикселей не хватает, и всё содержимое
-   * ниже заголовка встаёт выше макета. Правка точечная: менять общий
-   * зазор avanti_modal нельзя — он общий для всех модальных окон.
-   */
-  @include desktop-up {
-    &__intro {
-      margin-top: 2px;
-    }
-  }
-}
-</style>

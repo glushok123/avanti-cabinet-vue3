@@ -1,12 +1,27 @@
 <!--
   Карточка «Dati personali» левой колонки экрана подтверждения почты
   (кадр 1:3510): заголовок с кнопкой правки, список значений и поле IBAN.
-  Строки списка берутся у общего примитива «подпись — значение».
+  Строки списка и поле IBAN берутся у общих примитивов
+  avanti_label_value_row и avanti_copy_field.
+
+  ПОЧЕМУ ОТДЕЛЬНО ОТ avanti_profile_data_card: структура у карточек одна,
+  но метрики расходятся на каждом уровне — размер строк и поля IBAN (sm
+  против md), поля карточки (24px против 16/24px), раскладка шапки на
+  мобильной (столбец против ряда) и кнопка правки (во всю ширину, 14px
+  против кнопки по содержимому, 12px). Общий компонент пришлось бы почти
+  целиком собрать из двух наборов правил, поэтому кадры оставлены
+  раздельными: переиспользование живёт уровнем ниже — в примитивах.
 -->
 <template>
-  <AvantiCard class="avanti-auth-profile-data-card" padding="lg" shadow="none" tag="section">
+  <AvantiCard
+    class="avanti-auth-profile-data-card"
+    padding="lg"
+    shadow="none"
+    tag="section"
+    :aria-labelledby="titleId"
+  >
     <div class="avanti-auth-profile-data-card__head">
-      <h2 class="avanti-auth-profile-data-card__title">{{ content.title }}</h2>
+      <h2 :id="titleId" class="avanti-auth-profile-data-card__title">{{ content.title }}</h2>
       <AvantiButton class="avanti-auth-profile-data-card__edit" variant="outline" @click="handleEdit">
         {{ content.editLabel }}
       </AvantiButton>
@@ -14,9 +29,9 @@
     <div class="avanti-auth-profile-data-card__list">
       <AvantiLabelValueRow v-for="row in content.rows" :key="row.id" :label="row.label" :value="row.value" />
       <AvantiCopyField
-        :label="content.ibanLabel"
-        :value="content.ibanValue"
-        :copy-label="content.ibanCopyLabel"
+        :label="content.iban.label"
+        :value="content.iban.value"
+        :copy-label="content.iban.copyLabel"
         size="sm"
       />
     </div>
@@ -24,15 +39,20 @@
 </template>
 
 <script setup lang="ts">
+import { computed, useId } from 'vue'
 import AvantiCard from '@/components/ui/avanti_card.vue'
 import AvantiButton from '@/components/ui/avanti_button.vue'
 import AvantiLabelValueRow from '@/components/ui/avanti_label_value_row.vue'
 import AvantiCopyField from '@/components/ui/avanti_copy_field.vue'
-import type { AvantiProfileDataContent } from '@/types/avanti_auth'
+import type { AvantiProfileDataCardContent } from '@/types/avanti_profile'
 
-defineProps<{ content: AvantiProfileDataContent }>()
+defineProps<{ content: AvantiProfileDataCardContent }>()
 
+/** Нажатие кнопки «Modifica nome»: маршрут подключается на этапе интеграции. */
 const emit = defineEmits<{ edit: [] }>()
+
+const uid = useId()
+const titleId = computed(() => `${uid}-title`)
 
 function handleEdit(): void {
   emit('edit')
@@ -62,14 +82,23 @@ function handleEdit(): void {
     color: var(--avanti-color-text-strong);
   }
 
-  /* Кнопка правки в макете с фирменной обводкой, но тёмной подписью. */
+  /*
+   * Кнопка правки в макете с фирменной обводкой, но тёмной подписью.
+   *
+   * Обводка рисуется внутрь: обычный border прибавлял 2px к высоте, и кнопка
+   * вместе со строкой заголовка выходила 39px вместо макетных 37px
+   * (кадр 1:3513, 146×37). Тот же приём у карточки профиля — кадр 1:2823
+   * задаёт ровно те же габариты.
+   */
   & &__edit {
+    @include inner-border(var(--avanti-color-primary), 1px);
+
     width: 100%;
     padding: 10px 12px;
     font-size: 14px;
     font-weight: var(--avanti-font-weight-medium);
     color: var(--avanti-color-text-strong);
-    border-width: 1px;
+    border: none;
     border-radius: var(--avanti-radius-sm);
   }
 

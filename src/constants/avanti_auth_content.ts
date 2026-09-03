@@ -6,11 +6,12 @@
  */
 import type { AvantiNavItem } from '@/types/avanti_dashboard'
 import type {
+  AvantiAuthMode,
+  AvantiAuthScreenTexts,
   AvantiAuthTab,
   AvantiEmailVerificationContent,
-  AvantiProfileDataContent,
-  AvantiSecurityRow,
 } from '@/types/avanti_auth'
+import type { AvantiProfileDataCardContent, AvantiProfileSecurityRow } from '@/types/avanti_profile'
 
 /* ------------------------------------------------------------------ */
 /* Общее для модальных окон регистрации и входа                        */
@@ -29,40 +30,35 @@ export const AVANTI_AUTH_SHARED_TEXTS = {
   subtitle: 'Spazio personale sicuro · SSL',
   emailLabel: 'Indirizzo email',
   passwordLabel: 'Password',
+  passwordConfirmLabel: 'Conferma password',
   note: 'I tuoi dati sono protetti con crittografia',
   showPassword: 'Mostra la password',
   hidePassword: 'Nascondi la password',
 } as const
 
-/* ------------------------------------------------------------------ */
-/* Экран «Создать аккаунт»                                             */
-/* ------------------------------------------------------------------ */
-
-export const AVANTI_SIGN_UP_TEXTS = {
-  /** Заголовок вкладки браузера и скрытый h1 страницы. */
-  pageTitle: 'Crea account',
-  dialogLabel: 'Crea account',
-  title: 'Crea il tuo account per gestire la tua pratica di credito.',
-  passwordConfirmLabel: 'Conferma password',
-  submit: 'Crea account e accedi ›',
-} as const
-
-/* ------------------------------------------------------------------ */
-/* Экран «Войти в аккаунт»                                             */
-/* ------------------------------------------------------------------ */
-
 /**
+ * Тексты обоих экранов авторизации. Разметка у них общая
+ * (`avanti_auth_layout` и `avanti_auth_form`), различает их только режим.
+ *
  * РАСХОЖДЕНИЕ МАКЕТА: в кадрах входа (0:1338 и 8:1017) заголовок модального
  * окна и подпись кнопки дословно повторяют экран регистрации
  * («Crea il tuo account…», «Crea account e accedi ›»). Тексты оставлены как
  * в макете; вопрос о правильных подписях для входа уходит заказчику.
  */
-export const AVANTI_SIGN_IN_TEXTS = {
-  pageTitle: 'Accedi',
-  dialogLabel: 'Accedi',
-  title: 'Crea il tuo account per gestire la tua pratica di credito.',
-  submit: 'Crea account e accedi ›',
-} as const
+export const AVANTI_AUTH_SCREEN_TEXTS: Record<AvantiAuthMode, AvantiAuthScreenTexts> = {
+  'sign-up': {
+    pageTitle: 'Crea account',
+    dialogLabel: 'Crea account',
+    title: 'Crea il tuo account per gestire la tua pratica di credito.',
+    submit: 'Crea account e accedi ›',
+  },
+  'sign-in': {
+    pageTitle: 'Accedi',
+    dialogLabel: 'Accedi',
+    title: 'Crea il tuo account per gestire la tua pratica di credito.',
+    submit: 'Crea account e accedi ›',
+  },
+}
 
 /* ------------------------------------------------------------------ */
 /* Экран «Verifica email»                                              */
@@ -90,7 +86,7 @@ export const AVANTI_VERIFY_NAV_ITEMS: AvantiNavItem[] = [
  * «Tipo di documento», хотя по имени слоя вторая строка — номер документа.
  * Текст оставлен как в макете, вопрос уходит заказчику.
  */
-export const AVANTI_VERIFY_PROFILE_DATA: AvantiProfileDataContent = {
+export const AVANTI_VERIFY_PROFILE_DATA: AvantiProfileDataCardContent = {
   title: 'Dati personali',
   editLabel: 'Modifica nome',
   rows: [
@@ -101,16 +97,18 @@ export const AVANTI_VERIFY_PROFILE_DATA: AvantiProfileDataContent = {
     { id: 'document-type', label: 'Tipo di documento', value: 'Passaporto' },
     { id: 'document-number', label: 'Tipo di documento', value: 'AB1234567' },
   ],
-  ibanLabel: 'IBAN',
-  ibanValue: '-',
-  ibanCopyLabel: 'Copia IBAN',
+  iban: {
+    label: 'IBAN',
+    value: '-',
+    copyLabel: 'Copia IBAN',
+  },
 }
 
 /** Заголовок карточки «Sicurezza». */
 export const AVANTI_VERIFY_SECURITY_TITLE = 'Sicurezza'
 
 /** Строки карточки «Sicurezza» над блоком подтверждения почты. */
-export const AVANTI_VERIFY_SECURITY_ROWS: AvantiSecurityRow[] = [
+export const AVANTI_VERIFY_SECURITY_ROWS: AvantiProfileSecurityRow[] = [
   {
     id: 'password',
     description: 'Cambia la password del tuo account.',

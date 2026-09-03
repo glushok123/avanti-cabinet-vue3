@@ -1,11 +1,25 @@
 <!--
   Карточка «Sicurezza»: заголовок со щитом, строки смены пароля и почты,
-  разделённые линиями, и блок подтверждения почты внизу.
+  разделённые линиями, и блок под ними — он приходит слотом.
+
+  Одна карточка на два кадра: 1:3541 («Verifica email») и 1:2583 («Profilo»).
+  Шапка, плитка щита, разделители и список строк в них совпадают, а различия
+  сведены к пропу `variant` — как у примитива строки avanti_security_row,
+  которому этот же вариант передаётся дальше:
+  `default` — кадр подтверждения почты: карточка растёт по содержимому,
+              под шапкой 16px на обеих ширинах;
+  `compact` — кадр профиля: на мобильной зазор 16px, на десктопе высота
+              карточки зафиксирована (792×333) и строки распределены
+              по остатку.
+
+  Нижний блок у кадров разный (ввод кода против кнопки «отправить код»),
+  поэтому он не проп, а слот: карточка не знает, что в неё вложено.
 -->
 <template>
   <AvantiCard
     class="avanti-profile-security-card"
-    padding="none"
+    :class="variantClass"
+    :padding="cardPadding"
     shadow="none"
     tag="section"
     :aria-labelledby="titleId"
@@ -14,19 +28,21 @@
       <span class="avanti-profile-security-card__icon" aria-hidden="true">
         <AvantiIconShield />
       </span>
-      <h2 :id="titleId" class="avanti-profile-security-card__title">{{ content.title }}</h2>
+      <h2 :id="titleId" class="avanti-profile-security-card__title">{{ title }}</h2>
     </div>
-    <template v-for="row in content.rows" :key="row.id">
+    <template v-for="row in rows" :key="row.id">
       <span class="avanti-profile-security-card__divider" aria-hidden="true" />
       <AvantiSecurityRow
         :description="row.description"
         :action-label="row.actionLabel"
-        variant="compact"
+        :variant="variant"
         @action="handleAction(row.id)"
       />
     </template>
-    <span class="avanti-profile-security-card__divider" aria-hidden="true" />
-    <AvantiProfileVerificationBlock :content="content.verification" @verify="handleVerify" />
+    <template v-if="$slots.default">
+      <span class="avanti-profile-security-card__divider" aria-hidden="true" />
+      <slot />
+    </template>
   </AvantiCard>
 </template>
 
@@ -35,23 +51,36 @@ import { computed, useId } from 'vue'
 import AvantiCard from '@/components/ui/avanti_card.vue'
 import AvantiIconShield from '@/components/icons/avanti_icon_shield.vue'
 import AvantiSecurityRow from '@/components/ui/avanti_security_row.vue'
-import AvantiProfileVerificationBlock from '@/components/profile/avanti_profile_verification_block.vue'
-import type { AvantiProfileSecurityContent } from '@/types/avanti_profile'
+import type { AvantiProfileSecurityRow, AvantiProfileSecurityVariant } from '@/types/avanti_profile'
 
-defineProps<{ content: AvantiProfileSecurityContent }>()
+const props = withDefaults(
+  defineProps<{
+    title: string
+    rows: AvantiProfileSecurityRow[]
+    variant?: AvantiProfileSecurityVariant
+  }>(),
+  {
+    variant: 'default',
+  },
+)
 
 /** Идентификатор строки уходит наружу: по нему страница открывает нужную форму. */
-const emit = defineEmits<{ action: [id: string]; verify: [] }>()
+const emit = defineEmits<{ action: [id: string] }>()
 
 const uid = useId()
 const titleId = computed(() => `${uid}-title`)
 
+const variantClass = computed<string>(() => `avanti-profile-security-card--${props.variant}`)
+
+/*
+ * В кадре подтверждения почты поля карточки одинаковы на обеих ширинах —
+ * их даёт сама карточка. В кадре профиля они разные (16 и 24px), поэтому
+ * там поля задаются стилями блока.
+ */
+const cardPadding = computed<'lg' | 'none'>(() => (props.variant === 'default' ? 'lg' : 'none'))
+
 function handleAction(id: string): void {
   emit('action', id)
-}
-
-function handleVerify(): void {
-  emit('verify')
 }
 </script>
 
@@ -59,10 +88,7 @@ function handleVerify(): void {
 .avanti-profile-security-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  align-items: flex-start;
   width: 100%;
-  padding: 16px;
 
   &__head {
     display: flex;
@@ -97,23 +123,44 @@ function handleVerify(): void {
   }
 
   &__divider {
-    flex-shrink: 0;
     width: 100%;
     height: 1px;
     background-color: var(--avanti-color-border);
   }
 
+  /* --- default: карточка экрана подтверждения почты (кадр 1:3541) --- */
+  &--default {
+    align-items: stretch;
+  }
+
+  &--default &__head {
+    padding-bottom: 16px;
+  }
+
+  /* --- compact: карточка страницы профиля (кадр 1:2583) --- */
+  &--compact {
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  &--compact &__divider {
+    flex-shrink: 0;
+  }
+
   @include desktop-up {
     /*
-     * Высота карточки зафиксирована кадром Figma (792×333), а строки внутри
-     * распределяются по остатку — поэтому gap заменён на space-between.
+     * Высота карточки профиля зафиксирована кадром Figma (792×333), а строки
+     * внутри распределяются по остатку — поэтому gap заменён на space-between.
      */
-    gap: 0;
-    justify-content: space-between;
-    height: 333px;
-    padding: 24px;
+    &--compact {
+      gap: 0;
+      justify-content: space-between;
+      height: 333px;
+      padding: 24px;
+    }
 
-    &__head {
+    &--compact &__head {
       padding-bottom: 16px;
     }
   }

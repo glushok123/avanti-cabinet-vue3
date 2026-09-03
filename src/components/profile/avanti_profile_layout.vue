@@ -26,7 +26,14 @@
         :steps="stepper.steps"
       />
       <AvantiProfileDataCard :content="dataCard" @edit="handleEditName" />
-      <AvantiProfileSecurityCard :content="security" @action="handleSecurityAction" />
+      <AvantiProfileSecurityCard
+        :title="security.title"
+        :rows="security.rows"
+        variant="compact"
+        @action="handleSecurityAction"
+      >
+        <AvantiProfileVerificationBlock :content="security.verification" />
+      </AvantiProfileSecurityCard>
     </template>
 
     <template #side>
@@ -70,6 +77,7 @@ import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashb
 import AvantiDashboardChecklistCard from '@/components/dashboard/avanti_dashboard_checklist_card.vue'
 import AvantiProfileDataCard from '@/components/profile/avanti_profile_data_card.vue'
 import AvantiProfileSecurityCard from '@/components/profile/avanti_profile_security_card.vue'
+import AvantiProfileVerificationBlock from '@/components/profile/avanti_profile_verification_block.vue'
 import AvantiProfileConsultantWidget from '@/components/profile/avanti_profile_consultant_widget.vue'
 import {
   AVANTI_DASHBOARD_TEXTS as dashboardTexts,

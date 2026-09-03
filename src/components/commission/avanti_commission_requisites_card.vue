@@ -3,6 +3,10 @@
   Figma 1:524 / 241:23640 / 232:18058): получатель, IBAN, SWIFT и сумма,
   разделённые тонкими линиями, у каждой строки — кнопка копирования.
 
+  Сами строки верстает общий примитив `avanti_copy_field` в варианте `row`:
+  подпись, значение и кнопка копирования устроены так же, как в поле IBAN
+  карточки «Dati personali», меняются только размеры и наличие плашки.
+
   В макете два варианта одного экрана. В варианте 1:501 приписка про поле
   «Causale» набрана последней строкой внутри карточки, после разделителя;
   в варианте 241:23617 её вынесли в отдельную плашку под карточкой. Здесь
@@ -12,13 +16,19 @@
 <template>
   <div class="avanti-commission-requisites-card">
     <ul class="avanti-commission-requisites-card__list">
-      <AvantiCommissionRequisiteRow
+      <AvantiCopyField
         v-for="item in items"
         :key="item.id"
         class="avanti-commission-requisites-card__row"
-        :requisite="item"
-        :copy-labels="copyLabels"
-        @copy="emit('copy', $event)"
+        tag="li"
+        variant="row"
+        :label="item.label"
+        :value="item.value"
+        :copy-value="item.copyValue"
+        :copy-label="copyActionLabel(item.label)"
+        :copied-label="copyLabels.success"
+        :failed-label="copyLabels.failure"
+        @copy="emit('copy', item.id)"
       />
     </ul>
     <div v-if="$slots.note" class="avanti-commission-requisites-card__note">
@@ -28,10 +38,10 @@
 </template>
 
 <script setup lang="ts">
-import AvantiCommissionRequisiteRow from '@/components/commission/avanti_commission_requisite_row.vue'
+import AvantiCopyField from '@/components/ui/avanti_copy_field.vue'
 import type { AvantiCommissionCopyLabels, AvantiCommissionRequisite } from '@/types/avanti_commission'
 
-defineProps<{
+const props = defineProps<{
   /** Реквизиты сверху вниз. */
   items: AvantiCommissionRequisite[]
   /** Подписи кнопки копирования и сообщения о результате. */
@@ -39,6 +49,11 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{ copy: [id: string] }>()
+
+/** Доступное имя кнопки: общая подпись плюс название реквизита. */
+function copyActionLabel(label: string): string {
+  return `${props.copyLabels.action} ${label}`
+}
 </script>
 
 <style lang="scss" scoped>

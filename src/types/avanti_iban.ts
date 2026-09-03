@@ -10,6 +10,13 @@
 export type AvantiIbanStep = 'account' | 'verify'
 
 /**
+ * Формат ввода поля экранов IBAN.
+ * `iban` — фильтр символов и разбивка номера по группам, `plain` — обычная
+ * строка (имя владельца счёта).
+ */
+export type AvantiIbanFieldFormat = 'iban' | 'plain'
+
+/**
  * Вкладка переключателя панели.
  * В макете обе строки набраны отдельно: сверху номер шага или способ
  * («1», «IBAN»), снизу его название («Conto», «Bonifico bancario»).

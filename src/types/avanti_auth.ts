@@ -3,10 +3,15 @@
  * Описывают контракт между текстовыми константами вёрстки
  * и будущим ответом API.
  */
-import type { AvantiPersonalDataRow } from '@/types/avanti_dashboard'
 
 /** Идентификатор вкладки переключателя «Crea account / Accedi». */
 export type AvantiAuthTabId = 'sign-up' | 'sign-in'
+
+/**
+ * Режим экрана авторизации. Совпадает с идентификатором активной вкладки:
+ * одна и та же строка задаёт и подсветку переключателя, и набор полей формы.
+ */
+export type AvantiAuthMode = AvantiAuthTabId
 
 /** Вкладка переключателя над формой. */
 export interface AvantiAuthTab {
@@ -14,35 +19,24 @@ export interface AvantiAuthTab {
   label: string
 }
 
-/** Значения полей формы регистрации. */
-export interface AvantiSignUpFormValues {
-  email: string
-  password: string
-  passwordConfirm: string
-}
-
-/** Значения полей формы входа. */
-export interface AvantiSignInFormValues {
-  email: string
-  password: string
-}
-
-/** Строка карточки «Sicurezza»: описание слева, кнопка действия справа. */
-export interface AvantiSecurityRow {
-  id: string
-  description: string
-  actionLabel: string
-}
-
-/** Содержимое карточки «Dati personali» с кнопкой правки и полем IBAN. */
-export interface AvantiProfileDataContent {
+/** Тексты одного экрана авторизации: всё, чем вход отличается от регистрации. */
+export interface AvantiAuthScreenTexts {
+  /** Заголовок вкладки браузера и скрытый h1 страницы. */
+  pageTitle: string
+  /** Доступное имя модального окна. */
+  dialogLabel: string
   title: string
-  editLabel: string
-  rows: AvantiPersonalDataRow[]
-  ibanLabel: string
-  ibanValue: string
-  /** Доступное имя кнопки копирования IBAN. */
-  ibanCopyLabel: string
+  submit: string
+}
+
+/**
+ * Значения полей формы авторизации.
+ * Подтверждение пароля есть только на экране регистрации.
+ */
+export interface AvantiAuthFormValues {
+  email: string
+  password: string
+  passwordConfirm?: string
 }
 
 /** Содержимое блока подтверждения email внутри карточки «Sicurezza». */

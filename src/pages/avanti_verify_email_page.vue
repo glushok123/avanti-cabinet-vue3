@@ -26,7 +26,9 @@
         :steps="stepper.steps"
       />
       <AvantiAuthProfileDataCard :content="profileData" />
-      <AvantiAuthSecurityCard :title="securityTitle" :rows="securityRows" :verification="verification" />
+      <AvantiProfileSecurityCard :title="securityTitle" :rows="securityRows">
+        <AvantiAuthEmailVerification :content="verification" />
+      </AvantiProfileSecurityCard>
     </template>
 
     <template #side>
@@ -55,7 +57,8 @@ import AvantiDashboardStepper from '@/components/dashboard/avanti_dashboard_step
 import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashboard_personal_data_card.vue'
 import AvantiDashboardChecklistCard from '@/components/dashboard/avanti_dashboard_checklist_card.vue'
 import AvantiAuthProfileDataCard from '@/components/auth/avanti_auth_profile_data_card.vue'
-import AvantiAuthSecurityCard from '@/components/auth/avanti_auth_security_card.vue'
+import AvantiProfileSecurityCard from '@/components/profile/avanti_profile_security_card.vue'
+import AvantiAuthEmailVerification from '@/components/auth/avanti_auth_email_verification.vue'
 import {
   AVANTI_CHECKLIST as checklist,
   AVANTI_DASHBOARD_TEXTS as dashboardTexts,
