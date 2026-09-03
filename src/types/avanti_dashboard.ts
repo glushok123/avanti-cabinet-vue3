@@ -3,6 +3,7 @@
  * Описывают контракт между моковыми данными первого этапа
  * и будущим ответом API на втором этапе.
  */
+import type { AvantiWithdrawalDetails } from '@/types/avanti_withdrawal'
 
 /** Состояние шага: завершён, выполняется сейчас, ожидает очереди. */
 export type AvantiStepStatus = 'completed' | 'current' | 'pending'
@@ -163,6 +164,18 @@ export interface AvantiSupportBubbleContent {
 }
 
 /**
+ * Форма вывода средств в правой колонке кабинета (кадр 241:25321).
+ * Сама форма (`avanti_withdrawal_form`) знает свои тексты и способы получения,
+ * поэтому уровню прогресса достаточно доступного остатка и реквизитов.
+ */
+export interface AvantiDashboardWithdrawalContent {
+  /** Доступный к выводу остаток, евро — верхняя граница суммы перевода. */
+  availableAmount: number
+  /** Предзаполненные реквизиты: ключ поля → значение. */
+  details?: AvantiWithdrawalDetails
+}
+
+/**
  * Полный набор данных главной страницы для одного уровня прогресса.
  * Блоки, которых на уровне нет, равны null — страница их не выводит.
  */
@@ -176,4 +189,6 @@ export interface AvantiDashboardState {
   unlock: AvantiUnlockContent | null
   personalData: AvantiPersonalDataContent | null
   checklist: AvantiChecklistContent
+  /** Форма вывода средств: есть только на разблокированном уровне. */
+  withdrawal: AvantiDashboardWithdrawalContent | null
 }

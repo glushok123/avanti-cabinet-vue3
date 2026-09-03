@@ -103,10 +103,3 @@ export const AVANTI_DOCUMENTS_FAILURE: AvantiDocumentsResult = {
   description: 'Controlla la connessione e riprova.',
   hint: 'Se il problema persiste, scrivi al supporto.',
 }
-
-/** Подписи состояний для демонстрационной страницы. */
-export const AVANTI_DOCUMENTS_PAGE_SECTIONS = [
-  { id: 'upload', title: 'Caricamento' },
-  { id: 'error', title: 'Errore di caricamento' },
-  { id: 'verified', title: 'Documento verificato' },
-] as const

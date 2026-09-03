@@ -2,7 +2,8 @@ import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-rou
 
 /**
  * Маршруты повторяют порядок шагов оформления кредита: симуляция →
- * анкета → проверка банка → одобрение → кабинет → договор.
+ * анкета → проверка банка → одобрение → кабинет → документы → договор →
+ * подпись → IBAN для зачисления → комиссия.
  * Экраны, которых ещё нет в вёрстке, добавляются по мере готовности.
  */
 const routes: RouteRecordRaw[] = [
@@ -37,10 +38,34 @@ const routes: RouteRecordRaw[] = [
     meta: { title: 'Avanti — Area personale' },
   },
   {
+    path: '/documents',
+    name: 'documents',
+    component: () => import('@/pages/avanti_documents_page.vue'),
+    meta: { title: 'Avanti — Documenti richiesti' },
+  },
+  {
     path: '/contract',
     name: 'contract',
     component: () => import('@/pages/avanti_contract_page.vue'),
     meta: { title: 'Avanti — Contratto' },
+  },
+  {
+    path: '/signature',
+    name: 'signature',
+    component: () => import('@/pages/avanti_signature_page.vue'),
+    meta: { title: 'Avanti — Firma del contratto' },
+  },
+  {
+    path: '/iban-modal',
+    name: 'iban-modal',
+    component: () => import('@/pages/avanti_iban_modal_page.vue'),
+    meta: { title: 'Avanti — IBAN per l’accredito' },
+  },
+  {
+    path: '/commission',
+    name: 'commission',
+    component: () => import('@/pages/avanti_commission_page.vue'),
+    meta: { title: 'Avanti — Commissione' },
   },
   {
     path: '/chat',

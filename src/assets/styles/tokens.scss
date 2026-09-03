@@ -71,6 +71,9 @@
   --avanti-color-primary-surface-soft: #e6f9fa;
   --avanti-color-surface-glass: rgb(255 255 255 / 10%);
   --avanti-color-surface-zebra: #fafbfc;
+  --avanti-color-surface-tab: #fbfbfb;
+  --avanti-color-border-input: #e6e6e6;
+  --avanti-color-page-gradient-end: #eef6f6;
 
   /* --- Градиенты --- */
   --avanti-gradient-primary: linear-gradient(
@@ -97,6 +100,7 @@
   --avanti-radius-xl: 16px;
   --avanti-radius-2xl: 19px;
   --avanti-radius-3xl: 20px;
+  --avanti-radius-modal: 23px;
   --avanti-radius-4xl: 24px;
   --avanti-radius-5xl: 32px;
   --avanti-radius-pill: 99px;
@@ -114,6 +118,8 @@
   --avanti-shadow-withdraw-glow: 0 0 11px #fff;
   --avanti-shadow-unlock-glow: 0 0 7.695px #2491aa;
   --avanti-shadow-unlock-glow-mobile: 0 0 5.7px #2491aa;
+  --avanti-shadow-input: 0 1px 2px rgb(26 26 26 / 5%);
+  --avanti-shadow-modal: 0 8px 24px rgb(26 26 26 / 8%);
   --avanti-shadow-balance: 0 8px 12px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-circle: 0 4px 4px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-action: 0 4px 4px rgb(36 145 170 / 25%);

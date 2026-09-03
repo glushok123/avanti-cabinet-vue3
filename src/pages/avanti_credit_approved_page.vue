@@ -82,14 +82,20 @@ $details-width: 633px;
     }
 
     .avanti-credit-approved-page__content {
-      @include content-container($content-width-simulation);
-
       position: relative;
       gap: 48px;
       justify-content: flex-start;
 
+      /* Ширину ограничиваем с учётом собственных боковых отступов:
+         иначе они добавляются к центрированию и контент уезжает вправо.
+         width: 100% нужен, потому что родитель центрирует по горизонтали:
+         без него блок сжимается по содержимому и ограничение не работает. */
+      width: 100%;
+      max-width: calc($content-width-simulation + $content-gutter * 2);
+
       /* Высота резервируется под абсолютно спозиционированную иллюстрацию. */
       min-height: 719px;
+      margin-inline: auto;
     }
 
     /* Блок одобрения занимает 1145px из 1240px контентной колонки,

@@ -19,6 +19,7 @@ import type {
   AvantiBalanceContent,
   AvantiChecklistContent,
   AvantiDashboardState,
+  AvantiDashboardWithdrawalContent,
   AvantiUnlockContent,
 } from '@/types/avanti_dashboard'
 
@@ -45,6 +46,16 @@ const CHECKLIST_READY: AvantiChecklistContent = {
   variant: 'ready',
   completed: 5,
   items: AVANTI_CHECKLIST.items.map((item) => ({ ...item, iconStatus: 'completed' as const })),
+}
+
+/**
+ * Форма вывода средств правой колонки (кадр 241:25321).
+ * Остаток взят из кадра: ползунок стоит в крайнем правом положении и
+ * подписан «8.300 € / 8.300 €». Реквизиты в кадре не заполнены, поэтому
+ * поля формы открываются пустыми.
+ */
+const WITHDRAWAL: AvantiDashboardWithdrawalContent = {
+  availableAmount: 8300,
 }
 
 /** Карточка «SBLOCCO DEI FONDI COMPLETATO» — приходит на место баннера с замком. */
@@ -87,6 +98,7 @@ export const AVANTI_DASHBOARD_STATE_BASE: AvantiDashboardState = {
   unlock: null,
   personalData: AVANTI_PERSONAL_DATA,
   checklist: AVANTI_CHECKLIST,
+  withdrawal: null,
 }
 
 /**
@@ -95,7 +107,9 @@ export const AVANTI_DASHBOARD_STATE_BASE: AvantiDashboardState = {
  *
  * Расхождение макета: на десктопе шкалы шагов нет (её место занимает форма
  * вывода средств в правой колонке), на мобильной она остаётся в базовом виде
- * «Passo 4 di 5». Оставлена мобильная трактовка как более полная.
+ * «Passo 4 di 5». Оставлена мобильная трактовка как более полная: шкала шагов
+ * показывается, а форма вывода средств встаёт первой в правой колонке — так
+ * оба кадра сходятся в одну разметку.
  * Кроме того, десктопный кадр переиспользует старую карточку суммы
  * (бейдж «Completa i passaggi», выключенная кнопка), а мобильный уже
  * показывает разблокированную — взята мобильная.
@@ -109,6 +123,7 @@ export const AVANTI_DASHBOARD_STATE_STEPS_READY: AvantiDashboardState = {
   unlock: null,
   personalData: null,
   checklist: CHECKLIST_READY,
+  withdrawal: WITHDRAWAL,
 }
 
 /**
@@ -127,6 +142,7 @@ export const AVANTI_DASHBOARD_STATE_LEVEL_4: AvantiDashboardState = {
   unlock: UNLOCK,
   personalData: null,
   checklist: CHECKLIST_READY,
+  withdrawal: null,
 }
 
 /**

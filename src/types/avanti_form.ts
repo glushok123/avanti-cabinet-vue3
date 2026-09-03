@@ -14,6 +14,16 @@ export interface AvantiSelectOption {
   disabled?: boolean
 }
 
+/**
+ * Размер поля модального окна (`avanti_modal_field`).
+ * `sm` — кадры авторизации (поле 42px), `md` — кадры настроек аккаунта (44px).
+ * На десктопе оба варианта дают 50px, отличается типографика.
+ */
+export type AvantiModalFieldSize = 'sm' | 'md'
+
+/** Типы ввода, которые встречаются в полях модальных окон. */
+export type AvantiModalFieldType = 'text' | 'email' | 'password'
+
 /** Допустимые иконки сегментированного переключателя. */
 export type AvantiChoiceIcon = 'male' | 'female'
 

@@ -95,9 +95,12 @@ $content-width-bank-check: 1176px;
     background-color: var(--avanti-color-page);
 
     .avanti-bank-check-page__body {
-      @include content-container($content-width-simulation);
-
+      /* Ширину ограничиваем с учётом собственных боковых отступов:
+         иначе они добавляются к центрированию и контент уезжает вправо. */
+      width: 100%;
+      max-width: calc($content-width-simulation + $content-gutter * 2);
       padding: 28px $content-gutter 60px;
+      margin-inline: auto;
     }
 
     .avanti-bank-check-page__content {
