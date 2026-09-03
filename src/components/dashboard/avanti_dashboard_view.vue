@@ -92,6 +92,7 @@
           :items="checklist.items"
           :total="checklist.total"
           :completed="checklist.completed"
+          :counter="checklist.counter"
           :variant="checklist.variant"
           :toggle-label="texts.checklistToggle"
           :progress-label="texts.checklistProgress"

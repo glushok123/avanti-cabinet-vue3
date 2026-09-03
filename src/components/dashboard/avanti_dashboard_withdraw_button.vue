@@ -127,10 +127,17 @@ const stateClass = computed(() => `avanti-dashboard-withdraw-button--${props.sta
     gap: 4px;
     padding: 12px 24px;
 
-    /* Глиф стрелки при line-height: normal вырастает до 24px и делает
-       кнопку 48px вместо макетных 46 — фиксируем высоту строки. */
+    /*
+     * Глиф стрелки при line-height: normal вырастает до 24px и делает
+     * кнопку 48px вместо макетных 46 — фиксируем высоту строки.
+     * Ширина 18px — размер знакоместа стрелки в макете: у шрифтового глифа
+     * оно на 2,5px уже, из-за чего вся строка кнопки съезжала на 1px вправо.
+     */
     .avanti-dashboard-withdraw-button__arrow {
+      display: inline-block;
+      width: 18px;
       line-height: 22px;
+      text-align: left;
     }
 
     /* Значение из Figma, отдельного токена нет. */

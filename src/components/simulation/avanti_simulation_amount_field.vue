@@ -164,22 +164,14 @@ function handleBlur(): void {
    * Обычный border прибавился бы к габаритам (59px) и сдвинул бы вниз всё
    * содержимое страницы, поэтому линия нарисована inset-тенью.
    */
-  @include inner-border(
-    var(--avanti-color-primary),
-    1px,
-    var(--avanti-shadow-amount-field-mobile)
-  );
+  @include inner-border(var(--avanti-color-primary), 1px, var(--avanti-shadow-amount-field-mobile));
 
   transition:
     border-color var(--avanti-transition-fast),
     box-shadow var(--avanti-transition-fast);
 
   &:hover {
-    @include inner-border(
-      var(--avanti-color-primary-dark),
-      1px,
-      var(--avanti-shadow-amount-field-mobile)
-    );
+    @include inner-border(var(--avanti-color-primary-dark), 1px, var(--avanti-shadow-amount-field-mobile));
   }
 
   /* Фокус подсвечивается мягким бирюзовым кольцом поверх тени из макета. */

@@ -43,7 +43,10 @@ withDefaults(
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 62% 50%;
+
+    /* Кадрирование по центру: в эталоне видна ровно середина снимка,
+       смещение вправо уводило фигуру за край кружка. */
+    object-position: center;
     border: 1.778px solid var(--avanti-color-primary);
     border-radius: var(--avanti-radius-round);
     box-shadow: var(--avanti-shadow-support-glow);

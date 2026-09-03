@@ -144,9 +144,12 @@ withDefaults(
       font-weight: var(--avanti-font-weight-light);
     }
 
+    /* В мобильном кадре подпись набрана средним начертанием: при semibold
+       строка выходит на пиксель шире эталонных 131px и заметно жирнее. */
     &__description {
       width: 150px;
       font-size: 10px;
+      font-weight: var(--avanti-font-weight-medium);
       text-transform: uppercase;
       letter-spacing: 0.1px;
     }
