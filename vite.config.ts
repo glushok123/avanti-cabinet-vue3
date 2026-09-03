@@ -2,13 +2,12 @@ import path from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { viteSingleFile } from 'vite-plugin-singlefile'
 
 const stylesDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src/assets/styles')
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   base: './',
-  plugins: [vue(), ...(mode === 'singlefile' ? [viteSingleFile()] : [])],
+  plugins: [vue()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -22,8 +21,4 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  build: {
-    assetsInlineLimit: mode === 'singlefile' ? 100000000 : 4096,
-    cssCodeSplit: mode !== 'singlefile',
-  },
-}))
+})
