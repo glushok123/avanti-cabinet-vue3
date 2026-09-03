@@ -104,7 +104,13 @@ $close-size: 26px;
 .avanti-commission-info {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+
+  /*
+   * Зазор 20px — расстояние заголовочного блока до второго абзаца и абзаца
+   * до кнопки в кадре (246:7158 → 246:7163). Строка крестика отделена от
+   * заголовка восемью пикселями, поэтому у неё поле снизу −12.
+   */
+  gap: 20px;
   align-items: stretch;
   text-align: center;
 
@@ -113,15 +119,13 @@ $close-size: 26px;
     @include button-reset;
     @include focus-ring;
 
+    /* Кликабельная область 32×32 из кадра 246:7155, глиф в ней по центру. */
     display: flex;
+    align-items: center;
     align-self: flex-end;
-
-    /*
-     * Поля выравнивают глиф по кадру и оставляют строке крестика её высоту:
-     * 26 − 4 − 12 = 10px, ровно столько между крестиком и заголовком.
-     */
-    margin-top: -4px;
-    margin-right: 2px;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
     margin-bottom: -12px;
     color: var(--avanti-color-primary);
     transition: color var(--avanti-transition-fast);
@@ -155,7 +159,9 @@ $close-size: 26px;
     margin: 0;
     font-size: 16px;
     font-weight: var(--avanti-font-weight-regular);
-    line-height: 18px;
+
+    /* Пояснение в кадре — четыре строки по 20px (246:7160, высота 80). */
+    line-height: 20px;
     color: var(--avanti-color-text-secondary);
   }
 
@@ -180,8 +186,8 @@ $close-size: 26px;
   Метрики окна из кадра 246:6880. Общая оболочка `avanti_modal` живёт
   в `@/components/ui` и правится другими агентами, поэтому размеры кадра
   задаются здесь — точечно и только для окна с этим содержимым:
-  * ширина 510px вместо 480px размера `sm`;
-  * поля 20px сверху и снизу и 16px по бокам;
+  * ширина 511px вместо 480px размера `sm`;
+  * поля 16px сверху, 24px снизу и 16px по бокам;
   * пустая верхняя строка окна (крестик выключен) не добавляет промежутка.
   Блок намеренно не scoped: окно уходит в `body` через Teleport, а класс
   на его корень не пробрасывается (корень компонента — сам Teleport).
@@ -191,8 +197,8 @@ $close-size: 26px;
   --avanti-modal-gap: 0;
 
   .avanti-modal__window {
-    max-width: 510px;
-    padding: 20px 16px;
+    max-width: 511px;
+    padding: 16px 16px 24px;
   }
 
   /*

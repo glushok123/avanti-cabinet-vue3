@@ -2,8 +2,9 @@
   Одна вкладка-шаг в полосе переключателя (кадр «Шаг 1 — IBAN», Figma 1:353).
 
   Внешне в макете состояний два: текущий шаг — бирюзовая заливка с белой
-  подписью, остальные — серая плашка. Недоступный шаг дополнительно
-  приглушается, чтобы отличаться от пройденного, на который можно вернуться.
+  подписью, остальные — серая плашка одного цвета. Пройденный и недоступный
+  шаги различаются только курсором и `aria-disabled`: в кадре 246:7002 они
+  нарисованы одинаково.
 
   Скруглены только внешние углы полосы, поэтому радиус вешается на первую
   и последнюю вкладку — они всегда прямые потомки контейнера с role="tablist".
@@ -65,7 +66,6 @@ const tabIndex = computed(() => (props.tabbable && !locked.value ? 0 : -1))
 
 const stateClasses = computed(() => ({
   'avanti-tab--current': props.selected,
-  'avanti-tab--done': props.state === 'done' && !props.selected,
   'avanti-tab--locked': locked.value,
 }))
 
@@ -84,10 +84,14 @@ function handleClick(): void {
 
   flex: 1 1 0;
   min-width: 0;
-  padding: 8px 4px;
+
+  /* Полоса шагов в макете 37px: поля 12px и строка ровно 13px (246:7003).
+     При `normal` строка выходила 13.31 → 14, а вся полоса 30px, и всё
+     содержимое окна поднималось на 7px выше кадра. */
+  padding: 12px 4px;
   font-size: 11px;
   font-weight: var(--avanti-font-weight-medium);
-  line-height: normal;
+  line-height: 13px;
   color: var(--avanti-color-text-secondary);
   text-align: center;
   overflow-wrap: break-word;
@@ -123,18 +127,17 @@ function handleClick(): void {
     }
   }
 
-  /* --- Пройденный шаг: вид как в макете, но вернуться на него можно --- */
-  &--done {
-    color: var(--avanti-color-text-strong);
-  }
-
-  /* --- Недоступный шаг: приглушён и не реагирует на нажатие --- */
+  /*
+   * --- Пройденный и недоступный шаги ---
+   * В макете (246:7003 и 246:7007) обе неактивные вкладки нарисованы одним
+   * серым цветом: пройденный шаг не темнее, недоступный не бледнее. Поэтому
+   * состояния отличаются только курсором и `aria-disabled`, а не окраской.
+   */
   &--locked {
-    color: var(--avanti-color-text-tertiary);
     cursor: not-allowed;
 
     &:hover {
-      color: var(--avanti-color-text-tertiary);
+      color: var(--avanti-color-text-secondary);
     }
   }
 }

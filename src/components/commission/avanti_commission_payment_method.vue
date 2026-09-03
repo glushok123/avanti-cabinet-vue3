@@ -100,6 +100,9 @@ defineProps<{
 
     &__title {
       font-size: 16px;
+
+      /* Строка заголовка в макете 19px (246:7033), `normal` даёт 20. */
+      line-height: 19px;
     }
 
     &__description {

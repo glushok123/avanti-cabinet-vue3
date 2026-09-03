@@ -65,7 +65,10 @@ const totalText = computed<string>(() => `${formatAmount(props.amount.total)} ${
   &__label {
     font-size: 11px;
     font-weight: var(--avanti-font-weight-bold);
-    line-height: normal;
+
+    /* Строка надписи в макете ровно 13px (246:7015): `normal` даёт 14
+       и вся карточка становится на пиксель выше кадра. */
+    line-height: 13px;
     color: var(--avanti-color-text-on-primary-soft);
     letter-spacing: 0.8px;
   }
@@ -73,13 +76,19 @@ const totalText = computed<string>(() => `${formatAmount(props.amount.total)} ${
   &__value {
     font-size: 48px;
     font-weight: var(--avanti-font-weight-bold);
-    line-height: normal;
+
+    /* Строка суммы в макете 58px (246:7016), у `normal` выходит 59. */
+    line-height: 58px;
   }
 
   /* Разделитель из макета: линия в 30% прозрачности поверх заливки. */
   &__divider {
     height: 0;
-    margin: 0;
+
+    /* В макете линия нулевой высоты и зазор 16px отсчитывается от неё самой
+       (246:7017 на y=111, разбивка на y=127). Браузерная линия занимает
+       пиксель, поэтому он снимается отрицательным полем снизу. */
+    margin: 0 0 -1px;
     border: none;
     border-top: 1px solid var(--avanti-color-divider-on-primary);
   }

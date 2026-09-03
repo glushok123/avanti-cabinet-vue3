@@ -51,6 +51,7 @@
           :items="checklist.items"
           :total="checklist.total"
           :completed="checklist.completed"
+          :counter="checklistCounter"
           :toggle-label="dashboardTexts.checklistToggle"
           :progress-label="dashboardTexts.checklistProgress"
         />
@@ -70,6 +71,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useIsMobile } from '@/composables/use_is_mobile'
 import AvantiAppHeader from '@/components/layout/avanti_app_header.vue'
 import AvantiAppHeaderMobile from '@/components/layout/avanti_app_header_mobile.vue'
@@ -81,7 +83,6 @@ import AvantiProfileDataCard from '@/components/profile/avanti_profile_data_card
 import AvantiProfileSecurityCard from '@/components/profile/avanti_profile_security_card.vue'
 import AvantiProfileConsultantWidget from '@/components/profile/avanti_profile_consultant_widget.vue'
 import {
-  AVANTI_CHECKLIST as checklist,
   AVANTI_DASHBOARD_TEXTS as dashboardTexts,
   AVANTI_PERSONAL_DATA as personalData,
   AVANTI_STEPPER as stepper,
@@ -90,6 +91,7 @@ import {
 } from '@/constants/avanti_dashboard_mock'
 import {
   AVANTI_PROFILE_BOTTOM_NAV_ITEMS as bottomNavItems,
+  AVANTI_PROFILE_CHECKLIST as checklist,
   AVANTI_PROFILE_BREADCRUMBS as breadcrumbs,
   AVANTI_PROFILE_NAV_ITEMS as navItems,
   AVANTI_PROFILE_TEXTS as texts,
@@ -112,6 +114,13 @@ const emit = defineEmits<{ open: [id: string] }>()
 
 /** Отличается сама разметка шапки и навигации, поэтому нужен JS-признак. */
 const isMobile = useIsMobile()
+
+/*
+ * Бейдж со счётчиком и просторная раскладка чеклиста есть только в
+ * десктопных кадрах профиля: мобильные (19:1228) показывают компактную
+ * карточку, как на главной.
+ */
+const checklistCounter = computed<string>(() => (isMobile.value ? '' : (checklist.counter ?? '')))
 
 function handleEditName(): void {
   emit('open', 'name')

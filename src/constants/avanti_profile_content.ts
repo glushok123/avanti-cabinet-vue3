@@ -9,8 +9,12 @@
  * мобильные 19:1228, 17:2626, 22:2953, 22:3181.
  */
 import consultantAvatar from '@/assets/images/avanti_support_agent.png'
-import { AVANTI_HEADER_NAV_ITEMS, AVANTI_SUPPORT_NAV_ITEM } from '@/constants/avanti_dashboard_mock'
-import type { AvantiBreadcrumb, AvantiNavItem } from '@/types/avanti_dashboard'
+import {
+  AVANTI_CHECKLIST,
+  AVANTI_HEADER_NAV_ITEMS,
+  AVANTI_SUPPORT_NAV_ITEM,
+} from '@/constants/avanti_dashboard_mock'
+import type { AvantiBreadcrumb, AvantiChecklistContent, AvantiNavItem } from '@/types/avanti_dashboard'
 import type {
   AvantiProfileConsultantContent,
   AvantiProfileDataCardContent,
@@ -201,4 +205,15 @@ export const AVANTI_PROFILE_CONSULTANT: AvantiProfileConsultantContent = {
   avatar: consultantAvatar,
   count: 2,
   countLabel: 'messaggi non letti',
+}
+
+/**
+ * Чеклист правой колонки профиля. В кадре 1:2583 карточка просторная
+ * (464×516): в шапке бейдж со счётчиком, поля строк 24px, заголовок
+ * переносится на две строки. На главной та же карточка компактная,
+ * поэтому счётчик задаётся здесь, а не в общих данных кабинета.
+ */
+export const AVANTI_PROFILE_CHECKLIST: AvantiChecklistContent = {
+  ...AVANTI_CHECKLIST,
+  counter: '3 / 5 completati',
 }

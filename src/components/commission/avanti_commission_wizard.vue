@@ -65,7 +65,6 @@
       :panel-id="AVANTI_COMMISSION_COORDINATES_PANEL_ID"
       @submit="goNext"
     />
-
   </AvantiModal>
 
   <!--
