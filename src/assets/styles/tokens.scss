@@ -18,6 +18,7 @@
   /* Полупрозрачная белая подложка бейджа на градиентной карточке. */
   --avanti-color-surface-translucent: rgb(255 255 255 / 20%);
   --avanti-color-surface-neutral: #f4f4f5;
+  --avanti-color-surface-dark: #1a2332;
   --avanti-color-page: #f8fafb;
 
   /* Фон мобильного фрейма симуляции — в макете на 1 пункт светлее десктопного. */
@@ -31,6 +32,9 @@
   --avanti-color-text-heading: #111827;
   --avanti-color-text-black: #000;
   --avanti-color-text-muted: #747474;
+
+  /* Надписи над полями формы («COGNOME», «SESSO») — темнее общего muted. */
+  --avanti-color-text-label: #464646;
   --avanti-color-text-secondary: #71717a;
   --avanti-color-text-tertiary: #a1a1aa;
   --avanti-color-text-on-primary: #fff;
@@ -50,6 +54,7 @@
   /* --- Статусные --- */
   --avanti-color-danger: #ef4444;
   --avanti-color-danger-dark: #9a0606;
+  --avanti-color-success: #22c55e;
 
   /* --- Градиенты --- */
   --avanti-gradient-primary: linear-gradient(
@@ -75,12 +80,15 @@
   --avanti-radius-xl: 16px;
   --avanti-radius-2xl: 19px;
   --avanti-radius-3xl: 20px;
+  --avanti-radius-4xl: 24px;
+  --avanti-radius-5xl: 32px;
   --avanti-radius-pill: 99px;
   --avanti-radius-round: 50%;
 
   /* --- Тени --- */
   --avanti-shadow-card: 0 2px 4px rgb(26 35 50 / 6%);
   --avanti-shadow-card-soft: 0 4px 16px rgb(26 35 50 / 3%);
+  --avanti-shadow-chat-bubble: 0 2px 2px rgb(26 35 50 / 2%);
   --avanti-shadow-balance: 0 8px 12px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-circle: 0 4px 4px rgb(36 145 170 / 19%);
   --avanti-shadow-icon-action: 0 4px 4px rgb(36 145 170 / 25%);
@@ -96,6 +104,15 @@
   --avanti-shadow-drawer: -8px 0 24px rgb(0 0 0 / 18%);
   --avanti-shadow-button-primary: 0 4px 11.6px rgb(0 0 0 / 25%);
   --avanti-shadow-button-primary-mobile: 0 4px 4px rgb(0 0 0 / 16%);
+
+  /* Мягкая тень под полями анкеты (текстовое поле, триггер выпадающего списка). */
+  --avanti-shadow-field: 0 4px 6px rgb(0 0 0 / 5%);
+
+  /* Бирюзовое свечение под активным сегментом переключателя пола. */
+  --avanti-shadow-choice-active: 0 8px 8px rgb(36 145 170 / 20%);
+
+  /* Тень белой карточки анкеты. */
+  --avanti-shadow-form-card: 0 10px 15px rgb(0 0 0 / 4%);
 
   /* --- Переходы --- */
   --avanti-transition-fast: 0.15s ease;
