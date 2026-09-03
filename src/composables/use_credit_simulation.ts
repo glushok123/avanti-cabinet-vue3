@@ -5,7 +5,15 @@ import {
   AVANTI_TAN_RATE,
 } from '@/constants/avanti_simulation_config'
 
-const AMOUNT_FORMATTER = new Intl.NumberFormat('it-IT', { maximumFractionDigits: 0 })
+/*
+ * useGrouping: 'always' обязателен: по умолчанию итальянская локаль
+ * не разделяет разряды у четырёхзначных чисел (1000 → «1000»),
+ * а в макете нижняя граница подписана как «1.000 €».
+ */
+const AMOUNT_FORMATTER = new Intl.NumberFormat('it-IT', {
+  maximumFractionDigits: 0,
+  useGrouping: true,
+})
 
 /** Неразрывный пробел — разделитель разрядов в десктопной карточке итогов. */
 const NARROW_SPACE = '\u00a0'
@@ -23,6 +31,22 @@ export function formatAmount(value: number): string {
  */
 export function formatAmountSpaced(value: number): string {
   return formatAmount(value).replace(/\./g, NARROW_SPACE)
+}
+
+/**
+ * Разбирает введённую пользователем строку суммы: оставляет только цифры,
+ * поэтому «12.000», «12 000 €» и «12000» дают одно и то же число.
+ * Пустой ввод (нет ни одной цифры) даёт null — вызывающий код решает,
+ * чем его заменить.
+ */
+export function parseAmount(text: string): number | null {
+  const digits = text.replace(/\D/g, '')
+  return digits.length > 0 ? Number(digits) : null
+}
+
+/** Загоняет сумму в границы [min, max]. */
+export function clampAmount(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value))
 }
 
 /**
