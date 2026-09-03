@@ -1,12 +1,16 @@
-<!-- Знак логотипа Avanti — две стрелки фирменных цветов. -->
+<!--
+  Знак логотипа Avanti — две стрелки фирменных цветов.
+  Знак декоративный: рядом всегда идёт текстовое «Avanti» из avanti_logo,
+  поэтому скринридеру он не озвучивается.
+-->
 <template>
   <svg
     viewBox="0 0 48.1467 37.5656"
     width="100%"
     height="100%"
     fill="none"
-    role="img"
-    aria-label="Avanti"
+    aria-hidden="true"
+    focusable="false"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path

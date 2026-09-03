@@ -1,4 +1,4 @@
-<!-- Шеврон вправо — навигация «Continua» / «Indietro» (через поворот). Цвет наследуется от родителя через currentColor, размер задаёт контейнер. -->
+<!-- Крестик — закрытие мобильного меню. Цвет наследуется через currentColor, размер задаёт контейнер. -->
 <template>
   <svg
     viewBox="0 0 16 16"
@@ -10,17 +10,16 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M6 12L10 8L6 4"
+      d="M12.5 3.5L3.5 12.5M3.5 3.5L12.5 12.5"
       stroke="currentColor"
       :stroke-width="strokeWidth"
       stroke-linecap="round"
-      stroke-linejoin="round"
     />
   </svg>
 </template>
 
 <script setup lang="ts">
 withDefaults(defineProps<{ strokeWidth?: number | string }>(), {
-  strokeWidth: 1.33,
+  strokeWidth: 2,
 })
 </script>
