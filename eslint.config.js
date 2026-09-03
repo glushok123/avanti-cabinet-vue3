@@ -4,7 +4,7 @@ import vueTsEslintConfig from '@vue/eslint-config-typescript'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
 export default [
-  { ignores: ['dist/**', 'node_modules/**', '_figma_assets/**'] },
+  { ignores: ['dist/**', '.notes/**', 'node_modules/**', '_figma_assets/**'] },
 
   js.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
