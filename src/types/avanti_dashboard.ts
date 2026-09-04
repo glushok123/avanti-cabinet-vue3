@@ -3,6 +3,7 @@
  * Описывают контракт между моковыми данными первого этапа
  * и будущим ответом API на втором этапе.
  */
+import type { AvantiCertificateContent } from '@/types/avanti_certificate'
 import type { AvantiWithdrawalDetails } from '@/types/avanti_withdrawal'
 
 /** Состояние шага: завершён, выполняется сейчас, ожидает очереди. */
@@ -195,8 +196,28 @@ export interface AvantiDashboardWithdrawalContent {
 }
 
 /**
+ * Содержимое модального предупреждения кабинета (кадр 258:17494).
+ * Окно висит поверх страницы и к уровню прогресса относится так же,
+ * как остальные блоки, — приходит данными состояния.
+ */
+export interface AvantiDashboardWarningContent {
+  /** Надпись бейджа над заголовком («AVVISO»). */
+  badge: string
+  title: string
+  /** Текст в бирюзовой плашке под заголовком. */
+  message: string
+  actionLabel: string
+  /** Доступное имя кнопки закрытия: у крестика нет текста. */
+  closeLabel: string
+}
+
+/**
  * Полный набор данных главной страницы для одного уровня прогресса.
  * Блоки, которых на уровне нет, равны null — страница их не выводит.
+ *
+ * Поля блока сертификата CPI и предупреждения необязательные: они появились
+ * позже остальных, есть не на каждом уровне и не должны требовать правки
+ * уже собранных состояний.
  */
 export interface AvantiDashboardState {
   id: string
@@ -210,4 +231,8 @@ export interface AvantiDashboardState {
   checklist: AvantiChecklistContent
   /** Форма вывода средств: есть только на разблокированном уровне. */
   withdrawal: AvantiDashboardWithdrawalContent | null
+  /** Блок страхового сертификата CPI: карточка колонки и оба её окна. */
+  certificate?: AvantiCertificateContent | null
+  /** Модальное предупреждение поверх кабинета. */
+  warning?: AvantiDashboardWarningContent | null
 }

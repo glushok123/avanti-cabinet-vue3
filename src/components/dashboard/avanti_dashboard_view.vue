@@ -35,12 +35,25 @@
         :counter-short-label="lockBanner.counterShortLabel"
         :options="lockBanner.options"
         :action-label="texts.lockBannerAction"
+        @action="emit('lock-banner-action')"
       />
       <AvantiDashboardUnlockCard
         v-if="unlock"
         :title-lines="unlock.titleLines"
         :help-label="unlock.helpLabel"
         :steps="unlock.steps"
+      />
+      <!-- Карточка сертификата CPI встаёт последней в левой колонке
+           (кадры 256:11723, 232:16385). -->
+      <AvantiCertificateCard
+        v-if="certificate"
+        :overline="certificate.card.overline"
+        :title="certificate.card.title"
+        :description="certificate.card.description"
+        :metadata="certificate.card.metadata"
+        :action-label="certificate.card.actionLabel"
+        :state="certificate.card.state"
+        @action="viewerOpen = true"
       />
     </template>
 
@@ -74,6 +87,30 @@
       />
     </template>
 
+    <template #dialog>
+      <!--
+        Окна блока сертификата: просмотрщик документа и карточка
+        подтверждения поверх него (кадры 256:11916, 256:12255). Открыты ли
+        они сразу, говорит уровень — так собран каждый кадр.
+      -->
+      <template v-if="certificate">
+        <AvantiCertificateViewer v-model:open="viewerOpen" :content="certificate.viewer" />
+        <AvantiCertificateConfirmationModal
+          v-model:open="confirmationOpen"
+          :content="certificate.confirmation"
+        />
+      </template>
+      <AvantiDashboardWarningModal
+        v-if="warning"
+        v-model:open="warningOpen"
+        :badge="warning.badge"
+        :title="warning.title"
+        :message="warning.message"
+        :action-label="warning.actionLabel"
+        :close-label="warning.closeLabel"
+      />
+    </template>
+
     <template #float>
       <!--
         Виджет консультанта позиционируется относительно контентной области,
@@ -91,7 +128,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useIsMobile } from '@/composables/use_is_mobile'
 import AvantiCabinetLayout from '@/components/layout/avanti_cabinet_layout.vue'
 import AvantiDashboardStepper from '@/components/dashboard/avanti_dashboard_stepper.vue'
@@ -101,7 +138,11 @@ import AvantiDashboardUnlockCard from '@/components/dashboard/avanti_dashboard_u
 import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashboard_personal_data_card.vue'
 import AvantiDashboardChecklistCard from '@/components/dashboard/avanti_dashboard_checklist_card.vue'
 import AvantiDashboardSupportBubble from '@/components/dashboard/avanti_dashboard_support_bubble.vue'
+import AvantiDashboardWarningModal from '@/components/dashboard/avanti_dashboard_warning_modal.vue'
 import AvantiWithdrawalForm from '@/components/withdrawal/avanti_withdrawal_form.vue'
+import AvantiCertificateCard from '@/components/certificate/avanti_certificate_card.vue'
+import AvantiCertificateViewer from '@/components/certificate/avanti_certificate_viewer.vue'
+import AvantiCertificateConfirmationModal from '@/components/certificate/avanti_certificate_confirmation_modal.vue'
 import {
   AVANTI_DASHBOARD_TEXTS as texts,
   AVANTI_SUPPORT_BUBBLE as supportBubble,
@@ -122,6 +163,12 @@ const props = withDefaults(
  * Разметка у всех уровней одна: меняется только набор данных. Блоки,
  * которых на уровне нет, равны null и не попадают в DOM.
  */
+/**
+ * Кнопка-стрелка баннера «средства заблокированы» ведёт к незавершённым
+ * шагам. Раскладка не знает маршрута — о переходе решает страница.
+ */
+const emit = defineEmits<{ 'lock-banner-action': [] }>()
+
 const stepper = computed(() => props.state.stepper)
 const balance = computed(() => props.state.balance)
 const lockBanner = computed(() => props.state.lockBanner)
@@ -129,6 +176,27 @@ const unlock = computed(() => props.state.unlock)
 const personalData = computed(() => props.state.personalData)
 const checklist = computed(() => props.state.checklist)
 const withdrawal = computed(() => props.state.withdrawal)
+const certificate = computed(() => props.state.certificate ?? null)
+const warning = computed(() => props.state.warning ?? null)
+
+/*
+ * Окна блока сертификата и предупреждение открываются в том виде, в каком
+ * их показывает кадр уровня, но остаются закрываемыми: признак уровня
+ * задаёт только исходное состояние, дальше окном управляет пользователь.
+ */
+const viewerOpen = ref(false)
+const confirmationOpen = ref(false)
+const warningOpen = ref(false)
+
+watch(
+  () => props.state,
+  (state) => {
+    viewerOpen.value = Boolean(state.certificate?.viewerOpen)
+    confirmationOpen.value = Boolean(state.certificate?.confirmationOpen)
+    warningOpen.value = Boolean(state.warning)
+  },
+  { immediate: true },
+)
 
 /** Виджет консультанта есть только в мобильном кадре, поэтому нужен JS-признак. */
 const isMobile = useIsMobile()

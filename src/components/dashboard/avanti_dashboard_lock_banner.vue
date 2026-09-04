@@ -42,6 +42,7 @@
       tone="primary"
       shadow="action"
       :label="actionLabel"
+      @click="handleAction"
     >
       <AvantiIconArrowRight />
     </AvantiIconCircle>
@@ -65,6 +66,13 @@ const props = defineProps<{
   options: string[]
   actionLabel: string
 }>()
+
+/** Кнопка-стрелка ведёт к незавершённым шагам — маршрут решает страница. */
+const emit = defineEmits<{ action: [] }>()
+
+function handleAction(): void {
+  emit('action')
+}
 
 /**
  * Набор чекбоксов — это группа, а не россыпь отдельных полей, поэтому у неё
