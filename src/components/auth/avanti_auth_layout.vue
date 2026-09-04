@@ -35,7 +35,7 @@
           size="sm"
         />
       </template>
-      <AvantiAuthForm :mode="mode" @submit="goNext" />
+      <AvantiAuthForm :mode="mode" @select="handleSelectMode" @submit="goNext" />
     </AvantiModal>
   </div>
 </template>
@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useIsMobile } from '@/composables/use_is_mobile'
 import AvantiSimulationHeader from '@/components/layout/avanti_simulation_header.vue'
 import AvantiAuthBackdropContent from '@/components/auth/avanti_auth_backdrop_content.vue'
@@ -72,6 +73,16 @@ function handleClose(): void {
   goBack()
 }
 
+/**
+ * Половины переключателя «Crea account / Accedi» — это два разных экрана
+ * (кадры 0:1235 и 0:1338), поэтому клик меняет маршрут, а не состояние
+ * внутри окна: адрес остаётся честным, и ссылкой можно поделиться.
+ * Идентификаторы вкладок совпадают с путями маршрутов.
+ */
+function handleSelectMode(id: string): void {
+  void router.push(`/${id}`)
+}
+
 /** Подпись под заголовком в макете умещается в одну строку. */
 const subtitleLines = [shared.subtitle]
 
@@ -85,6 +96,8 @@ const logoSize = computed(() => (isMobile.value ? 'sm' : 'lg'))
  * подтверждению почты, вход — сразу в кабинет. Проверок пока нет, они
  * появятся вместе с API.
  */
+const router = useRouter()
+
 const { goNext, goBack } = useFlowNavigation()
 </script>
 

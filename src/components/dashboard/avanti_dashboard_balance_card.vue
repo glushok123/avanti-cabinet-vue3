@@ -15,7 +15,7 @@
       <span class="avanti-dashboard-balance-card__amount">{{ amount }}</span>
       <span class="avanti-dashboard-balance-card__details">{{ details }}</span>
     </div>
-    <AvantiDashboardWithdrawButton :label="actionLabel" :state="actionState" />
+    <AvantiDashboardWithdrawButton :label="actionLabel" :state="actionState" @click="emit('withdraw')" />
     <div class="avanti-dashboard-balance-card__footer">
       <span class="avanti-dashboard-balance-card__line" aria-hidden="true" />
       <span class="avanti-dashboard-balance-card__note">{{ note }}</span>
@@ -42,6 +42,12 @@ withDefaults(
   }>(),
   { actionState: 'locked' },
 )
+
+/**
+ * Кнопка вывода средств: маршрут решает страница. В состоянии `locked`
+ * кнопка выключена, поэтому событие оттуда не приходит.
+ */
+const emit = defineEmits<{ withdraw: [] }>()
 </script>
 
 <style lang="scss" scoped>

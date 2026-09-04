@@ -26,6 +26,7 @@
         :note="balance.note"
         :action-label="balance.actionLabel"
         :action-state="balance.actionState"
+        @withdraw="emit('withdraw')"
       />
       <AvantiDashboardLockBanner
         v-if="lockBanner"
@@ -67,6 +68,7 @@
         v-if="withdrawal"
         :available-amount="withdrawal.availableAmount"
         :details="withdrawal.details"
+        @submit="emit('withdraw')"
       />
       <AvantiDashboardPersonalDataCard
         v-if="personalData"
@@ -167,7 +169,12 @@ const props = withDefaults(
  * Кнопка-стрелка баннера «средства заблокированы» ведёт к незавершённым
  * шагам. Раскладка не знает маршрута — о переходе решает страница.
  */
-const emit = defineEmits<{ 'lock-banner-action': [] }>()
+const emit = defineEmits<{
+  /** Кнопка-стрелка баннера «средства заблокированы». */
+  'lock-banner-action': []
+  /** Кнопка «Preleva i fondi» формы вывода средств. */
+  withdraw: []
+}>()
 
 const stepper = computed(() => props.state.stepper)
 const balance = computed(() => props.state.balance)

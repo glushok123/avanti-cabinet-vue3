@@ -19,7 +19,7 @@
         :progress-label="stepper.progressLabel"
         :steps="stepper.steps"
       />
-      <AvantiAuthProfileDataCard :content="profileData" />
+      <AvantiAuthProfileDataCard :content="profileData" @edit="router.push('/profile/name')" />
       <AvantiProfileSecurityCard :title="securityTitle" :rows="securityRows">
         <AvantiAuthEmailVerification :content="verification" @confirm="goNext" />
       </AvantiProfileSecurityCard>
@@ -46,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiCabinetLayout from '@/components/layout/avanti_cabinet_layout.vue'
 import AvantiDashboardStepper from '@/components/dashboard/avanti_dashboard_stepper.vue'
@@ -71,6 +72,9 @@ import {
 
 /** Подтверждение кода открывает кабинет. */
 const { goNext } = useFlowNavigation()
+
+/** Кнопка правки данных ведёт в настройки имени (кадр 1:2773). */
+const router = useRouter()
 </script>
 
 <style lang="scss" scoped>

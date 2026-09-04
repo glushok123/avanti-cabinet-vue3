@@ -12,10 +12,11 @@
   уровень, тот же, что показывает роут `/home` без параметров.
 -->
 <template>
-  <AvantiDashboardView :state="state" @lock-banner-action="goNext" />
+  <AvantiDashboardView :state="state" @lock-banner-action="goNext" @withdraw="router.push('/iban')" />
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFlowNavigation } from '@/composables/use_flow_navigation'
@@ -67,4 +68,7 @@ const state = computed<AvantiDashboardState>(() => {
 
 /** Кнопка баннера ведёт к следующему шагу сценария — загрузке документов. */
 const { goNext } = useFlowNavigation()
+
+/** «Preleva i fondi» ведёт к вводу IBAN для зачисления (кадр 31:6355). */
+const router = useRouter()
 </script>
