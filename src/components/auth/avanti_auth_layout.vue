@@ -17,7 +17,13 @@
     <main class="avanti-auth-layout__body">
       <AvantiAuthBackdropContent />
     </main>
-    <AvantiModal :open="isOpen" variant="brand" :label="texts.dialogLabel" :close-label="shared.closeLabel">
+    <AvantiModal
+      v-model:open="isOpen"
+      variant="brand"
+      :label="texts.dialogLabel"
+      :close-label="shared.closeLabel"
+      @close="handleClose"
+    >
       <template #header-center>
         <AvantiLogo :size="logoSize" />
       </template>
@@ -36,7 +42,7 @@
 
 <script setup lang="ts">
 import { useFlowNavigation } from '@/composables/use_flow_navigation'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useIsMobile } from '@/composables/use_is_mobile'
 import AvantiSimulationHeader from '@/components/layout/avanti_simulation_header.vue'
 import AvantiAuthBackdropContent from '@/components/auth/avanti_auth_backdrop_content.vue'
@@ -51,8 +57,20 @@ const props = defineProps<{ mode: AvantiAuthMode }>()
 
 const texts = computed(() => AVANTI_AUTH_SCREEN_TEXTS[props.mode])
 
-/** В макете окно открыто всегда: закрытие подключается вместе с маршрутами. */
-const isOpen = true
+/**
+ * В макете окно открыто сразу — экран без него не нарисован. Но крестик,
+ * подложка и Escape обязаны работать, поэтому состояние реактивное.
+ */
+const isOpen = ref<boolean>(true)
+
+/**
+ * Закрытие возвращает на предыдущий шаг сценария: окно авторизации лежит
+ * поверх экрана одобрения кредита, и уйти ему больше некуда — подложка
+ * под ним декоративная.
+ */
+function handleClose(): void {
+  goBack()
+}
 
 /** Подпись под заголовком в макете умещается в одну строку. */
 const subtitleLines = [shared.subtitle]
@@ -67,7 +85,7 @@ const logoSize = computed(() => (isMobile.value ? 'sm' : 'lg'))
  * подтверждению почты, вход — сразу в кабинет. Проверок пока нет, они
  * появятся вместе с API.
  */
-const { goNext } = useFlowNavigation()
+const { goNext, goBack } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>
