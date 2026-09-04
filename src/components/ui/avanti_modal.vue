@@ -177,7 +177,11 @@ $modal-layer: 110;
     flex-direction: column;
     gap: var(--avanti-modal-gap);
     min-height: 0;
-    overflow-y: auto;
+
+    /* Только вертикальная прокрутка: блоки, намеренно выходящие в поля окна
+       (линия панели документов, панель IBAN, вкладки авторизации), давали
+       горизонтальную полосу. `clip` обрезает по краю поля, куда они и вписаны. */
+    overflow: clip auto;
   }
 
   &__footer {
