@@ -2,7 +2,7 @@
   Вводный блок экрана ожидания: надзаголовок, заголовок и пояснение.
 
   От `avanti_simulation_section_heading` отличается третьей строкой
-  и другими размерами (20/32/20 против 18/32), поэтому это отдельный блок,
+  и другими размерами (24/32 против 18/32), поэтому это отдельный блок,
   а не проп существующего заголовка.
 -->
 <template>
@@ -45,20 +45,21 @@ withDefaults(
     letter-spacing: 0.48px;
   }
 
+  /* Кадр 1:4679: 24px Bold #333, в две строки капслоком. */
   &__title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: var(--avanti-font-weight-bold);
     line-height: normal;
-    color: var(--avanti-color-text-heading);
+    color: var(--avanti-color-text-dark);
     text-transform: uppercase;
   }
 
+  /* Кадр 1:4680: 14px/18px, разрядки в мобильном кадре нет. */
   &__subtitle {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: var(--avanti-font-weight-regular);
     line-height: 18px;
     color: var(--avanti-color-text-muted);
-    letter-spacing: 0.52px;
   }
 
   @include desktop-up {

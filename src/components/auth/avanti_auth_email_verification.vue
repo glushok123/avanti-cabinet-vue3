@@ -1,7 +1,9 @@
 <!--
-  Блок подтверждения почты внутри карточки «Sicurezza» (кадр 1:3558):
-  заголовок со статусом, пояснение, ряд ячеек кода, кнопка подтверждения
-  и ссылка повторной отправки.
+  Блок подтверждения почты внутри карточки «Sicurezza»: заголовок со
+  статусом, пояснение, ряд ячеек кода, кнопка подтверждения и ссылка
+  повторной отправки.
+  Десктоп — кадр 1:3558, мобильная — кадр 22:3508: там блок уже (отступы
+  14px), тексты на пункт мельче, а кнопка и таймер идут столбиком по центру.
 -->
 <template>
   <section class="avanti-auth-email-verification">
@@ -69,7 +71,9 @@ function handleResend(): void {
   gap: 10px;
   align-items: flex-start;
   width: 100%;
-  padding: 16px;
+
+  /* Кадр 22:3508: на мобильной внутренние отступы 14px. */
+  padding: 14px;
   background-color: var(--avanti-color-primary-soft);
   border-radius: var(--avanti-radius-sm);
 
@@ -121,12 +125,14 @@ function handleResend(): void {
 
   &__description,
   &__prompt {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: var(--avanti-font-weight-regular);
     line-height: normal;
   }
 
   &__description {
+    /* Кадр 22:3583 → 22:3590: между заголовком и пояснением 18px. */
+    margin-top: 8px;
     color: var(--avanti-color-text-secondary);
   }
 
@@ -144,7 +150,9 @@ function handleResend(): void {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    align-items: flex-start;
+
+    /* Кадр 22:3604: кнопка и таймер выровнены по центру блока. */
+    align-items: center;
     width: 100%;
     margin-top: 14px;
   }
@@ -154,16 +162,18 @@ function handleResend(): void {
     height: 36px;
     padding: 8px 16px;
     font-size: 14px;
+    font-weight: var(--avanti-font-weight-medium);
     text-transform: uppercase;
     border-radius: var(--avanti-radius-sm);
   }
 
+  /* Кадр 22:3610: строки таймера идут по центру с зазором 2px. */
   &__resend {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    align-items: flex-start;
-    font-size: 13px;
+    gap: 2px;
+    align-items: center;
+    font-size: 12px;
     line-height: normal;
   }
 
@@ -176,18 +186,25 @@ function handleResend(): void {
     @include button-reset;
     @include focus-ring;
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: var(--avanti-font-weight-semibold);
     color: var(--avanti-color-primary);
     text-decoration: underline;
   }
 
+  /* Десктопный кадр 1:3558: блок шире, тексты 13px, кнопка и таймер в строку. */
   @include desktop-up {
     gap: 10px;
+    padding: 16px;
 
     &__description,
     &__prompt {
       max-width: 400px;
+      font-size: 13px;
+    }
+
+    &__description {
+      margin-top: 0;
     }
 
     &__footer {
@@ -202,6 +219,16 @@ function handleResend(): void {
       height: 36px;
       font-size: 16px;
       font-weight: var(--avanti-font-weight-medium);
+    }
+
+    &__resend {
+      gap: 6px;
+      align-items: flex-start;
+      font-size: 13px;
+    }
+
+    &__resend-action {
+      font-size: 13px;
     }
   }
 }

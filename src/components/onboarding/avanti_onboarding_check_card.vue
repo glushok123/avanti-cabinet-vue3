@@ -1,6 +1,11 @@
 <!--
   Блок проверки на экране ожидания: этапы отправки заявки, разделитель
   и строка прогресса (круг со скорингом плюс полоса ответивших банков).
+
+  Подпись «ещё несколько секунд» в кадрах стоит по-разному: на десктопе
+  (0:1110) — в колонке полосы загрузки, на мобильной (1:4699) — отдельной
+  строкой во всю ширину карточки. Разметка выбирается по ширине экрана,
+  чтобы не держать в DOM скрытый дубль текста.
 -->
 <template>
   <section class="avanti-onboarding-check-card">
@@ -17,8 +22,14 @@
       <span class="avanti-onboarding-check-card__divider" />
       <div class="avanti-onboarding-check-card__progress">
         <AvantiOnboardingProgressRing :value="score" />
-        <AvantiOnboardingProgressBar :done="done" :total="total" :hint="hint" :label="progressLabel" />
+        <AvantiOnboardingProgressBar
+          :done="done"
+          :total="total"
+          :hint="isMobile ? undefined : hint"
+          :label="progressLabel"
+        />
       </div>
+      <p v-if="isMobile" class="avanti-onboarding-check-card__hint">{{ hint }}</p>
     </div>
   </section>
 </template>
@@ -27,6 +38,7 @@
 import AvantiOnboardingCheckRow from '@/components/onboarding/avanti_onboarding_check_row.vue'
 import AvantiOnboardingProgressRing from '@/components/onboarding/avanti_onboarding_progress_ring.vue'
 import AvantiOnboardingProgressBar from '@/components/onboarding/avanti_onboarding_progress_bar.vue'
+import { useIsMobile } from '@/composables/use_is_mobile'
 import type { AvantiCheckRow } from '@/types/avanti_onboarding'
 
 defineProps<{
@@ -43,6 +55,8 @@ defineProps<{
   /** Доступное имя полосы загрузки. */
   progressLabel: string
 }>()
+
+const isMobile = useIsMobile()
 </script>
 
 <style lang="scss" scoped>
@@ -64,8 +78,20 @@ defineProps<{
   &__rows {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+
+    /* Кадр 1:4682: между строками статусов 10px. */
+    gap: 10px;
     width: 100%;
+  }
+
+  /* Кадр 1:4699: подпись курсивом во всю ширину карточки. */
+  &__hint {
+    width: 100%;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: var(--avanti-font-weight-regular);
+    line-height: normal;
+    color: var(--avanti-color-text-muted);
   }
 
   /* Разделитель: линия, растворяющаяся к обоим краям. */
@@ -82,7 +108,9 @@ defineProps<{
 
   &__progress {
     display: flex;
-    gap: 16px;
+
+    /* Кадр 1:4690: между кругом и полосой 12px. */
+    gap: 12px;
     align-items: center;
     width: 100%;
   }

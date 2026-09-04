@@ -1,7 +1,7 @@
 <!--
   Сетка банков-партнёров на экране ожидания.
   Десктоп: четыре колонки по 285px с промежутками 12px и 20px (по макету).
-  Мобильная: две колонки, ширина колонок делится поровну.
+  Мобильная (кадр 1:4700): две колонки по 175px с промежутками 8px.
 -->
 <template>
   <ul class="avanti-onboarding-bank-grid" :aria-label="label">
@@ -34,7 +34,7 @@ defineProps<{
 .avanti-onboarding-bank-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
   width: 100%;
 
   @include desktop-up {

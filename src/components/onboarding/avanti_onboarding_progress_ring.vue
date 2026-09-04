@@ -82,8 +82,10 @@ onMounted(() => {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+
+  /* Кадр 1:4691: круг прогресса на мобильной — 48px. */
+  width: 48px;
+  height: 48px;
 
   &__svg {
     width: 100%;
@@ -102,12 +104,13 @@ onMounted(() => {
     transition: stroke-dashoffset 1s ease-out;
   }
 
+  /* Кадр 1:4694: 16px Bold #333 в центре круга. */
   &__value {
     position: absolute;
-    font-size: 20px;
-    font-weight: var(--avanti-font-weight-semibold);
+    font-size: 16px;
+    font-weight: var(--avanti-font-weight-bold);
     line-height: normal;
-    color: var(--avanti-color-text-black);
+    color: var(--avanti-color-text-dark);
     text-transform: uppercase;
   }
 
@@ -115,8 +118,11 @@ onMounted(() => {
     width: 66px;
     height: 66px;
 
+    /* Десктопный кадр 0:1109: 26px SemiBold чёрным. */
     .avanti-onboarding-progress-ring__value {
       font-size: 26px;
+      font-weight: var(--avanti-font-weight-semibold);
+      color: var(--avanti-color-text-black);
     }
   }
 }

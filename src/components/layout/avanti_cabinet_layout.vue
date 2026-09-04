@@ -78,11 +78,9 @@ import type { AvantiBreadcrumb, AvantiNavItem } from '@/types/avanti_dashboard'
  * значение снято с конкретного кадра Figma и проверено пиксельной сверкой.
  *  · default     — главная кабинета и ввод IBAN: 20/72/40, мобильная 16/16/20
  *  · flush       — профиль: контент начинается сразу под шапкой (0 сверху)
- *  · wide-mobile — как default, но мобильные боковые отступы 20px:
- *                  так собраны экраны, для которых мобильного кадра нет
  *  · document    — договор: 22px сверху, 42px снизу, мобильная 20px
  */
-type AvantiCabinetPadding = 'default' | 'flush' | 'wide-mobile' | 'document'
+type AvantiCabinetPadding = 'default' | 'flush' | 'document'
 
 const props = withDefaults(
   defineProps<{
@@ -194,15 +192,6 @@ const layoutClasses = computed<string[]>(() => {
 
     @include mobile {
       padding: 16px 16px 20px;
-    }
-  }
-
-  /* Экран без мобильного кадра в Figma: боковые отступы 20px по логике проекта. */
-  &--wide-mobile &__content {
-    padding: 20px 72px 40px;
-
-    @include mobile {
-      padding: 16px 20px 20px;
     }
   }
 

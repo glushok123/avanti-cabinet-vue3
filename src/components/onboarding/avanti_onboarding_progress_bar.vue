@@ -2,6 +2,10 @@
   Полоса загрузки экрана ожидания: счётчик ответивших банков,
   трек с заливкой и подпись «ещё несколько секунд».
 
+  Подпись выводится только когда её передали: в десктопном кадре 0:1110 она
+  лежит в колонке полосы, а в мобильном 1:4699 — во всю ширину карточки,
+  поэтому там её рисует сам блок проверки.
+
   Заливка выведена нативным <progress>: доля задаётся атрибутами value/max,
   поэтому динамическая ширина не требует inline-стилей и полоса
   сразу озвучивается скринридером.
@@ -19,7 +23,7 @@
         :aria-label="label"
       />
     </div>
-    <p class="avanti-onboarding-progress-bar__hint">{{ hint }}</p>
+    <p v-if="hint" class="avanti-onboarding-progress-bar__hint">{{ hint }}</p>
   </div>
 </template>
 
@@ -31,8 +35,8 @@ const props = defineProps<{
   done: number
   /** Сколько банков в проверке всего. */
   total: number
-  /** Подпись под полосой. */
-  hint: string
+  /** Подпись под полосой: на мобильной её рисует блок проверки. */
+  hint?: string
   /** Доступное имя полосы: видимого заголовка у неё нет. */
   label: string
 }>()
@@ -45,15 +49,18 @@ const counter = computed<string>(() => `${props.done}/${props.total}`)
 .avanti-onboarding-progress-bar {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+
+  /* Кадр 1:4695: между счётчиком и треком 6px. */
+  gap: 6px;
   width: 100%;
   min-width: 0;
 
+  /* Кадр 1:4696: 14px Bold #333. */
   &__counter {
     font-size: 14px;
-    font-weight: var(--avanti-font-weight-semibold);
+    font-weight: var(--avanti-font-weight-bold);
     line-height: normal;
-    color: var(--avanti-color-text-black);
+    color: var(--avanti-color-text-dark);
     text-transform: uppercase;
   }
 
@@ -61,7 +68,9 @@ const counter = computed<string>(() => `${props.done}/${props.total}`)
   &__track {
     position: relative;
     width: 100%;
-    height: 6px;
+
+    /* Кадр 1:4697: трек 8px в обеих ширинах макета. */
+    height: 8px;
     overflow: hidden;
     border-radius: var(--avanti-radius-pill);
   }
@@ -111,18 +120,19 @@ const counter = computed<string>(() => `${props.done}/${props.total}`)
     font-weight: var(--avanti-font-weight-regular);
     line-height: normal;
     color: var(--avanti-color-text-muted);
-    letter-spacing: 0.52px;
   }
 
   @include desktop-up {
     gap: 10px;
 
+    /* Десктопный кадр 0:1112: 20px SemiBold чёрным. */
     .avanti-onboarding-progress-bar__counter {
       font-size: 20px;
+      font-weight: var(--avanti-font-weight-semibold);
+      color: var(--avanti-color-text-black);
     }
 
     .avanti-onboarding-progress-bar__track {
-      height: 8px;
       margin-bottom: 8px;
     }
 

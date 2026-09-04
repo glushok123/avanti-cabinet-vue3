@@ -41,6 +41,24 @@
   --avanti-color-text-on-primary-soft: #eaf4f6;
   --avanti-color-text-on-primary-dim: #f3f3f3;
 
+  /* --- Палитра блока сертификата CPI (кадры 256:11723, 256:12221,
+     256:12458, 258:17494). В макете он набран отдельной серо-синей шкалой,
+     которой в остальном кабинете нет. --- */
+  --avanti-color-border-slate: #e2e8f0;
+  --avanti-color-text-slate: #64748b;
+  --avanti-color-text-slate-strong: #1e293b;
+  --avanti-color-text-slate-body: #475569;
+  --avanti-color-text-slate-deep: #0f172a;
+  --avanti-color-surface-viewer: #f0f3f8;
+  --avanti-color-text-confirm-label: #7f8e9d;
+  --avanti-color-text-confirm-title: #101d35;
+
+  /* Подложка и обводка блока предупреждения (кадр 258:17494). */
+  --avanti-color-surface-danger-soft: #fce8e6;
+  --avanti-color-border-notice: #e0e6ed;
+  --avanti-color-border-info: #e2ebf2;
+  --avanti-color-text-notice: #111a2c;
+
   /* --- Границы и разделители --- */
   --avanti-color-border: #e4e4e7;
   --avanti-color-border-soft: #e2edf0;
@@ -60,6 +78,9 @@
   --avanti-color-success-dark: #1e7e34;
   --avanti-color-text-step-done: #393939;
   --avanti-color-text-bank: #424242;
+
+  /* Тёмный текст мобильных кадров онбординга (кадр 1:4669). */
+  --avanti-color-text-dark: #333;
   --avanti-color-text-heading-strong: #09090b;
   --avanti-color-text-terms: #4b5563;
   --avanti-color-text-note: #6b7280;
@@ -145,6 +166,12 @@
 
   /* Тень белой карточки анкеты. */
   --avanti-shadow-form-card: 0 10px 15px rgb(0 0 0 / 4%);
+
+  /* --- Тени блока сертификата CPI --- */
+  --avanti-shadow-certificate-card: 0 8px 12px rgb(15 23 42 / 5%);
+  --avanti-shadow-certificate-document: 0 4px 6px rgb(0 0 0 / 6%);
+  --avanti-shadow-confirmation-card: 0 12px 12px rgb(15 30 54 / 15%);
+  --avanti-shadow-notice-modal: 0 12px 16px rgb(26 35 50 / 8%);
 
   /* --- Переходы --- */
   --avanti-transition-fast: 0.15s ease;

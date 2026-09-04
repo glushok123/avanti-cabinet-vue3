@@ -1,11 +1,9 @@
 <!--
   Страница «Банк прогрузка» — ожидание ответа банков-партнёров.
-  Десктоп: заголовок, блок проверки, сетка из 12 банков и кнопки шага.
-
-  РАСХОЖДЕНИЕ МАКЕТА: мобильного фрейма этого экрана в Figma нет.
-  Мобильная версия собрана по логике соседних экранов симуляции кредита:
-  боковые отступы 20px, те же размеры шрифтов, сетка банков в две колонки.
-  Требуется подтверждение заказчика.
+  Десктоп (кадр 0:1077): заголовок, блок проверки, сетка из 12 банков
+  и кнопки шага.
+  Мобильная (кадр 1:4669, 390×1136): те же блоки в один поток, боковые
+  отступы 16px, сетка банков в две колонки по 175px, кнопки шага столбиком.
 -->
 <template>
   <div class="avanti-bank-check-page">
@@ -36,6 +34,8 @@
           class="avanti-bank-check-page__actions"
           :back-label="texts.actionBack"
           :next-label="texts.actionNext"
+          @back="goBack"
+          @next="goNext"
         />
       </div>
     </main>
@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiSimulationHeader from '@/components/layout/avanti_simulation_header.vue'
 import AvantiSimulationActions from '@/components/simulation/avanti_simulation_actions.vue'
 import AvantiOnboardingSectionIntro from '@/components/onboarding/avanti_onboarding_section_intro.vue'
@@ -65,6 +66,9 @@ const statusLabels = AVANTI_BANK_STATUS_LABELS
 const score = AVANTI_BANK_CHECK_SCORE
 const done = AVANTI_BANK_CHECK_DONE
 const total = AVANTI_BANK_CHECK_TOTAL
+
+/** Переходы мастера: порядок шагов задан в `avanti_flow`. */
+const { goBack, goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>
@@ -81,14 +85,17 @@ $content-width-bank-check: 1176px;
   min-height: 100vh;
   background-color: var(--avanti-color-page-mobile);
 
+  /* Кадр 1:4669: контент 358px внутри 390px, сверху 20px, снизу 32px. */
   &__body {
-    padding: 24px 20px 32px;
+    padding: 20px 16px 32px;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+
+    /* Промежутки между всеми четырьмя блоками мобильного кадра — 24px. */
+    gap: 24px;
   }
 
   @include desktop-up {
@@ -104,6 +111,8 @@ $content-width-bank-check: 1176px;
     }
 
     .avanti-bank-check-page__content {
+      /* На десктопе блоки стоят теснее, чем в мобильном кадре. */
+      gap: 20px;
       max-width: $content-width-bank-check;
     }
 
@@ -115,6 +124,32 @@ $content-width-bank-check: 1176px;
     .avanti-bank-check-page__actions {
       margin-top: 16px;
     }
+  }
+}
+
+/*
+ * Кнопки шага в мобильном кадре (1:4761) стоят столбиком во всю ширину:
+ * основная «Avvia la verifica» сверху, «Indietro» под ней, высота 48px
+ * и шеврон 24px. Общий блок мастера остаётся строкой на других экранах,
+ * поэтому раскладка переопределяется здесь, а не в самом компоненте.
+ */
+@include mobile {
+  .avanti-bank-check-page .avanti-bank-check-page__actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .avanti-bank-check-page__actions :deep(.avanti-simulation-actions__slot) {
+    flex: 0 0 auto;
+  }
+
+  .avanti-bank-check-page__actions :deep(.avanti-button) {
+    height: 48px;
+  }
+
+  .avanti-bank-check-page__actions :deep(.avanti-button__icon) {
+    width: 24px;
+    height: 24px;
   }
 }
 </style>

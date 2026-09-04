@@ -1,5 +1,7 @@
 <!--
   Карточка банка-партнёра в сетке проверки: логотип, название и состояние.
+  На десктопе (кадр 0:1117) логотип стоит слева от подписей, на мобильной
+  (кадр 1:4701) — над ними, карточка ровно 175×80.
 
   Три состояния из макета: проверен (зелёная подпись, бирюзовая обводка),
   проверяется (серая подпись, бирюзовая обводка) и в очереди
@@ -42,10 +44,14 @@ const statusClass = computed(() => `avanti-onboarding-bank-card--${props.status}
 <style lang="scss" scoped>
 .avanti-onboarding-bank-card {
   display: flex;
-  gap: 8px;
-  align-items: center;
-  min-height: 60px;
-  padding: 6px 8px 6px 6px;
+
+  /* Кадр 1:4701: карточка 80px высотой, логотип сверху, подписи снизу. */
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 80px;
+  padding: 10px;
   overflow: hidden;
   background-color: var(--avanti-color-surface);
   border-radius: var(--avanti-radius-md);
@@ -55,39 +61,52 @@ const statusClass = computed(() => `avanti-onboarding-bank-card--${props.status}
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 34px;
+    width: 100%;
+
+    /* Кадр 1:4702: полоса логотипа 28px во всю ширину карточки. */
+    height: 28px;
+    overflow: hidden;
   }
 
+  /*
+   * В мобильном кадре логотип нарисован крупнее своей полосы: изображение
+   * выше рамки в 1,385 раза (28 → 38,8px), верх и низ подрезаны. Логотипы
+   * выгружены под десктопную рамку 81×62, поэтому масштаб задаётся высотой.
+   */
   &__image {
-    width: 100%;
-    height: 100%;
+    width: auto;
+    max-width: 100%;
+    height: 138.5%;
     object-fit: contain;
   }
 
   &__info {
     display: flex;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
     min-width: 0;
+
+    /* Кадр 1:4703: блок подписей 26px — вторая строка чуть выходит
+       в нижний отступ карточки, как и нарисовано. */
+    height: 26px;
   }
 
+  /* Кадр 1:4704: 13px SemiBold без разрядки. */
   &__name {
-    font-size: 12px;
-    font-weight: var(--avanti-font-weight-medium);
+    font-size: 13px;
+    font-weight: var(--avanti-font-weight-semibold);
     line-height: normal;
     color: var(--avanti-color-text-bank);
     text-transform: uppercase;
-    letter-spacing: 0.48px;
   }
 
+  /* Кадр 1:4705: 11px Regular. */
   &__status {
     font-size: 11px;
-    font-weight: var(--avanti-font-weight-light);
+    font-weight: var(--avanti-font-weight-regular);
     line-height: normal;
     color: var(--avanti-color-text-muted);
-    letter-spacing: 0.44px;
   }
 
   /* --- Банк ответил --- */
@@ -118,8 +137,13 @@ const statusClass = computed(() => `avanti-onboarding-bank-card--${props.status}
     }
   }
 
+  /* Десктопный кадр 0:1117: логотип слева, карточка 285×70. */
   @include desktop-up {
+    flex-direction: row;
     gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    height: auto;
     min-height: 70px;
     padding: 0 8px 0 7px;
 
@@ -128,13 +152,26 @@ const statusClass = computed(() => `avanti-onboarding-bank-card--${props.status}
       height: 62px;
     }
 
+    .avanti-onboarding-bank-card__image {
+      width: 100%;
+      height: 100%;
+    }
+
+    .avanti-onboarding-bank-card__info {
+      flex: 1 1 auto;
+      gap: 2px;
+      height: auto;
+    }
+
     .avanti-onboarding-bank-card__name {
       font-size: 16px;
+      font-weight: var(--avanti-font-weight-medium);
       letter-spacing: 0.64px;
     }
 
     .avanti-onboarding-bank-card__status {
       font-size: 14px;
+      font-weight: var(--avanti-font-weight-light);
       letter-spacing: 0.56px;
     }
   }

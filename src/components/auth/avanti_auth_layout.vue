@@ -29,12 +29,13 @@
           size="sm"
         />
       </template>
-      <AvantiAuthForm :mode="mode" />
+      <AvantiAuthForm :mode="mode" @submit="goNext" />
     </AvantiModal>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import { computed } from 'vue'
 import { useIsMobile } from '@/composables/use_is_mobile'
 import AvantiSimulationHeader from '@/components/layout/avanti_simulation_header.vue'
@@ -60,6 +61,13 @@ const isMobile = useIsMobile()
 
 /** В макете логотип окна мельче шапочного: sm на мобильной, lg на десктопе. */
 const logoSize = computed(() => (isMobile.value ? 'sm' : 'lg'))
+
+/**
+ * Отправка формы ведёт к следующему шагу сценария: регистрация — к
+ * подтверждению почты, вход — сразу в кабинет. Проверок пока нет, они
+ * появятся вместе с API.
+ */
+const { goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

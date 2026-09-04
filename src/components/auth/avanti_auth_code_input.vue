@@ -142,7 +142,9 @@ function handleFocus(event: FocusEvent): void {
 <style lang="scss" scoped>
 .avanti-auth-code-input {
   display: flex;
-  gap: 8px;
+
+  /* Кадры 1:3573 и 22:3597: ячейки 32px с зазором 10px в обеих ширинах. */
+  gap: 10px;
   align-items: center;
 
   &__cell {
@@ -151,9 +153,8 @@ function handleFocus(event: FocusEvent): void {
     /* Обводка внутрь: габарит ячейки совпадает с кадром Figma. */
     @include inner-border(var(--avanti-color-primary));
 
-    flex: 1 1 32px;
+    flex: 0 0 32px;
     width: 32px;
-    max-width: 44px;
     height: 32px;
     padding: 0;
     font-family: var(--avanti-font-family-base);
@@ -165,15 +166,6 @@ function handleFocus(event: FocusEvent): void {
     background-color: var(--avanti-color-surface);
     border: none;
     border-radius: var(--avanti-radius-xs);
-  }
-
-  @include desktop-up {
-    gap: 10px;
-
-    &__cell {
-      flex: 0 0 32px;
-      max-width: none;
-    }
   }
 }
 </style>

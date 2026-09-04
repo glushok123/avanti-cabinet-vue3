@@ -1,24 +1,18 @@
 <!--
-  Страница «Verifica email» (кадр 1:3463) — раздел «Profilo» личного кабинета
-  с блоком подтверждения почты внутри карточки «Sicurezza».
+  Страница «Verifica email» — раздел «Profilo» личного кабинета с блоком
+  подтверждения почты внутри карточки «Sicurezza».
+  Десктоп — кадр 1:3463, мобильная — кадр 22:3408 (390×1687, в макете он
+  назван «profilo-mobile», но внутри стоит именно блок верификации почты).
 
   Каркас страницы (шапка, шкала шагов, карточка личных данных правой колонки,
   чеклист верификации, нижняя навигация) переиспользован у главной страницы
   личного кабинета — общий компонент `avanti_cabinet_layout`.
 
-  ВОПРОС ЗАКАЗЧИКУ: мобильного макета экрана в Figma нет. Мобильная раскладка
-  собрана по логике проекта — одна колонка, боковые отступы 20px (вариант
-  отступов `wide-mobile`), шкала шрифтов как в мобильных кадрах симуляции
-  кредита; дублирующая карточка «Dati personali» правой колонки на мобильной
-  скрыта, как и на главной.
+  Дублирующая карточка «Dati personali» правой колонки на мобильной скрыта,
+  как и на главной: те же «Cognome» и «Nome» уже есть в основной карточке.
 -->
 <template>
-  <AvantiCabinetLayout
-    class="avanti-verify-email-page"
-    :title="texts.pageTitle"
-    :nav-items="navItems"
-    content-padding="wide-mobile"
-  >
+  <AvantiCabinetLayout class="avanti-verify-email-page" :title="texts.pageTitle" :nav-items="navItems">
     <template #main>
       <AvantiDashboardStepper
         :title="stepper.title"
@@ -27,7 +21,7 @@
       />
       <AvantiAuthProfileDataCard :content="profileData" />
       <AvantiProfileSecurityCard :title="securityTitle" :rows="securityRows">
-        <AvantiAuthEmailVerification :content="verification" />
+        <AvantiAuthEmailVerification :content="verification" @confirm="goNext" />
       </AvantiProfileSecurityCard>
     </template>
 
@@ -52,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiCabinetLayout from '@/components/layout/avanti_cabinet_layout.vue'
 import AvantiDashboardStepper from '@/components/dashboard/avanti_dashboard_stepper.vue'
 import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashboard_personal_data_card.vue'
@@ -73,6 +68,9 @@ import {
   AVANTI_VERIFY_SECURITY_ROWS as securityRows,
   AVANTI_VERIFY_SECURITY_TITLE as securityTitle,
 } from '@/constants/avanti_auth_content'
+
+/** Подтверждение кода открывает кабинет. */
+const { goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>
@@ -83,6 +81,13 @@ import {
    */
   .avanti-verify-email-page .avanti-verify-email-page__personal-data {
     display: none;
+  }
+
+  /* Кадр 22:3408: контент начинается вплотную под шапкой,
+     снизу до конца кадра остаётся 40px. */
+  .avanti-verify-email-page :deep(.avanti-cabinet-layout__content) {
+    padding-top: 0;
+    padding-bottom: 40px;
   }
 }
 </style>
