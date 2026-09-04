@@ -22,7 +22,11 @@
           />
           <AvantiOnboardingApprovalNote :badge="texts.noteBadge" :text="texts.note" />
         </div>
-        <AvantiOnboardingCtaButton class="avanti-credit-approved-page__cta" :label="texts.cta" />
+        <AvantiOnboardingCtaButton
+          class="avanti-credit-approved-page__cta"
+          :label="texts.cta"
+          @click="goNext"
+        />
         <AvantiOnboardingCardStack class="avanti-credit-approved-page__cards" :cards="cards" />
       </div>
     </main>
@@ -30,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiSimulationHeader from '@/components/layout/avanti_simulation_header.vue'
 import AvantiOnboardingApprovalHeading from '@/components/onboarding/avanti_onboarding_approval_heading.vue'
 import AvantiOnboardingApprovalCard from '@/components/onboarding/avanti_onboarding_approval_card.vue'
@@ -45,6 +50,9 @@ import {
 const texts = AVANTI_CREDIT_APPROVED_TEXTS
 const details = AVANTI_APPROVAL_DETAILS
 const cards = AVANTI_APPROVAL_CARDS
+
+/** Переход к следующему шагу: порядок задан в `avanti_flow`. */
+const { goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

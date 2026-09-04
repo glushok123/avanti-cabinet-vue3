@@ -47,6 +47,8 @@
         class="avanti-simulation-page__actions"
         :back-label="texts.actionBack"
         :next-label="texts.actionNext"
+        @back="goBack"
+        @next="goNext"
       />
     </main>
   </div>
@@ -60,6 +62,7 @@ import AvantiSimulationDurationSection from '@/components/simulation/avanti_simu
 import AvantiSimulationSummaryCard from '@/components/simulation/avanti_simulation_summary_card.vue'
 import AvantiSimulationDisclaimer from '@/components/simulation/avanti_simulation_disclaimer.vue'
 import AvantiSimulationActions from '@/components/simulation/avanti_simulation_actions.vue'
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import { useIsMobile } from '@/composables/use_is_mobile'
 import { formatAmount, formatAmountSpaced, useCreditSimulation } from '@/composables/use_credit_simulation'
 import {
@@ -122,6 +125,9 @@ const summaryRows = computed(() => [
     unit: isMobile.value ? monthsUnit : undefined,
   },
 ])
+
+/** Переходы мастера: порядок шагов задан в `avanti_flow`. */
+const { goBack, goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

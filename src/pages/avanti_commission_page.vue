@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiCommissionWizard from '@/components/commission/avanti_commission_wizard.vue'
 import AvantiDashboardView from '@/components/dashboard/avanti_dashboard_view.vue'
 import { AVANTI_DASHBOARD_STATE_BASE as state } from '@/constants/avanti_dashboard_states'
@@ -51,7 +52,11 @@ const status = computed<string>(() => {
 function handleFinish(): void {
   isFinished.value = true
   isOpen.value = false
+  goNext()
 }
+
+/** Комиссия — последний шаг: после оплаты возвращаемся в кабинет. */
+const { goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

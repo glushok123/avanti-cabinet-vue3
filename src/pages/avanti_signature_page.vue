@@ -33,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import { computed, ref } from 'vue'
 import AvantiSignaturePanel from '@/components/signature/avanti_signature_panel.vue'
 import AvantiModal from '@/components/ui/avanti_modal.vue'
@@ -66,11 +67,12 @@ function handleChange(value: boolean): void {
   cancelled.value = false
 }
 
-/** «Cancella» закрывает окно: в макете это возврат к странице договора. */
+/** «Cancella» закрывает окно и возвращает к странице договора. */
 function handleCancel(): void {
   cancelled.value = true
   result.value = null
   isOpen.value = false
+  goBack()
 }
 
 /** «Conferma Firma» тоже закрывает окно — подпись поставлена. */
@@ -78,7 +80,11 @@ function handleConfirm(value: AvantiSignatureResult): void {
   result.value = value
   cancelled.value = false
   isOpen.value = false
+  goNext()
 }
+
+/** После подписи сценарий ведёт к вводу IBAN для зачисления. */
+const { goNext, goBack } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

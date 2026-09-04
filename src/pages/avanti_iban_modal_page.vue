@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiDashboardView from '@/components/dashboard/avanti_dashboard_view.vue'
 import AvantiIbanPanel from '@/components/iban/avanti_iban_panel.vue'
 import AvantiModal from '@/components/ui/avanti_modal.vue'
@@ -50,7 +51,11 @@ const status = computed<string>(() => (saved.value ? 'IBAN salvato.' : 'IBAN non
 function handleSave(): void {
   saved.value = true
   isOpen.value = false
+  goNext()
 }
+
+/** Сохранение реквизитов ведёт к оплате комиссии. */
+const { goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

@@ -33,7 +33,7 @@
         Кадра с этой зоной в Figma нет, поэтому в поставке её не видно.
       -->
       <AvantiDocumentsPanel
-        v-model:selected-option-id="selectedOptionId"
+        :selected-option-id="selectedOptionId"
         :title="texts.panelTitle"
         :state="frame.state"
         :summary="frame.summary"
@@ -46,14 +46,17 @@
         :result="frame.result"
         :actions="frame.actions"
         :note="texts.note"
+        @update:selected-option-id="handleSelectOption"
+        @submit="goNext"
       />
     </AvantiModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiDashboardView from '@/components/dashboard/avanti_dashboard_view.vue'
 import AvantiDocumentsPanel from '@/components/documents/avanti_documents_panel.vue'
 import AvantiModal from '@/components/ui/avanti_modal.vue'
@@ -67,6 +70,7 @@ import {
 import { AVANTI_DASHBOARD_STATE_BASE as dashboardState } from '@/constants/avanti_dashboard_states'
 
 const route = useRoute()
+const router = useRouter()
 
 /** В макете окно открыто сразу — витрина повторяет это поведение. */
 const isOpen = ref<boolean>(true)
@@ -84,12 +88,30 @@ const frame = computed<AvantiDocumentsFrame>(() => {
   return resolveFrame(Array.isArray(queryValue) ? queryValue[0] : queryValue)
 })
 
-/** Отмеченный тип документа: задаётся кадром, дальше им управляет пользователь. */
-const selectedOptionId = ref<string>(frame.value.selectedOptionId)
+/**
+ * Отмеченный тип документа. Пока пользователь не выбрал ничего, показывается
+ * значение кадра; после выбора приоритет за пользователем, иначе переход
+ * к кадру загрузки сбрасывал бы его отметку на значение из макета.
+ */
+const pickedOptionId = ref<string | null>(null)
 
-watch(frame, (next) => {
-  selectedOptionId.value = next.selectedOptionId
-})
+const selectedOptionId = computed<string>(() => pickedOptionId.value ?? frame.value.selectedOptionId)
+
+/**
+ * Выбор типа документа раскрывает кадр загрузки (22:3657): в макете переход
+ * между этими кадрами не нарисован, но без него из базового кадра некуда идти —
+ * кнопки отправки там нет. Состояние по-прежнему живёт в адресе, поэтому
+ * ссылку на любой кадр можно передать как есть.
+ */
+function handleSelectOption(id: string): void {
+  pickedOptionId.value = id
+  if (frame.value.files.length === 0) {
+    void router.replace({ query: { ...route.query, state: 'upload' } })
+  }
+}
+
+/** Основная кнопка панели ведёт к следующему шагу сценария. */
+const { goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

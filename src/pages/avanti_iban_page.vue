@@ -23,6 +23,7 @@
           :owner="owner"
           @update:iban="setIban"
           @update:owner="setOwner"
+          @submit="goNext"
         />
       </AvantiIbanAmountCard>
     </template>
@@ -46,6 +47,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useIsMobile } from '@/composables/use_is_mobile'
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiCabinetLayout from '@/components/layout/avanti_cabinet_layout.vue'
 import AvantiDashboardStepper from '@/components/dashboard/avanti_dashboard_stepper.vue'
 import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashboard_personal_data_card.vue'
@@ -85,4 +87,7 @@ function setIban(value: string): void {
 function setOwner(value: string): void {
   owner.value = value
 }
+
+/** Подтверждение реквизитов ведёт к оплате комиссии. */
+const { goNext } = useFlowNavigation()
 </script>

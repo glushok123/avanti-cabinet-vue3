@@ -67,6 +67,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiSimulationHeader from '@/components/layout/avanti_simulation_header.vue'
 import AvantiSimulationActions from '@/components/simulation/avanti_simulation_actions.vue'
 import AvantiFormCard from '@/components/ui/avanti_form_card.vue'
@@ -90,17 +91,11 @@ const documentTypeOptions = AVANTI_DOCUMENT_TYPE_OPTIONS
 const { values, errors, hasDocumentType } = usePersonalDataForm()
 
 /*
- * Переходы между шагами мастера появятся на этапе интеграции: сейчас во вёрстке
- * нет ни маршрутов следующего шага, ни отправки анкеты. Обработчики оставлены
- * пустыми намеренно, чтобы submit формы не перезагружал страницу.
+ * Переходы мастера: порядок шагов задан в `avanti_flow`. Отправки анкеты пока
+ * нет — она появится вместе с API, а `@submit.prevent` не даёт форме
+ * перезагрузить страницу, поэтому переход остаётся управляемым роутером.
  */
-function handleBack(): void {
-  /* Шаг назад подключается вместе с маршрутами мастера. */
-}
-
-function handleNext(): void {
-  /* Отправка анкеты подключается вместе с API. */
-}
+const { goBack: handleBack, goNext: handleNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>

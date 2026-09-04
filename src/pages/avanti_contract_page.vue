@@ -21,7 +21,7 @@
       <section class="avanti-contract-page__documents">
         <h2 class="avanti-contract-page__documents-title">{{ texts.documentsTitle }}</h2>
         <AvantiContractVerifiedBanner :banner="verifiedBanner" />
-        <AvantiContractSigningCard :card="signingCard" />
+        <AvantiContractSigningCard :card="signingCard" @sign="goNext" />
         <AvantiContractDocument
           :label="texts.documentLabel"
           title-tag="h3"
@@ -59,6 +59,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFlowNavigation } from '@/composables/use_flow_navigation'
 import AvantiCabinetLayout from '@/components/layout/avanti_cabinet_layout.vue'
 import AvantiDashboardStepper from '@/components/dashboard/avanti_dashboard_stepper.vue'
 import AvantiDashboardPersonalDataCard from '@/components/dashboard/avanti_dashboard_personal_data_card.vue'
@@ -88,6 +89,9 @@ import {
   AVANTI_CONTRACT_TEXTS as texts,
   AVANTI_CONTRACT_VERIFIED_BANNER as verifiedBanner,
 } from '@/constants/avanti_contract_content'
+
+/** «Firma il contratto» ведёт на экран подписи. */
+const { goNext } = useFlowNavigation()
 </script>
 
 <style lang="scss" scoped>
